@@ -54,12 +54,22 @@ func proportionalNavigation():
 	var LOSRate = (currTargetDirection-prevTargetDirection)
 	var closingVelocity = getClosingVelocity()
 	var desiredAccel = 4*LOSRate*closingVelocity
-	if (desiredAccel > acceleration):
-		hiddenRotation = velocityDirection + PI/2
-	elif (desiredAccel < -acceleration):
-		hiddenRotation = velocityDirection - PI/2
+	if velocity.dot(relativeDisplacement) > 0:
+		if (desiredAccel > acceleration):
+			hiddenRotation = velocityDirection + PI/2
+		elif (desiredAccel < -acceleration):
+			hiddenRotation = velocityDirection - PI/2
+		else:
+			hiddenRotation = velocityDirection + asin(desiredAccel/acceleration)
 	else:
-		hiddenRotation = velocityDirection + asin(desiredAccel/acceleration)
+		#A messes up when the velocity is close to 0. Perhaps make the chosen algorithm persist for a bit?
+		print("backwards")
+		if (desiredAccel > acceleration/2):
+			hiddenRotation = velocityDirection + PI + PI/6
+		elif (desiredAccel < -acceleration/2):
+			hiddenRotation = velocityDirection + PI - PI/6
+		else:
+			hiddenRotation = velocityDirection + PI + asin(desiredAccel/acceleration)
 
 func hit_by_bullet():
 	var explosion = explosionFile.instantiate()

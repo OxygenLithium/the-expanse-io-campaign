@@ -15,8 +15,8 @@ var shoot_timer = 0
 func shoot_missile():
 	var missile = missileFile.instantiate()
 	missile.global_position = global_position
-	missile.rotation = rotation
 	get_parent().add_child(missile)
+	missile.rotation = rotation
 	missile.velocity = Vector2(100,0).rotated(rotation)
 	
 	var missile_marker = missileMarkerFile.instantiate()
