@@ -1,9 +1,9 @@
 extends CharacterBody2D
 
 var type = "missile"
-var allegiance = "UNN"
+var allegiance
 
-var target = "/root/Node/player"
+var target
 var explosionFile = load("res://scenes/weapon/explosion.tscn")
 
 var targetPosition
@@ -12,9 +12,9 @@ var relativeDisplacement
 var relativeVelocity
 var currTargetDirection
 var prevTargetDirection
-var hiddenRotation
 
 var velocityDirection
+var relativeVelocityDireciton
 
 var acceleration = 5
 
@@ -22,7 +22,6 @@ var acceleration = 5
 func _ready() -> void:
 	currTargetDirection = 0
 	prevTargetDirection = 0
-	hiddenRotation = 0
 	pass # Replace with function body.
 
 func getVelocityDirection():
@@ -50,26 +49,34 @@ func getClosingVelocity():
 	return sqrt(closingVelocityVector.dot(closingVelocityVector))
 
 func proportionalNavigation():
-	#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
-	var LOSRate = (currTargetDirection-prevTargetDirection)
-	var closingVelocity = getClosingVelocity()
-	var desiredAccel = 4*LOSRate*closingVelocity
-	if velocity.dot(relativeDisplacement) > 0:
+	if relativeVelocity.dot(relativeDisplacement) < 0:
+		#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
+		var LOSRate = (currTargetDirection-prevTargetDirection)
+		var closingVelocity = getClosingVelocity()
+		var desiredAccel
+		desiredAccel = 4*LOSRate*closingVelocity
 		if (desiredAccel > acceleration):
-			hiddenRotation = velocityDirection + PI/2
+			rotation = relativeVelocity.angle() + PI + PI/2
 		elif (desiredAccel < -acceleration):
-			hiddenRotation = velocityDirection - PI/2
+			rotation = relativeVelocity.angle() + PI - PI/2
 		else:
-			hiddenRotation = velocityDirection + asin(desiredAccel/acceleration)
+			rotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
 	else:
-		#A messes up when the velocity is close to 0. Perhaps make the chosen algorithm persist for a bit?
-		print("backwards")
-		if (desiredAccel > acceleration/2):
-			hiddenRotation = velocityDirection + PI + PI/6
-		elif (desiredAccel < -acceleration/2):
-			hiddenRotation = velocityDirection + PI - PI/6
+		if velocity.length() < acceleration:
+			velocity = Vector2(0,0)
+			rotation = relativeDisplacement.angle()
 		else:
-			hiddenRotation = velocityDirection + PI + asin(desiredAccel/acceleration)
+			rotation = relativeVelocity.angle()
+			
+	#else:
+		##A messes up when the velocity is close to 0. Perhaps make the chosen algorithm persist for a bit?
+		#desiredAccel = 4*LOSRate*(10000/closingVelocity)
+		#if (desiredAccel > acceleration/2):
+			#rotation = velocityDirection + PI + PI/6
+		#elif (desiredAccel < -acceleration/2):
+			#rotation = velocityDirection + PI - PI/6
+		#else:
+			#rotation = velocityDirection + PI + asin(desiredAccel/acceleration)
 
 func hit_by_bullet():
 	var explosion = explosionFile.instantiate()
@@ -82,7 +89,7 @@ func hit_by_bullet():
 func _physics_process(delta: float) -> void:
 	#fetches and calculates parameters about the target
 	if !get_node(target):
-		velocity += Vector2(acceleration,0).rotated(hiddenRotation)
+		velocity += Vector2(acceleration,0).rotated(rotation)
 		move_and_slide()
 		return
 	targetPosition = get_node(target).position
@@ -93,10 +100,7 @@ func _physics_process(delta: float) -> void:
 	
 	velocityDirection = getVelocityDirection()
 	
-	rotation = velocityDirection
-	
-	velocity.x += cos(hiddenRotation)*acceleration
-	velocity.y += sin(hiddenRotation)*acceleration
+	velocity += Vector2(acceleration,0).rotated(rotation)
 	
 	proportionalNavigation()
 	

@@ -1,15 +1,16 @@
 extends CharacterBody2D
 
+#Fields accessed by others on checks
 var type = "ship"
 var allegiance = "MCRN"
 
-var health = 100
-var maxhealth = 100
-
+#Random number generator
 var rng = RandomNumberGenerator.new()
 
+#Files
 var bulletFile = load("res://scenes/weapon/bullet.tscn")
 var missileFile = load("res://scenes/weapon/missile.tscn")
+var missileMarkerFile = load("res://radar_map/mcrn_missile_marker.tscn")
 
 var smallShipExplosionFile = load("res://scenes/weapon/smallShipExplosion.tscn")
 
@@ -18,8 +19,15 @@ var bulletMarkerFile = load("res://radar_map/bullet_marker.tscn")
 var pdcPivotPath = ["/root/Node/player/pdc_pivot_upper_left", "/root/Node/player/pdc_pivot_upper_right"]
 var pdcMarkerPath = ["/root/Node/player/pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left", "/root/Node/player/pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right"]
 
+#Healthbar
 @onready var healthBar = get_node("/root/Node/hud_canvas/health_bar")
 
+#Stats
+#Health stats
+var health = 100
+var maxhealth = 100
+
+#Movement stats
 const ACCELERATION1 = 1
 const ACCELERATION2 = 2
 
@@ -27,12 +35,15 @@ var acceleration = 0
 var angVelocity = 0
 
 var bulletSpeed = 3000
-var shootTimer = 0
+
+#Cooldowns
+var shootCooldown = 0
+var missileCooldown = 0
 
 func _ready():
 	healthBar.recalculate(health,maxhealth)
 
-func shootPDC():
+func shoot_PDC():
 	for i in range(2):
 		var bullet = bulletFile.instantiate()
 		bullet.position = get_node(pdcMarkerPath[i]).global_position + velocity/60
@@ -48,11 +59,24 @@ func shootPDC():
 		$/root/Node/map_canvas/radar_map.add_child(bullet_marker)
 		
 
-	shootTimer = 3
+func shoot_missile():
+	var missile = missileFile.instantiate()
+	missile.allegiance = "MCRN"
+	missile.target = "/root/Node/enemy_ship"
+	missile.set_collision_layer_value(2, true)
+	missile.set_collision_mask_value(9, true)
+	missile.global_position = global_position
+	missile.velocity = velocity
+	missile.rotation = rotation
+	missile.velocity += Vector2(300,0).rotated(rotation)
+	get_parent().add_child(missile)
+	
+	var missile_marker = missileMarkerFile.instantiate()
+	missile_marker.missile = missile
+	$/root/Node/map_canvas/radar_map.add_child(missile_marker)
 
 func take_damage_missile():
-	health -= 40
-	print(health)
+	health -= 1
 	healthBar.recalculate(health,maxhealth)
 
 func death():
@@ -104,9 +128,17 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("key_3"):
 		acceleration = ACCELERATION2
 	
-	if Input.is_action_pressed("click") && shootTimer == 0:
-		shootPDC()
-	if shootTimer > 0:
-		shootTimer = shootTimer - 1
+	if Input.is_action_pressed("click") && shootCooldown == 0:
+		shoot_PDC()
+		shootCooldown = 3
+	if Input.is_action_pressed("key_space") && missileCooldown == 0:
+		shoot_missile()
+		missileCooldown = 60
+		
+	if shootCooldown > 0:
+		shootCooldown -= 1
+		
+	if missileCooldown > 0:
+		missileCooldown -= 1
 	
 	move_and_slide()
