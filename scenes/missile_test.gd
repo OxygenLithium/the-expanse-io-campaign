@@ -16,13 +16,33 @@ var prevTargetDirection
 var velocityDirection
 var relativeVelocityDireciton
 
-var acceleration = 5
+const lifespan = 1800
+const accelerations = [0,4,8]
+
+var acceleration
+var accelerationGrade
+
+var cutAcceleration
+const cutAccelerationSpeed = 500
+const cutAccelerationDistance = 3000
+
+var timer = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	currTargetDirection = 0
 	prevTargetDirection = 0
+	accelerationGrade = 1
 	pass # Replace with function body.
+
+func getTelemetry():
+	targetPosition = target.position
+	targetVelocity = target.velocity
+	relativeDisplacement = targetPosition - position
+	relativeVelocity = targetVelocity - velocity
+	currTargetDirection = relativeDisplacement.angle()
+	velocityDirection = velocity.angle()
+	
 
 func getVelocityDirection():
 	var fixedVX = velocity.x
@@ -32,21 +52,14 @@ func getVelocityDirection():
 	if (sign(velocity.x) == -1):
 		angle += PI
 	return angle
-	
-
-func getTargetDirection():
-	var fixedDX = position.x-targetPosition.x
-	if fixedDX == 0:
-		fixedDX = 0.01
-	var angle = atan((position.y-targetPosition.y)/fixedDX)
-	if (sign(position.x-targetPosition.x) == 1):
-		angle += PI
-	return angle
 
 func getClosingVelocity():
 	#vector projection of rel. velocity onto rel. displacement
 	var closingVelocityVector = relativeVelocity.dot(relativeDisplacement)/relativeDisplacement.dot(relativeDisplacement)*relativeDisplacement
 	return sqrt(closingVelocityVector.dot(closingVelocityVector))
+
+func validCutAcceleration():
+	return (relativeVelocity.length() < cutAccelerationSpeed && relativeDisplacement.length() < cutAccelerationDistance)
 
 func proportionalNavigation():
 	if relativeVelocity.dot(relativeDisplacement) < 0:
@@ -61,22 +74,15 @@ func proportionalNavigation():
 			rotation = relativeVelocity.angle() + PI - PI/2
 		else:
 			rotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
+		if (desiredAccel < accelerations[accelerationGrade]/4 && validCutAcceleration()):
+			cutAcceleration = true
+			
 	else:
 		if velocity.length() < acceleration:
 			velocity = Vector2(0,0)
 			rotation = relativeDisplacement.angle()
 		else:
 			rotation = relativeVelocity.angle()
-			
-	#else:
-		##A messes up when the velocity is close to 0. Perhaps make the chosen algorithm persist for a bit?
-		#desiredAccel = 4*LOSRate*(10000/closingVelocity)
-		#if (desiredAccel > acceleration/2):
-			#rotation = velocityDirection + PI + PI/6
-		#elif (desiredAccel < -acceleration/2):
-			#rotation = velocityDirection + PI - PI/6
-		#else:
-			#rotation = velocityDirection + PI + asin(desiredAccel/acceleration)
 
 func hit_by_bullet():
 	var explosion = explosionFile.instantiate()
@@ -88,21 +94,29 @@ func hit_by_bullet():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
 	#fetches and calculates parameters about the target
-	if !get_node(target):
+	cutAcceleration = false
+	
+	if !target:
 		velocity += Vector2(acceleration,0).rotated(rotation)
 		move_and_slide()
 		return
-	targetPosition = get_node(target).position
-	targetVelocity = get_node(target).velocity
-	relativeDisplacement = targetPosition - position
-	relativeVelocity = targetVelocity - velocity
-	currTargetDirection = getTargetDirection()
+		
+	getTelemetry()
 	
-	velocityDirection = getVelocityDirection()
+	if timer >= 30:
+		proportionalNavigation()
+		
+	if timer == 30:
+		accelerationGrade = 2
+	elif timer == lifespan:
+		queue_free()
+		return
+		
+	acceleration = accelerations[accelerationGrade]
+	if (!cutAcceleration):
+		velocity += Vector2(acceleration,0).rotated(rotation)
 	
-	velocity += Vector2(acceleration,0).rotated(rotation)
-	
-	proportionalNavigation()
+	timer += 1
 	
 	
 	for i in get_slide_collision_count():

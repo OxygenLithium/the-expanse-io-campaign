@@ -55,24 +55,28 @@ func shoot_PDC():
 		bullet.set_visible(true)
 		
 		var bullet_marker = bulletMarkerFile.instantiate()
-		bullet_marker.bullet = bullet
+		bullet_marker.markerTarget = bullet
 		$/root/Node/map_canvas/radar_map.add_child(bullet_marker)
 		
 
 func shoot_missile():
 	var missile = missileFile.instantiate()
 	missile.allegiance = "MCRN"
-	missile.target = "/root/Node/enemy_ship"
+	if "allegiance" in $/root/Node/mainCamera.target and $/root/Node/mainCamera.target.allegiance != "MCRN":
+		missile.target = $/root/Node/mainCamera.target
+	else:
+		missile.target = $/root/Node/enemy_ship
 	missile.set_collision_layer_value(2, true)
 	missile.set_collision_mask_value(9, true)
-	missile.global_position = global_position
+	missile.set_collision_mask_value(10, true)
+	missile.global_position = global_position + Vector2(50,0).rotated(rotation)
 	missile.velocity = velocity
 	missile.rotation = rotation
 	missile.velocity += Vector2(300,0).rotated(rotation)
 	get_parent().add_child(missile)
 	
 	var missile_marker = missileMarkerFile.instantiate()
-	missile_marker.missile = missile
+	missile_marker.markerTarget = missile
 	$/root/Node/map_canvas/radar_map.add_child(missile_marker)
 
 func take_damage_missile():
@@ -123,10 +127,13 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_pressed("key_1"):
 		acceleration = 0
+		$ship_sprite.texture = load("res://sprites/ship_and_parts/player/roci_drive_off.png")
 	if Input.is_action_pressed("key_2"):
 		acceleration = ACCELERATION1
+		$ship_sprite.texture = load("res://sprites/ship_and_parts/player/roci_drive_on.png")
 	if Input.is_action_pressed("key_3"):
 		acceleration = ACCELERATION2
+		$ship_sprite.texture = load("res://sprites/ship_and_parts/player/roci_drive_on.png")
 	
 	if Input.is_action_pressed("click") && shootCooldown == 0:
 		shoot_PDC()

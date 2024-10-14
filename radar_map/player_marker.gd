@@ -1,18 +1,19 @@
 extends Polygon2D
 
-var player = "/root/Node/player"
+@onready var markerTarget = get_node("/root/Node/player")
 
 var markers = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	$/root/Node/map_canvas/radar_map.cameraLockable.push_back(self)
+	return
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if !get_node(player):
+	if !markerTarget:
 		queue_free()
 		return
-	rotation = get_node(player).rotation
-	position = Vector2(600,600) + get_node(player).position/100
+	rotation = markerTarget.rotation
+	position = Vector2(600,600) + markerTarget.position/100

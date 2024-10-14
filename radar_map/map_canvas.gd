@@ -1,8 +1,6 @@
-extends Polygon2D
+extends CanvasLayer
 
-var markerTarget
-
-var markers = {}
+var toggleDelay = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -11,8 +9,9 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if !markerTarget:
-		queue_free()
-	else:
-		rotation = markerTarget.rotation
-		position = Vector2(600,600) + markerTarget.position/100
+	if toggleDelay == 0 && Input.is_action_pressed("key_m"):
+		set_visible(!visible)
+		toggleDelay = 10
+	
+	if (toggleDelay > 0):
+		toggleDelay -= 1

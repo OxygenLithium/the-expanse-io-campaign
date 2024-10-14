@@ -1,32 +1,29 @@
 [gd_scene load_steps=6 format=3 uid="uid://bb26ohp7arwpb"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_f1bkf"]
-[ext_resource type="Texture2D" uid="uid://dk6pvgol2gmeu" path="res://sprites/ship_and_parts/rocinante placeholder.png" id="2_v2or6"]
+[ext_resource type="Texture2D" uid="uid://d4m3mqwrpb4r2" path="res://sprites/ship_and_parts/player/roci_drive_off.png" id="2_egv8x"]
 [ext_resource type="Texture2D" uid="uid://ci6caan12shp0" path="res://sprites/minigun.png" id="3_8vxsh"]
 [ext_resource type="Script" path="res://weapon/pdc.gd" id="4_xh4ul"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cweei"]
-size = Vector2(631.915, 119.098)
+size = Vector2(601.79, 116.716)
 
 [node name="player" type="CharacterBody2D"]
 collision_mask = 257
 script = ExtResource("1_f1bkf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.323598, 1.5001)
+position = Vector2(0.399487, 0.250054)
 scale = Vector2(0.209913, 0.209913)
 shape = SubResource("RectangleShape2D_cweei")
 
 [node name="ship_sprite" type="Sprite2D" parent="."]
-position = Vector2(-18.647, 9.00016)
-scale = Vector2(0.209913, 0.209913)
-texture = ExtResource("2_v2or6")
-
-[node name="Marker2D" type="Marker2D" parent="."]
-position = Vector2(89, 0)
+position = Vector2(3.56128, -7.15256e-07)
+scale = Vector2(0.93249, 0.93249)
+texture = ExtResource("2_egv8x")
 
 [node name="pdc_pivot_upper_left" type="Node2D" parent="."]
-position = Vector2(13, -21)
+position = Vector2(11.5613, -19)
 scale = Vector2(0.145, 0.145)
 script = ExtResource("4_xh4ul")
 
@@ -38,7 +35,7 @@ texture = ExtResource("3_8vxsh")
 position = Vector2(27.5862, 6.89655)
 
 [node name="pdc_pivot_upper_right" type="Node2D" parent="."]
-position = Vector2(14, 22)
+position = Vector2(11.5613, 19)
 script = ExtResource("4_xh4ul")
 
 [node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_right"]
