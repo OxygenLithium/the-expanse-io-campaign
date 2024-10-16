@@ -16,7 +16,6 @@ func _process(delta: float) -> void:
 		if $/root/Node/mainCamera.target != $/root/Node/mainCamera.player:
 			$/root/Node/mainCamera.prevTarget = $/root/Node/mainCamera.target
 		$/root/Node/mainCamera.target = $/root/Node/mainCamera.player
-		print($/root/Node/mainCamera.prevTarget)
 	if Input.is_action_pressed("key_c"):
 		var minDistance = INF
 		var closestMarker = null
@@ -29,7 +28,6 @@ func _process(delta: float) -> void:
 				$/root/Node/mainCamera.target = closestMarker.markerTarget
 			elif $/root/Node/mainCamera.prevTarget:
 				$/root/Node/mainCamera.target = $/root/Node/mainCamera.prevTarget
-			print($/root/Node/mainCamera.prevTarget)
 		#else:
 			#var absoluteMousePos = get_global_mouse_position() + $/root/Node/mainCamera.target.position
 			#print(absoluteMousePos)

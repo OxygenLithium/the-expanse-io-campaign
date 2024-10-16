@@ -36,6 +36,12 @@ var angVelocity = 0
 
 var bulletSpeed = 3000
 
+const RCSThrust = 300
+const RCSLightThrust = 30
+const RCSCooldownLength = 60
+const RCSLightCooldownLength = 30
+var RCSCooldowns = [0,0,0,0]
+
 #Cooldowns
 var shootCooldown = 0
 var missileCooldown = 0
@@ -49,7 +55,7 @@ func shoot_PDC():
 		bullet.position = get_node(pdcMarkerPath[i]).global_position + velocity/60
 		get_parent().add_child(bullet)
 		bullet.rotation = get_node(pdcPivotPath[i]).rotation + rotation
-		bullet.rotation += rng.randf_range(-PI/180, PI/180)
+		bullet.rotation += rng.randf_range(-PI/60, PI/60)
 		bullet.velocity = velocity
 		bullet.velocity += Vector2(bulletSpeed,0).rotated(bullet.rotation)
 		bullet.set_visible(true)
@@ -98,18 +104,32 @@ func _physics_process(delta: float) -> void:
 	velocity += Vector2(acceleration,0).rotated(rotation)
 	rotation_degrees += angVelocity
 	
-	if Input.is_action_pressed("key_w"):
-		velocity.x += cos(rotation)*10
-		velocity.y += sin(rotation)*10
-	if Input.is_action_pressed("key_a"):
-		velocity.x += sin(rotation)*10
-		velocity.y -= cos(rotation)*10
-	if Input.is_action_pressed("key_s"):
-		velocity.x -= cos(rotation)*10
-		velocity.y -= sin(rotation)*10
-	if Input.is_action_pressed("key_d"):
-		velocity.x -= sin(rotation)*10
-		velocity.y += cos(rotation)*10
+	if !Input.is_action_pressed("key_shift"):
+		if Input.is_action_pressed("key_w") && RCSCooldowns[0] == 0:
+			velocity += Vector2(RCSThrust,0).rotated(rotation)
+			RCSCooldowns[0] = RCSCooldownLength
+		if Input.is_action_pressed("key_a") && RCSCooldowns[1] == 0:
+			velocity += Vector2(RCSThrust,0).rotated(rotation-PI/2)
+			RCSCooldowns[1] = RCSCooldownLength
+		if Input.is_action_pressed("key_s") && RCSCooldowns[2] == 0:
+			velocity -= Vector2(RCSThrust,0).rotated(rotation)
+			RCSCooldowns[2] = RCSCooldownLength
+		if Input.is_action_pressed("key_d") && RCSCooldowns[3] == 0:
+			velocity += Vector2(RCSThrust,0).rotated(rotation+PI/2)
+			RCSCooldowns[3] = RCSCooldownLength
+	else:
+		if Input.is_action_pressed("key_w") && RCSCooldowns[0] == 0:
+			velocity += Vector2(RCSLightThrust,0).rotated(rotation)
+			RCSCooldowns[0] = RCSLightCooldownLength
+		if Input.is_action_pressed("key_a") && RCSCooldowns[1] == 0:
+			velocity += Vector2(RCSLightThrust,0).rotated(rotation-PI/2)
+			RCSCooldowns[1] = RCSLightCooldownLength
+		if Input.is_action_pressed("key_s") && RCSCooldowns[2] == 0:
+			velocity -= Vector2(RCSLightThrust,0).rotated(rotation)
+			RCSCooldowns[2] = RCSLightCooldownLength
+		if Input.is_action_pressed("key_d") && RCSCooldowns[3] == 0:
+			velocity += Vector2(RCSLightThrust,0).rotated(rotation+PI/2)
+			RCSCooldowns[3] = RCSLightCooldownLength
 	
 	
 	if Input.is_action_pressed("key_e"):
@@ -147,5 +167,9 @@ func _physics_process(delta: float) -> void:
 		
 	if missileCooldown > 0:
 		missileCooldown -= 1
+		
+	for i in range(4):
+		if RCSCooldowns[i] > 0:
+			RCSCooldowns[i] -= min(RCSCooldowns[i],1)
 	
 	move_and_slide()
