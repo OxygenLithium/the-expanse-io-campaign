@@ -1,6 +1,6 @@
 extends Polygon2D
 
-@onready var markerTarget = get_node("/root/Node/enemy_ship")
+var markerTarget
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -10,7 +10,13 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if !markerTarget:
+	if !markerTarget or !is_instance_valid(markerTarget):
+		$/root/Node/map_canvas/radar_map.cameraLockable.erase(self)
+		queue_free()
 		return
 	rotation = markerTarget.rotation
-	position = Vector2(600,600) + markerTarget.position/100
+	position = Vector2(600,600) + (markerTarget.position-$/root/Node/map_canvas/radar_map.mapCenter)/$/root/Node/map_canvas/radar_map.mapScale
+	if abs(position.x - 600) > 600 or abs(position.y-600) > 600:
+		visible = false
+	else:
+		visible = true 

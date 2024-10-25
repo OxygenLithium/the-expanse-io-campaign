@@ -1,11 +1,21 @@
 extends CharacterBody2D
 
+@export var pdcPivots: Array[Node2D]
+@export var pdcMarkers: Array[Node2D]
+
 #Fields accessed by others on checks
 var type = "ship"
 var allegiance = "MCRN"
 
 #Random number generator
 var rng = RandomNumberGenerator.new()
+
+#Autotrack AI
+var PDCAutotrack = false
+var PDCTarget = null
+var getPDCTargetTimer = 0
+
+@onready var incomingMissiles = []
 
 #Files
 var bulletFile = load("res://scenes/weapon/bullet.tscn")
@@ -15,9 +25,6 @@ var missileMarkerFile = load("res://radar_map/mcrn_missile_marker.tscn")
 var smallShipExplosionFile = load("res://scenes/weapon/smallShipExplosion.tscn")
 
 var bulletMarkerFile = load("res://radar_map/bullet_marker.tscn")
-
-var pdcPivotPath = ["/root/Node/player/pdc_pivot_upper_left", "/root/Node/player/pdc_pivot_upper_right"]
-var pdcMarkerPath = ["/root/Node/player/pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left", "/root/Node/player/pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right"]
 
 #Healthbar
 @onready var healthBar = get_node("/root/Node/hud_canvas/health_bar")
@@ -46,15 +53,42 @@ var RCSCooldowns = [0,0,0,0]
 var shootCooldown = 0
 var missileCooldown = 0
 
+#Weapons
+var target = null
+
 func _ready():
 	healthBar.recalculate(health,maxhealth)
+	
+	$/root/Node.MCRNShips.push_back(self)
+
+func getPDCTarget():
+	var futurePos = position + velocity + Vector2(acceleration,0).rotated(rotation)/120
+	
+	if incomingMissiles.size() + $/root/Node.UNNShips.size() == 0:
+		return null
+	var closest = null
+	var minDistance = 4500
+	for i in range(incomingMissiles.size()):
+		if (incomingMissiles[i].position - futurePos).length() < minDistance:
+			closest = incomingMissiles[i]
+			minDistance = (incomingMissiles[i].position - futurePos).length()
+	
+	for i in range($/root/Node.UNNShips.size()):
+		if ($/root/Node.UNNShips[i].position - futurePos).length() < minDistance:
+			closest = $/root/Node.UNNShips[i]
+			minDistance = ($/root/Node.UNNShips[i].position - futurePos).length()
+	return closest
 
 func shoot_PDC():
 	for i in range(2):
 		var bullet = bulletFile.instantiate()
-		bullet.position = get_node(pdcMarkerPath[i]).global_position + velocity/60
+		bullet.allegiance = "MCRN"
+		bullet.position = pdcMarkers[i].global_position + velocity/60
+		bullet.set_collision_layer_value(3, true)
+		bullet.set_collision_mask_value(9, true)
+		bullet.set_collision_mask_value(10, true)
 		get_parent().add_child(bullet)
-		bullet.rotation = get_node(pdcPivotPath[i]).rotation + rotation
+		bullet.rotation = pdcPivots[i].rotation + rotation
 		bullet.rotation += rng.randf_range(-PI/60, PI/60)
 		bullet.velocity = velocity
 		bullet.velocity += Vector2(bulletSpeed,0).rotated(bullet.rotation)
@@ -68,10 +102,8 @@ func shoot_PDC():
 func shoot_missile():
 	var missile = missileFile.instantiate()
 	missile.allegiance = "MCRN"
-	if "allegiance" in $/root/Node/mainCamera.target and $/root/Node/mainCamera.target.allegiance != "MCRN":
-		missile.target = $/root/Node/mainCamera.target
-	else:
-		missile.target = $/root/Node/enemy_ship
+	
+	missile.target = target
 	missile.set_collision_layer_value(2, true)
 	missile.set_collision_mask_value(9, true)
 	missile.set_collision_mask_value(10, true)
@@ -86,10 +118,16 @@ func shoot_missile():
 	$/root/Node/map_canvas/radar_map.add_child(missile_marker)
 
 func take_damage_missile():
+	health -= 20
+	healthBar.recalculate(health,maxhealth)
+	
+func take_damage_bullet():
 	health -= 1
 	healthBar.recalculate(health,maxhealth)
 
 func death():
+	$/root/Node.MCRNShips.erase(self)
+	
 	var small_ship_explosion = smallShipExplosionFile.instantiate()
 	small_ship_explosion.position = global_position
 	small_ship_explosion.velocity = velocity
@@ -155,12 +193,30 @@ func _physics_process(delta: float) -> void:
 		acceleration = ACCELERATION2
 		$ship_sprite.texture = load("res://sprites/ship_and_parts/player/roci_drive_on.png")
 	
-	if Input.is_action_pressed("click") && shootCooldown == 0:
+	if "allegiance" in $/root/Node/mainCamera.target and $/root/Node/mainCamera.target.allegiance != "MCRN":
+		target = $/root/Node/mainCamera.target
+	if !target or !is_instance_valid(target):
+		target = null
+	
+	if Input.is_action_just_pressed("key_t"):
+		PDCAutotrack = !PDCAutotrack
+	if PDCAutotrack && PDCTarget && shootCooldown == 0:
+		shoot_PDC()
+		shootCooldown = 3
+	if !PDCAutotrack && Input.is_action_pressed("click") && shootCooldown == 0:
 		shoot_PDC()
 		shootCooldown = 3
 	if Input.is_action_pressed("key_space") && missileCooldown == 0:
 		shoot_missile()
 		missileCooldown = 60
+		
+	if PDCTarget and !is_instance_valid(PDCTarget):
+		PDCTarget = getPDCTarget()
+	
+	if getPDCTargetTimer > 30:
+		PDCTarget = getPDCTarget()
+		getPDCTargetTimer = 0
+	getPDCTargetTimer += 1
 		
 	if shootCooldown > 0:
 		shootCooldown -= 1

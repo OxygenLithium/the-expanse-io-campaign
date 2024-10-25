@@ -1,12 +1,15 @@
 extends CharacterBody2D
 
 var type = "bullet"
-var allegiance = "MCRN"
+var allegiance
 
 var timer = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	#for j in range(16):
+				#print(j+1)
+				#print(get_collision_mask_value(j+1))
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -24,6 +27,8 @@ func _physics_process(delta: float) -> void:
 		
 		if (collider.type == "missile"):
 			collider.hit_by_bullet()
+		elif (collider.type == "ship"):
+			collider.take_damage_bullet()
 		
 		queue_free()
 		break

@@ -16,23 +16,35 @@ var prevTargetDirection
 var velocityDirection
 var relativeVelocityDireciton
 
-const lifespan = 1800
-const accelerations = [0,4,8]
+const lifespan = 900
+const accelerations = [0,6,12]
 
-var acceleration
+var acceleration = 4
 var accelerationGrade
+
+var desiredRotation = 0
 
 var cutAcceleration
 const cutAccelerationSpeed = 500
 const cutAccelerationDistance = 3000
 
+var approxImpactTime = INF
+
+#seconds
+const finalManeuverTime = 3
+
 var timer = 0
+
+var proportionalNavTimer = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	currTargetDirection = 0
 	prevTargetDirection = 0
 	accelerationGrade = 1
+	
+	if target and "incomingMissiles" in target:
+		target.incomingMissiles.push_back(self)
 	pass # Replace with function body.
 
 func getTelemetry():
@@ -61,34 +73,41 @@ func getClosingVelocity():
 func validCutAcceleration():
 	return (relativeVelocity.length() < cutAccelerationSpeed && relativeDisplacement.length() < cutAccelerationDistance)
 
+func approximateImpactTime(closingVelocity):
+	return (-(closingVelocity*60) + sqrt((closingVelocity*60)**2 + 4*acceleration*relativeDisplacement.length()))/2*acceleration
+
 func proportionalNavigation():
 	if relativeVelocity.dot(relativeDisplacement) < 0:
 		#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
 		var LOSRate = (currTargetDirection-prevTargetDirection)
 		var closingVelocity = getClosingVelocity()
+		approxImpactTime = approximateImpactTime(closingVelocity)
 		var desiredAccel
 		desiredAccel = 4*LOSRate*closingVelocity
 		if (desiredAccel > acceleration):
-			rotation = relativeVelocity.angle() + PI + PI/2
+			desiredRotation = relativeVelocity.angle() + PI + PI/2
 		elif (desiredAccel < -acceleration):
-			rotation = relativeVelocity.angle() + PI - PI/2
+			desiredRotation = relativeVelocity.angle() + PI - PI/2
 		else:
-			rotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
+			desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
 		if (desiredAccel < accelerations[accelerationGrade]/4 && validCutAcceleration()):
 			cutAcceleration = true
 			
 	else:
 		if velocity.length() < acceleration:
 			velocity = Vector2(0,0)
-			rotation = relativeDisplacement.angle()
+			desiredRotation = relativeDisplacement.angle()
 		else:
-			rotation = relativeVelocity.angle()
+			desiredRotation = relativeVelocity.angle()
 
 func hit_by_bullet():
 	var explosion = explosionFile.instantiate()
 	explosion.position = global_position
 	explosion.velocity = velocity
-	get_parent().add_child(explosion)	
+	get_parent().add_child(explosion)
+	
+	if is_instance_valid(target) && "incomingMissiles" in target:
+		target.incomingMissiles.erase(self)
 	queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -104,13 +123,37 @@ func _physics_process(delta: float) -> void:
 	getTelemetry()
 	
 	if timer >= 30:
-		proportionalNavigation()
+		if approxImpactTime < finalManeuverTime || proportionalNavTimer > 10:
+			proportionalNavigation()
+			proportionalNavTimer = 0
 		
 	if timer == 30:
 		accelerationGrade = 2
 	elif timer == lifespan:
+		if "incomingMissiles" in target:
+			target.incomingMissiles.erase(self)
 		queue_free()
 		return
+	
+	rotation = fmod(rotation, 2*PI)
+	desiredRotation = fmod(desiredRotation, 2*PI)
+	
+	var diffRotation = fmod(desiredRotation - rotation, 2*PI)
+	if diffRotation < -PI:
+		diffRotation += 2*PI
+	elif diffRotation > PI:
+		diffRotation -= 2*PI
+	if timer < 60:
+		if diffRotation >= 0:
+			rotation += min(diffRotation, PI/30)
+		else:
+			rotation += max(diffRotation, -PI/30)
+	else:
+		if diffRotation >= 0:
+			rotation += min(diffRotation, PI/30)
+		else:
+			rotation += max(diffRotation, -PI/30)
+	
 		
 	acceleration = accelerations[accelerationGrade]
 	if (!cutAcceleration):
@@ -118,6 +161,7 @@ func _physics_process(delta: float) -> void:
 	
 	timer += 1
 	
+	proportionalNavTimer += 1
 	
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
@@ -140,6 +184,9 @@ func _physics_process(delta: float) -> void:
 			get_parent().add_child(explosion)
 			
 			collider.take_damage_missile()
+			
+		if "incomingMissiles" in target:
+			target.incomingMissiles.erase(self)
 		queue_free()
 		break
 	

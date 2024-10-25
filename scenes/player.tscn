@@ -8,9 +8,11 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cweei"]
 size = Vector2(601.79, 116.716)
 
-[node name="player" type="CharacterBody2D"]
+[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("pdcPivots", "pdcMarkers")]
 collision_mask = 257
 script = ExtResource("1_f1bkf")
+pdcPivots = [NodePath("pdc_pivot_upper_left"), NodePath("pdc_pivot_upper_right")]
+pdcMarkers = [NodePath("pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.399487, 0.250054)

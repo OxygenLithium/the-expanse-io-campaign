@@ -4,6 +4,26 @@ extends Camera2D
 @onready var target = get_node("/root/Node/player")
 var prevTarget = null
 
+func getTarget():
+	if is_instance_valid(target):
+		return target
+	if is_instance_valid(prevTarget):
+		target = prevTarget
+		prevTarget = null
+	return null
+	
+func setTarget(newTarget):
+	target = newTarget
+	
+func setPrevTarget(newTarget):
+	prevTarget = newTarget
+
+func getPrevTarget():
+	if is_instance_valid(prevTarget):
+		return prevTarget
+	prevTarget = null
+	return null
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
@@ -15,5 +35,8 @@ func _process(delta: float) -> void:
 			prevTarget = null
 		if player:
 			target = player
-	else:
-		position = target.position
+		else:
+			target = null
+		return
+	
+	position = target.position

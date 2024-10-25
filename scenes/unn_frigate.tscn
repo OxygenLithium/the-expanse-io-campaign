@@ -1,22 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://xh760rt8upvn"]
+[gd_scene load_steps=6 format=3 uid="uid://xh760rt8upvn"]
 
-[ext_resource type="Script" path="res://enemy_ship.gd" id="1_cxy5a"]
-[ext_resource type="Texture2D" uid="uid://bmutm10q3ioej" path="res://sprites/ship_and_parts/unn placeholder.png" id="2_j0b0h"]
-[ext_resource type="Texture2D" uid="uid://ci6caan12shp0" path="res://sprites/minigun.png" id="3_vf2hj"]
+[ext_resource type="Script" path="res://scripts/unn_ships/unn_frigate.gd" id="1_b0wqm"]
+[ext_resource type="Texture2D" uid="uid://bmutm10q3ioej" path="res://sprites/ship_and_parts/unn placeholder.png" id="2_uk2ll"]
+[ext_resource type="Script" path="res://weapon/enemyPDC.gd" id="3_wmxa4"]
+[ext_resource type="Texture2D" uid="uid://ci6caan12shp0" path="res://sprites/minigun.png" id="4_i3lsr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ypt78"]
 size = Vector2(782.818, 123.861)
 
-[node name="enemy_ship" type="CharacterBody2D"]
+[node name="unn_frigate" type="CharacterBody2D" node_paths=PackedStringArray("pdcPivots", "pdcMarkers")]
 position = Vector2(-882, -66)
 collision_layer = 256
-collision_mask = 263
-script = ExtResource("1_cxy5a")
+collision_mask = 257
+script = ExtResource("1_b0wqm")
+pdcPivots = [NodePath("pdc_pivot_upper_left"), NodePath("pdc_pivot_upper_right")]
+pdcMarkers = [NodePath("pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right")]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-20.6705, 7.5)
 scale = Vector2(0.258018, 0.258017)
-texture = ExtResource("2_j0b0h")
+texture = ExtResource("2_uk2ll")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.167664, -0.500015)
@@ -26,21 +29,23 @@ shape = SubResource("RectangleShape2D_ypt78")
 [node name="pdc_pivot_upper_left" type="Node2D" parent="."]
 position = Vector2(17.3295, -30.5)
 scale = Vector2(0.145, 0.145)
+script = ExtResource("3_wmxa4")
 
 [node name="pdc_upper_left" type="Sprite2D" parent="pdc_pivot_upper_left"]
 position = Vector2(55.1724, 0)
-texture = ExtResource("3_vf2hj")
+texture = ExtResource("4_i3lsr")
 
 [node name="pdc_marker_upper_left" type="Marker2D" parent="pdc_pivot_upper_left/pdc_upper_left"]
 position = Vector2(27.5862, 6.89655)
 
 [node name="pdc_pivot_upper_right" type="Node2D" parent="."]
 position = Vector2(17.3295, 28.5)
+script = ExtResource("3_wmxa4")
 
 [node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_right"]
 position = Vector2(6.99999, -1.90735e-06)
 scale = Vector2(0.145, 0.145)
-texture = ExtResource("3_vf2hj")
+texture = ExtResource("4_i3lsr")
 
 [node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_upper_right/pdc_upper_right"]
 position = Vector2(27.5863, 6.89652)
