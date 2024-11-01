@@ -2,8 +2,11 @@ extends CanvasLayer
 
 var toggleDelay = 0
 
+@export var radar_map : ColorRect
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	radar_map.visible = true
 	pass # Replace with function body.
 
 

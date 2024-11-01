@@ -68,6 +68,7 @@ func _ready():
 
 func death():
 	$/root/Node.UNNShips.erase(self)
+	$/root/Node.unn_ship_destroyed()
 	
 	var small_ship_explosion = smallShipExplosionFile.instantiate()
 	small_ship_explosion.position = global_position

@@ -1,12 +1,12 @@
 [gd_scene load_steps=6 format=3 uid="uid://xh760rt8upvn"]
 
 [ext_resource type="Script" path="res://scripts/unn_ships/unn_frigate.gd" id="1_b0wqm"]
-[ext_resource type="Texture2D" uid="uid://bmutm10q3ioej" path="res://sprites/ship_and_parts/unn placeholder.png" id="2_uk2ll"]
+[ext_resource type="Texture2D" uid="uid://ti6sb5w73jkc" path="res://sprites/ship_and_parts/Munroe-class Frigate.png" id="2_2bmrs"]
 [ext_resource type="Script" path="res://weapon/enemyPDC.gd" id="3_wmxa4"]
 [ext_resource type="Texture2D" uid="uid://ci6caan12shp0" path="res://sprites/minigun.png" id="4_i3lsr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ypt78"]
-size = Vector2(782.818, 123.861)
+size = Vector2(719.318, 140.535)
 
 [node name="unn_frigate" type="CharacterBody2D" node_paths=PackedStringArray("pdcPivots", "pdcMarkers")]
 position = Vector2(-882, -66)
@@ -17,17 +17,17 @@ pdcPivots = [NodePath("pdc_pivot_upper_left"), NodePath("pdc_pivot_upper_right")
 pdcMarkers = [NodePath("pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right")]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(-20.6705, 7.5)
+position = Vector2(-1.00003, 4.76837e-07)
 scale = Vector2(0.258018, 0.258017)
-texture = ExtResource("2_uk2ll")
+texture = ExtResource("2_2bmrs")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.167664, -0.500015)
+position = Vector2(-6.49713, 1.24998)
 scale = Vector2(0.209913, 0.209913)
 shape = SubResource("RectangleShape2D_ypt78")
 
 [node name="pdc_pivot_upper_left" type="Node2D" parent="."]
-position = Vector2(17.3295, -30.5)
+position = Vector2(-10, -27)
 scale = Vector2(0.145, 0.145)
 script = ExtResource("3_wmxa4")
 
@@ -39,7 +39,7 @@ texture = ExtResource("4_i3lsr")
 position = Vector2(27.5862, 6.89655)
 
 [node name="pdc_pivot_upper_right" type="Node2D" parent="."]
-position = Vector2(17.3295, 28.5)
+position = Vector2(-6.00003, 21)
 script = ExtResource("3_wmxa4")
 
 [node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_right"]

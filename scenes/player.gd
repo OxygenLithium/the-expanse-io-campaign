@@ -126,6 +126,7 @@ func take_damage_bullet():
 	healthBar.recalculate(health,maxhealth)
 
 func death():
+	$/root/Node.player_death()
 	$/root/Node.MCRNShips.erase(self)
 	
 	var small_ship_explosion = smallShipExplosionFile.instantiate()
