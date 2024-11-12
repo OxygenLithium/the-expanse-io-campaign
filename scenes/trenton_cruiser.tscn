@@ -1,12 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://d2lgm1jvjnmrm"]
+[gd_scene load_steps=8 format=3 uid="uid://d2lgm1jvjnmrm"]
 
 [ext_resource type="Script" path="res://scripts/unn_ships/trenton_cruiser.gd" id="1_db1vo"]
 [ext_resource type="Texture2D" uid="uid://d1j4reasrnh05" path="res://sprites/ship_and_parts/Trenton-class Cruiser.png" id="2_lh30j"]
 [ext_resource type="Script" path="res://weapon/enemyPDC.gd" id="3_wmxa4"]
 [ext_resource type="Texture2D" uid="uid://ci6caan12shp0" path="res://sprites/minigun.png" id="4_i3lsr"]
+[ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/drive plume.png" id="4_vmdhi"]
+[ext_resource type="Script" path="res://scripts/drive_plume.gd" id="5_g1k58"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ypt78"]
-size = Vector2(425.442, 189.748)
+size = Vector2(580, 189.748)
 
 [node name="cruiser" type="CharacterBody2D" node_paths=PackedStringArray("pdcPivots", "pdcMarkers")]
 collision_layer = 256
@@ -15,23 +17,8 @@ script = ExtResource("1_db1vo")
 pdcPivots = [NodePath("pdc_pivot_upper_uleft"), NodePath("pdc_pivot_upper_bleft"), NodePath("pdc_pivot_upper_bright"), NodePath("pdc_pivot_upper_uright")]
 pdcMarkers = [NodePath("pdc_pivot_upper_uleft/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_upper_bleft/pdc_upper_right/pdc_marker_upper_right"), NodePath("pdc_pivot_upper_bright/pdc_upper_right/pdc_marker_upper_right"), NodePath("pdc_pivot_upper_uright/pdc_upper_right/pdc_marker_upper_right")]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(22.9737, -0.27696)
-scale = Vector2(1.01194, 1.01193)
-texture = ExtResource("2_lh30j")
-
-[node name="top_thruster" type="CollisionShape2D" parent="."]
-position = Vector2(-226.653, 36.0847)
-scale = Vector2(0.209913, 0.209913)
-shape = SubResource("RectangleShape2D_ypt78")
-
-[node name="bottom_thruster" type="CollisionShape2D" parent="."]
-position = Vector2(-227, -39)
-scale = Vector2(0.209913, 0.209913)
-shape = SubResource("RectangleShape2D_ypt78")
-
 [node name="pdc_pivot_upper_uleft" type="Node2D" parent="."]
-position = Vector2(-217, -77)
+position = Vector2(-253, -75)
 scale = Vector2(0.145, 0.145)
 script = ExtResource("3_wmxa4")
 
@@ -43,7 +30,7 @@ texture = ExtResource("4_i3lsr")
 position = Vector2(27.5862, 6.89655)
 
 [node name="pdc_pivot_upper_bleft" type="Node2D" parent="."]
-position = Vector2(-219, 77)
+position = Vector2(-249, 75)
 script = ExtResource("3_wmxa4")
 
 [node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_bleft"]
@@ -55,7 +42,7 @@ texture = ExtResource("4_i3lsr")
 position = Vector2(27.5863, 6.89652)
 
 [node name="pdc_pivot_upper_bright" type="Node2D" parent="."]
-position = Vector2(-75, 108)
+position = Vector2(-68, 106)
 script = ExtResource("3_wmxa4")
 
 [node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_bright"]
@@ -67,7 +54,7 @@ texture = ExtResource("4_i3lsr")
 position = Vector2(27.5863, 6.89652)
 
 [node name="pdc_pivot_upper_uright" type="Node2D" parent="."]
-position = Vector2(120, -89)
+position = Vector2(155, -90)
 script = ExtResource("3_wmxa4")
 
 [node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_uright"]
@@ -78,12 +65,39 @@ texture = ExtResource("4_i3lsr")
 [node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_upper_uright/pdc_upper_right"]
 position = Vector2(27.5863, 6.89652)
 
+[node name="Drive Plume" type="Sprite2D" parent="."]
+position = Vector2(-391.882, -39)
+scale = Vector2(0.289278, 0.143552)
+texture = ExtResource("4_vmdhi")
+script = ExtResource("5_g1k58")
+
+[node name="Drive Plume2" type="Sprite2D" parent="."]
+position = Vector2(-393, 37)
+scale = Vector2(0.289278, 0.143552)
+texture = ExtResource("4_vmdhi")
+script = ExtResource("5_g1k58")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(22.9737, -0.27696)
+scale = Vector2(1.01194, 1.01193)
+texture = ExtResource("2_lh30j")
+
 [node name="body" type="CollisionShape2D" parent="."]
-position = Vector2(-75, 0)
+position = Vector2(-73, 0)
 scale = Vector2(0.5, 0.8)
 shape = SubResource("RectangleShape2D_ypt78")
 
 [node name="nose" type="CollisionShape2D" parent="."]
-position = Vector2(128, -33)
+position = Vector2(123, -32)
 scale = Vector2(0.45, 0.28)
+shape = SubResource("RectangleShape2D_ypt78")
+
+[node name="top_thruster" type="CollisionShape2D" parent="."]
+position = Vector2(-249.653, 36.0847)
+scale = Vector2(0.209913, 0.209913)
+shape = SubResource("RectangleShape2D_ypt78")
+
+[node name="bottom_thruster" type="CollisionShape2D" parent="."]
+position = Vector2(-250, -39)
+scale = Vector2(0.209913, 0.209913)
 shape = SubResource("RectangleShape2D_ypt78")

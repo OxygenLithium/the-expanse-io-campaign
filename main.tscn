@@ -70,6 +70,7 @@ offset_bottom = 1450.0
 script = ExtResource("3_e6103")
 
 [node name="Jupiter" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(1203, 1117)
 scale = Vector2(5.62598, 5.62598)
 texture = ExtResource("5_v2q78")

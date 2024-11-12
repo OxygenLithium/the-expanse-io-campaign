@@ -100,6 +100,17 @@ func proportionalNavigation():
 		else:
 			desiredRotation = relativeVelocity.angle()
 
+
+func hit_by_railgun():
+	var explosion = explosionFile.instantiate()
+	explosion.position = global_position
+	explosion.velocity = velocity
+	get_parent().add_child(explosion)
+	
+	if is_instance_valid(target) && "incomingMissiles" in target:
+		target.incomingMissiles.erase(self)
+	queue_free()
+
 func hit_by_bullet():
 	var explosion = explosionFile.instantiate()
 	explosion.position = global_position

@@ -4,6 +4,7 @@ extends Node
 @export var hud_canvas : CanvasLayer
 
 var frigateFile = load("res://scenes/unn_frigate.tscn")
+var destroyerFile = load("res://scenes/murphy_destroyer.tscn")
 var cruiserFile = load("res://scenes/trenton_cruiser.tscn")
 
 var UNNShips = []
@@ -38,19 +39,27 @@ func _ready() -> void:
 		#add_child(enemy)
 	
 	var enemy = frigateFile.instantiate()
-	enemy.position = Vector2(25000,-100)
+	enemy.position = Vector2(25000,-200)
 	add_child(enemy)
 	
 	enemy = frigateFile.instantiate()
 	enemy.position = Vector2(25000,200)
 	add_child(enemy)
+	#
+	#enemy = destroyerFile.instantiate()
+	#enemy.position = Vector2(26000,-100)
+	#add_child(enemy)
 	
-	enemy = cruiserFile.instantiate()
-	enemy.position = Vector2(26000,000)
+	enemy = destroyerFile.instantiate()
+	enemy.position = Vector2(20000,000)
 	add_child(enemy)
 	
+	#enemy = cruiserFile.instantiate()
+	#enemy.position = Vector2(25500,000)
+	#add_child(enemy)
+	
 	#enemy = frigateFile.instantiate()
-	#enemy.position = Vector2(-108000,-250)
+	#enemy.position = Vector2(20000,0)
 	#add_child(enemy)
 	#
 	#enemy = frigateFile.instantiate()

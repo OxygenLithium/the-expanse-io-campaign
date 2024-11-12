@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqw2w5mtpgync"]
+
+[ext_resource type="Script" path="res://radar_map/bullet_marker.gd" id="1_guy4w"]
+
+[node name="bullet_marker" type="Polygon2D"]
+scale = Vector2(0.125, 0.125)
+color = Color(0, 0.847059, 0, 1)
+polygon = PackedVector2Array(0, -8, 40, 0, 0, 8, -40, 0)
+script = ExtResource("1_guy4w")

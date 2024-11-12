@@ -76,6 +76,9 @@ func death():
 	get_parent().add_child(small_ship_explosion)
 	queue_free()
 
+func special_actions():
+	pass
+
 func missile_cooldowns():
 	if missileCooldown == 500:
 		shoot_missile()
@@ -133,6 +136,10 @@ func take_damage_missile():
 
 func take_damage_bullet():
 	health -= 1
+	pass
+	
+func tanke_damage_railgun(damage):
+	health -= damage
 	pass
 
 func getVelocityDirection():
@@ -210,6 +217,8 @@ func _physics_process(delta: float) -> void:
 	
 	if shootCooldown > 0:
 		shootCooldown -= 1
+	
+	special_actions()
 	
 	missile_cooldowns()
 	

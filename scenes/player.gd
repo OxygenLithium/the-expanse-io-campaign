@@ -3,6 +3,8 @@ extends CharacterBody2D
 @export var pdcPivots: Array[Node2D]
 @export var pdcMarkers: Array[Node2D]
 
+@export var drivePlume: Node2D
+
 #Fields accessed by others on checks
 var type = "ship"
 var allegiance = "MCRN"
@@ -58,6 +60,7 @@ var target = null
 
 func _ready():
 	healthBar.recalculate(health,maxhealth)
+	drivePlume.visible = false
 	
 	$/root/Node.MCRNShips.push_back(self)
 
@@ -124,6 +127,10 @@ func take_damage_missile():
 func take_damage_bullet():
 	health -= 1
 	healthBar.recalculate(health,maxhealth)
+	
+func take_damage_railgun(damage):
+	health -= damage
+	healthBar.recalculate(health,maxhealth)
 
 func death():
 	$/root/Node.player_death()
@@ -186,13 +193,12 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_pressed("key_1"):
 		acceleration = 0
-		$ship_sprite.texture = load("res://sprites/ship_and_parts/player/roci_drive_off.png")
 	if Input.is_action_pressed("key_2"):
 		acceleration = ACCELERATION1
-		$ship_sprite.texture = load("res://sprites/ship_and_parts/player/roci_drive_on.png")
+		#$ship_sprite.texture = load("res://sprites/ship_and_parts/player/roci_drive_on.png")
 	if Input.is_action_pressed("key_3"):
 		acceleration = ACCELERATION2
-		$ship_sprite.texture = load("res://sprites/ship_and_parts/player/roci_drive_on.png")
+		#$ship_sprite.texture = load("res://sprites/ship_and_parts/player/roci_drive_on.png")
 	
 	if "allegiance" in $/root/Node/mainCamera.target and $/root/Node/mainCamera.target.allegiance != "MCRN":
 		target = $/root/Node/mainCamera.target
