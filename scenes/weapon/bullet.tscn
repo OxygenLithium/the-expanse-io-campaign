@@ -5,7 +5,7 @@
 
 [node name="bullet" type="CharacterBody2D"]
 position = Vector2(-6, -35)
-collision_layer = 2
+collision_layer = 0
 collision_mask = 768
 script = ExtResource("1_4hb8b")
 

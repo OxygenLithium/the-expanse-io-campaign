@@ -18,6 +18,7 @@ const mapRadius = 600
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	visible = false
 	pass # Replace with function body.
 
 
@@ -27,6 +28,9 @@ func _process(delta: float) -> void:
 	var cameraPrevTarget = mainCamera.getPrevTarget()
 	if !cameraTarget:
 		return
+		
+	if Input.is_action_just_pressed("key_m"):
+		visible = !visible
 	
 	if Input.is_action_just_pressed("key_-") and mapSizeNumber > 0:
 		mapSizeNumber -= 1

@@ -5,7 +5,8 @@ extends "res://scripts/unn_ships/enemy_ship.gd"
 @export var railgun : Node2D
 var railgunRoundFile = load("res://scenes/weapon/enemyRailgunRound.tscn")
 var railgunRoundMarkerFile = load("res://radar_map/railgun_round_marker.tscn")
-var railgunTimer = 280
+var railgunWarning = load("res://hud/railgunWarning.tscn")
+var railgunTimer = rng.randi_range(0,150)
 const railgunRoundSpeed = 15000
 
 func special_init():
@@ -29,11 +30,20 @@ func shoot_railgun():
 	var railgun_round_marker = railgunRoundMarkerFile.instantiate()
 	railgun_round_marker.markerTarget = railgunRound
 	$/root/Node/map_canvas/radar_map.add_child(railgun_round_marker)
+	
+	var railgun_warning = railgunWarning.instantiate()
+	railgun_warning.target = railgunRound
+	$/root/Node/map_canvas.add_child(railgun_warning)
+
+func calc_railgun_lead():
+	if "acceleration" in target:
+		return (target.velocity - velocity)*((target.global_position-global_position).length()/railgunRoundSpeed) + Vector2(target.acceleration,0).rotated(target.rotation)*(((target.global_position-global_position).length()/railgunRoundSpeed)**2)*30
+	return (target.velocity - velocity)*((target.global_position-global_position).length()/railgunRoundSpeed)
 
 func special_actions():
-	railgun.look_at(target.global_position)
+	railgun.look_at(target.global_position + calc_railgun_lead())
 	railgunTimer += 1
-	if railgunTimer > 60:
+	if railgunTimer > 600:
 		shoot_railgun()
-		railgunTimer = 0
+		railgunTimer = rng.randi_range(0,60)
 	pass

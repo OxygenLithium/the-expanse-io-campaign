@@ -13,7 +13,7 @@ var allegiance = "MCRN"
 var rng = RandomNumberGenerator.new()
 
 #Autotrack AI
-var PDCAutotrack = false
+var PDCAutotrack = true
 var PDCTarget = null
 var getPDCTargetTimer = 0
 
@@ -62,6 +62,9 @@ func _ready():
 	healthBar.recalculate(health,maxhealth)
 	drivePlume.visible = false
 	
+	PDCAutotrack = true
+	$/root/Node/map_canvas/autotrack_label.text = "PDC Autotrack: ON"
+	
 	$/root/Node.MCRNShips.push_back(self)
 
 func getPDCTarget():
@@ -83,7 +86,7 @@ func getPDCTarget():
 	return closest
 
 func shoot_PDC():
-	for i in range(2):
+	for i in range(pdcMarkers.size()):
 		var bullet = bulletFile.instantiate()
 		bullet.allegiance = "MCRN"
 		bullet.position = pdcMarkers[i].global_position + velocity/60
@@ -207,6 +210,10 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("key_t"):
 		PDCAutotrack = !PDCAutotrack
+		if PDCAutotrack:
+			$/root/Node/map_canvas/autotrack_label.text = "PDC Autotrack: ON"
+		else:
+			$/root/Node/map_canvas/autotrack_label.text = "PDC Autotrack: OFF"
 	if PDCAutotrack && PDCTarget && shootCooldown == 0:
 		shoot_PDC()
 		shootCooldown = 3

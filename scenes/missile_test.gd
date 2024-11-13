@@ -17,7 +17,7 @@ var velocityDirection
 var relativeVelocityDireciton
 
 const lifespan = 900
-const accelerations = [0,6,12]
+const accelerations = [0,6,18]
 
 var acceleration = 4
 var accelerationGrade
@@ -25,7 +25,7 @@ var accelerationGrade
 var desiredRotation = 0
 
 var cutAcceleration
-const cutAccelerationSpeed = 500
+const cutAccelerationSpeed = 1200
 const cutAccelerationDistance = 3000
 
 var approxImpactTime = INF

@@ -26,6 +26,8 @@ var missileMarkerFile = load("res://radar_map/unn_missile_marker.tscn")
 var bulletFile = load("res://scenes/weapon/enemyBullet.tscn")
 var bulletMarkerFile = load("res://radar_map/bullet_marker.tscn")
 
+var missileWarning = load("res://hud/missileWarning.tscn")
+
 var enemyMarkerFile = load("res://radar_map/enemy_marker.tscn")
 
 var smallShipExplosionFile = load("res://scenes/weapon/smallShipExplosion.tscn")
@@ -129,6 +131,10 @@ func shoot_missile():
 	var missile_marker = missileMarkerFile.instantiate()
 	missile_marker.markerTarget = missile
 	$/root/Node/map_canvas/radar_map.add_child(missile_marker)
+	
+	var missile_warning = missileWarning.instantiate()
+	missile_warning.target = missile
+	$/root/Node/map_canvas.add_child(missile_warning)
 
 func take_damage_missile():
 	health -= 20

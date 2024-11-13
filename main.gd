@@ -38,20 +38,26 @@ func _ready() -> void:
 		#enemy.position = Vector2(10000,-1000 + 1000*i)
 		#add_child(enemy)
 	
-	var enemy = frigateFile.instantiate()
-	enemy.position = Vector2(25000,-200)
-	add_child(enemy)
+	var enemy = null
 	
-	enemy = frigateFile.instantiate()
-	enemy.position = Vector2(25000,200)
-	add_child(enemy)
+	#enemy = frigateFile.instantiate()
+	#enemy.position = Vector2(25000,-200)
+	#add_child(enemy)
+	
+	#enemy = frigateFile.instantiate()
+	#enemy.position = Vector2(25000,200)
+	#add_child(enemy)
 	#
 	#enemy = destroyerFile.instantiate()
 	#enemy.position = Vector2(26000,-100)
 	#add_child(enemy)
 	
 	enemy = destroyerFile.instantiate()
-	enemy.position = Vector2(20000,000)
+	enemy.position = Vector2(20000,0)
+	add_child(enemy)
+	
+	enemy = destroyerFile.instantiate()
+	enemy.position = Vector2(22000,2000)
 	add_child(enemy)
 	
 	#enemy = cruiserFile.instantiate()
