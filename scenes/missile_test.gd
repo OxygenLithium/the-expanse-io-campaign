@@ -67,14 +67,19 @@ func getVelocityDirection():
 
 func getClosingVelocity():
 	#vector projection of rel. velocity onto rel. displacement
-	var closingVelocityVector = relativeVelocity.dot(relativeDisplacement)/relativeDisplacement.dot(relativeDisplacement)*relativeDisplacement
-	return sqrt(closingVelocityVector.dot(closingVelocityVector))
+	return -relativeVelocity.dot(relativeDisplacement)/relativeDisplacement.dot(relativeDisplacement)*relativeDisplacement.length()
+	
+func getClosingAcceleration():
+	#vector projection of rel. velocity onto rel. displacement
+	if not "acceleration" in target:
+		return 0
+	return -Vector2(target.acceleration,0).rotated(target.rotation).dot(relativeDisplacement)/relativeDisplacement.dot(relativeDisplacement)*relativeDisplacement.length()
 
 func validCutAcceleration():
 	return (relativeVelocity.length() < cutAccelerationSpeed && relativeDisplacement.length() < cutAccelerationDistance)
 
 func approximateImpactTime(closingVelocity):
-	return (-(closingVelocity*60) + sqrt((closingVelocity*60)**2 + 4*acceleration*relativeDisplacement.length()))/2*acceleration
+	return (-(closingVelocity*60) + sqrt((closingVelocity*60)**2 + 4*(acceleration+getClosingAcceleration())*relativeDisplacement.length()))/2*acceleration
 
 func proportionalNavigation():
 	if relativeVelocity.dot(relativeDisplacement) < 0:

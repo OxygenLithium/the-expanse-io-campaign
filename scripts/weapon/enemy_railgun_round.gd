@@ -15,7 +15,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
 	timer += 1
-	if timer > 90:
+	if timer > 150:
 		queue_free()
 	
 	for i in get_slide_collision_count():

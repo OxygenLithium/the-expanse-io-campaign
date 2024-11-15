@@ -3,6 +3,7 @@ extends ColorRect
 @export var mainCamera : Node2D
 
 var cameraLockable = []
+var cameraLockable2 = []
 
 const cameraLockDistanceInMap = 50
 const cameraLockDistanceInGame = 150
@@ -54,6 +55,11 @@ func _process(delta: float) -> void:
 				if (el.global_position - get_global_mouse_position()).length() < min(cameraLockDistanceInMap,minDistance):
 					minDistance = (el.global_position - get_global_mouse_position()).length()
 					closestMarker = el
+			if Input.is_action_pressed("key_shift"):
+				for el in cameraLockable2:
+					if (el.global_position - get_global_mouse_position()).length() < min(cameraLockDistanceInMap,minDistance):
+						minDistance = (el.global_position - get_global_mouse_position()).length()
+						closestMarker = el
 			if closestMarker:
 				mainCamera.setTarget(closestMarker.markerTarget)
 			elif $/root/Node/mainCamera.prevTarget:
@@ -69,3 +75,18 @@ func _process(delta: float) -> void:
 			#if closestMarker:
 				#cameraTarget = closestMarker.markerTarget
 			#print("----------")
+	if Input.is_action_just_pressed("key_f"):
+		var minDistance = INF
+		var closestMarker = null
+		if $/root/Node/map_canvas.visible:
+			for el in cameraLockable:
+				if (el.global_position - get_global_mouse_position()).length() < min(cameraLockDistanceInMap,minDistance):
+					minDistance = (el.global_position - get_global_mouse_position()).length()
+					closestMarker = el
+			if Input.is_action_pressed("key_shift"):
+				for el in cameraLockable2:
+					if (el.global_position - get_global_mouse_position()).length() < min(cameraLockDistanceInMap,minDistance):
+						minDistance = (el.global_position - get_global_mouse_position()).length()
+						closestMarker = el
+			if closestMarker:
+				$/root/Node/player.target = closestMarker.markerTarget

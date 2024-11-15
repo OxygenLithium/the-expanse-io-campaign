@@ -8,6 +8,7 @@ var railgunRoundMarkerFile = load("res://radar_map/railgun_round_marker.tscn")
 var railgunWarning = load("res://hud/railgunWarning.tscn")
 var railgunTimer = rng.randi_range(0,150)
 const railgunRoundSpeed = 15000
+const railgunRange = 15000
 
 func special_init():
 	health = 100
@@ -43,7 +44,7 @@ func calc_railgun_lead():
 func special_actions():
 	railgun.look_at(target.global_position + calc_railgun_lead())
 	railgunTimer += 1
-	if railgunTimer > 600:
+	if railgunTimer > 600 and (target.global_position-global_position).length() < railgunRange:
 		shoot_railgun()
 		railgunTimer = rng.randi_range(0,60)
 	pass

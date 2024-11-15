@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ceku4w7mjgf8o"]
+[gd_scene load_steps=17 format=3 uid="uid://ceku4w7mjgf8o"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_21lp1"]
 [ext_resource type="PackedScene" uid="uid://c25hobfh6ie7u" path="res://radar_map.tscn" id="1_6607f"]
@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://dtemqkaurh56b" path="res://hud/mission failed.png" id="8_7ya7k"]
 [ext_resource type="Script" path="res://hud/hud_canvas.gd" id="8_dow45"]
 [ext_resource type="Texture2D" uid="uid://e31f3ox45ms5" path="res://hud/mission accomplished.png" id="10_xqrtd"]
+[ext_resource type="Texture2D" uid="uid://drli6mbq3150" path="res://sprites/ship_and_parts/Scirocco-class Cruiser.png" id="14_dx5h7"]
+[ext_resource type="Texture2D" uid="uid://c5qtexwsx0085" path="res://sprites/weapon/Murphy Railgun.png" id="15_d0gci"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4c6h0"]
 font_size = 36
@@ -89,3 +91,17 @@ texture = ExtResource("5_v2q78")
 
 [node name="player" parent="." instance=ExtResource("2_i60sp")]
 position = Vector2(-1, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-27, -345)
+scale = Vector2(0.367559, 0.36756)
+texture = ExtResource("14_dx5h7")
+
+[node name="railgun_pivot" type="Node2D" parent="Sprite2D"]
+position = Vector2(-299.271, -185.004)
+scale = Vector2(1, 1)
+
+[node name="railgun_sprite" type="Sprite2D" parent="Sprite2D/railgun_pivot"]
+position = Vector2(81.6195, 3.05176e-05)
+scale = Vector2(1.20987, 1.39048)
+texture = ExtResource("15_d0gci")

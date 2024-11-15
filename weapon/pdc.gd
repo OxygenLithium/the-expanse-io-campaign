@@ -9,6 +9,16 @@ var prevPDCTargetAngle = 0
 func _ready() -> void:
 	pass # Replace with function body.
 
+func predictTime(target, targetPosition = null):
+	if !targetPosition:
+		targetPosition = target.global_position
+	var relDistance = targetPosition - global_position
+	var relVelocity = target.velocity - get_parent().velocity
+	var closingVelocity = relVelocity.dot(relDistance)/relDistance.dot(relDistance)*relDistance
+	if relDistance.dot(relVelocity) < 0:
+		return relDistance.length()/(3000+closingVelocity.length())
+	return relDistance.length()/(3000-closingVelocity.length())
+
 func approximateLead(predictedTime):
 	var relativeVelocity = get_parent().PDCTarget.velocity - get_parent().velocity
 	if "acceleration" in get_parent().PDCTarget:
@@ -24,8 +34,8 @@ func _process(delta: float) -> void:
 			if abs(currPDCTargetAngle - prevPDCTargetAngle) < PI/30 or abs(currPDCTargetAngle - prevPDCTargetAngle) > 59*PI/30:
 				look_at(get_parent().PDCTarget.global_position)
 			else:
-				var firstApproxPosition = approximateLead((get_parent().PDCTarget.global_position - get_parent().global_position).length()/60)
-				look_at(get_parent().PDCTarget.global_position + approximateLead(firstApproxPosition.length()/60) + get_parent().velocity/60)
+				var firstApproxPosition = approximateLead(predictTime(get_parent().PDCTarget))
+				look_at(get_parent().PDCTarget.global_position + firstApproxPosition + get_parent().velocity/60)
 			prevPDCTargetAngle = currPDCTargetAngle
 	else:
 		if $/root/Node/map_canvas.visible:

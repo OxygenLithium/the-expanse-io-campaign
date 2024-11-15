@@ -13,12 +13,12 @@ size = Vector2(641.127, 136.366)
 [node name="player" type="CharacterBody2D" node_paths=PackedStringArray("pdcPivots", "pdcMarkers", "drivePlume")]
 collision_mask = 257
 script = ExtResource("1_f1bkf")
-pdcPivots = [NodePath("pdc_pivot_upper_left"), NodePath("pdc_pivot_upper_right")]
-pdcMarkers = [NodePath("pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right")]
+pdcPivots = [NodePath("pdc_pivot_upper_left"), NodePath("pdc_pivot_upper_right"), NodePath("pdc_pivot_lower_left"), NodePath("pdc_pivot_lower_right")]
+pdcMarkers = [NodePath("pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right"), NodePath("pdc_pivot_lower_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_lower_right/pdc_upper_right/pdc_marker_upper_right")]
 drivePlume = NodePath("Drive Plume")
 
 [node name="pdc_pivot_upper_left" type="Node2D" parent="."]
-position = Vector2(3, -22)
+position = Vector2(13, -24)
 scale = Vector2(0.145, 0.145)
 script = ExtResource("4_xh4ul")
 
@@ -30,7 +30,7 @@ texture = ExtResource("3_8vxsh")
 position = Vector2(27.5862, 6.89655)
 
 [node name="pdc_pivot_upper_right" type="Node2D" parent="."]
-position = Vector2(2, 21)
+position = Vector2(13, 21)
 script = ExtResource("4_xh4ul")
 
 [node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_right"]
@@ -39,6 +39,30 @@ scale = Vector2(0.145, 0.145)
 texture = ExtResource("3_8vxsh")
 
 [node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_upper_right/pdc_upper_right"]
+position = Vector2(27.5863, 6.89652)
+
+[node name="pdc_pivot_lower_left" type="Node2D" parent="."]
+position = Vector2(-24, -20)
+scale = Vector2(0.145, 0.145)
+script = ExtResource("4_xh4ul")
+
+[node name="pdc_upper_left" type="Sprite2D" parent="pdc_pivot_lower_left"]
+position = Vector2(62.0689, -6.89655)
+texture = ExtResource("3_8vxsh")
+
+[node name="pdc_marker_upper_left" type="Marker2D" parent="pdc_pivot_lower_left/pdc_upper_left"]
+position = Vector2(27.5862, 6.89655)
+
+[node name="pdc_pivot_lower_right" type="Node2D" parent="."]
+position = Vector2(-22, 19)
+script = ExtResource("4_xh4ul")
+
+[node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_lower_right"]
+position = Vector2(6.99999, -1.90735e-06)
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("3_8vxsh")
+
+[node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_lower_right/pdc_upper_right"]
 position = Vector2(27.5863, 6.89652)
 
 [node name="Drive Plume" type="Sprite2D" parent="."]

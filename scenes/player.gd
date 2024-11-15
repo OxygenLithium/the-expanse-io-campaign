@@ -73,12 +73,13 @@ func getPDCTarget():
 	if incomingMissiles.size() + $/root/Node.UNNShips.size() == 0:
 		return null
 	var closest = null
-	var minDistance = 4500
+	var minDistance = 12
 	for i in range(incomingMissiles.size()):
-		if (incomingMissiles[i].position - futurePos).length() < minDistance:
+		if incomingMissiles[i].approxImpactTime < minDistance:
 			closest = incomingMissiles[i]
-			minDistance = (incomingMissiles[i].position - futurePos).length()
+			minDistance = incomingMissiles[i].approxImpactTime
 	
+	minDistance *= 500
 	for i in range($/root/Node.UNNShips.size()):
 		if ($/root/Node.UNNShips[i].position - futurePos).length() < minDistance:
 			closest = $/root/Node.UNNShips[i]

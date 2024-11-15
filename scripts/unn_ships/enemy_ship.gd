@@ -10,7 +10,7 @@ const allegiance = "UNN"
 var health = 50
 
 @onready var incomingMissiles = []
-var pdcTarget = null
+var PDCTarget = null
 var getPDCTargetTimer = 0
 
 var bulletSpeed = 3000
@@ -32,7 +32,7 @@ var enemyMarkerFile = load("res://radar_map/enemy_marker.tscn")
 
 var smallShipExplosionFile = load("res://scenes/weapon/smallShipExplosion.tscn")
 
-var acceleration = 1
+var acceleration = 1.5
 
 #AI Distance Control
 const minDistance = 1500
@@ -48,11 +48,17 @@ var shootCooldown = 0
 
 var PDCLockDistance = 1500
 
+# Random Movement Behaviour
+var desiredDistance = rng.randi_range(2000,3000)
+var favouredSide = (rng.randi_range(0,1)-0.5)*2
+var turnSpeed = rng.randf_range(PI/480, PI/240)
+
 # Telemetry
 var targetPosition
 var targetVelocity
 var relativeDisplacement
 var relativeVelocity
+
 var currTargetDirection
 var prevTargetDirection
 
@@ -89,7 +95,7 @@ func missile_cooldowns():
 		missileCooldown = rng.randi_range(0,150)
 
 func getTelemetry():
-	targetPosition = target.position
+	targetPosition = target.position + Vector2(desiredDistance,0).rotated((target.position-position).angle() + PI/3*favouredSide)
 	targetVelocity = target.velocity
 	relativeDisplacement = targetPosition - position
 	relativeVelocity = targetVelocity - velocity
@@ -209,15 +215,15 @@ func _physics_process(delta: float) -> void:
 		death()
 		return
 	
-	if pdcTarget and !is_instance_valid(pdcTarget):
-		pdcTarget = getPDCTarget()
+	if PDCTarget and !is_instance_valid(PDCTarget):
+		PDCTarget = getPDCTarget()
 	
 	if getPDCTargetTimer > 30:
-		pdcTarget = getPDCTarget()
+		PDCTarget = getPDCTarget()
 		getPDCTargetTimer = 0
 	getPDCTargetTimer += 1
 	
-	if pdcTarget and shootCooldown == 0:
+	if PDCTarget and shootCooldown == 0:
 		shoot_PDC()
 		shootCooldown = 3
 	
@@ -248,9 +254,9 @@ func _physics_process(delta: float) -> void:
 	elif diffRotation > PI:
 		diffRotation -= 2*PI
 	if diffRotation >= 0:
-		rotation += min(diffRotation, PI/360)
+		rotation += min(diffRotation, turnSpeed)
 	else:
-		rotation += max(diffRotation, -PI/360)
+		rotation += max(diffRotation, -turnSpeed)
 	
 	velocity += Vector2(min(acceleration,relativeVelocity.length()),0).rotated(rotation)
 
