@@ -1,5 +1,8 @@
 extends "res://scripts/unn_ships/enemy_ship.gd"
 
+const displayType = "Trenton-class Cruiser"
+var displayName = ""
+
 func ready():
 	health = 200
 

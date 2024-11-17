@@ -70,6 +70,13 @@ func _ready():
 func getPDCTarget():
 	var futurePos = position + velocity + Vector2(acceleration,0).rotated(rotation)/120
 	
+	if target == null:
+		$/root/Node/map_canvas/target_label.text = "No Target Selected" 
+	elif "displayType" in target:
+		$/root/Node/map_canvas/target_label.text = "Target:\n" + target.displayType
+		if "displayName" in target:
+			$/root/Node/map_canvas/target_label.text += "\n"+target.displayName
+	
 	if incomingMissiles.size() + $/root/Node.UNNShips.size() == 0:
 		return null
 	var closest = null
@@ -147,7 +154,7 @@ func death():
 	queue_free()
 
 func _physics_process(delta: float) -> void:
-	if health < 0:
+	if health < 0.1:
 		death()
 	
 	# Add the gravity.

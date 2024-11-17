@@ -35,8 +35,8 @@ var smallShipExplosionFile = load("res://scenes/weapon/smallShipExplosion.tscn")
 var acceleration = 1.5
 
 #AI Distance Control
-const minDistance = 1500
-const maxDistance = 10000
+const minDistance = 0
+const maxDistance = 0
 
 #AI Navigation
 var desiredRotation = 0
@@ -49,7 +49,7 @@ var shootCooldown = 0
 var PDCLockDistance = 1500
 
 # Random Movement Behaviour
-var desiredDistance = rng.randi_range(2000,3000)
+var desiredDistance = rng.randi_range(3000,6000)
 var favouredSide = (rng.randi_range(0,1)-0.5)*2
 var turnSpeed = rng.randf_range(PI/480, PI/240)
 
@@ -168,7 +168,7 @@ func getClosingVelocity():
 	var closingVelocityVector = relativeVelocity.dot(relativeDisplacement)/relativeDisplacement.dot(relativeDisplacement)*relativeDisplacement
 	return sqrt(closingVelocityVector.dot(closingVelocityVector))
 
-func proportionalNavigation():
+func proportionalNavigation(decelerate = false):
 	if relativeVelocity.dot(relativeDisplacement) < 0:
 		#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
 		var LOSRate = (currTargetDirection-prevTargetDirection)*60
@@ -176,11 +176,20 @@ func proportionalNavigation():
 		var desiredAccel
 		desiredAccel = 4*LOSRate*closingVelocity
 		if (desiredAccel > acceleration):
-			desiredRotation = relativeVelocity.angle() + PI + PI/2
+			if decelerate:
+				desiredRotation = relativeVelocity.angle() - PI/2
+			else:
+				desiredRotation = relativeVelocity.angle() + PI + PI/2
 		elif (desiredAccel < -acceleration):
-			desiredRotation = relativeVelocity.angle() + PI - PI/2
+			if decelerate:
+				desiredRotation = relativeVelocity.angle() + PI/2
+			else:
+				desiredRotation = relativeVelocity.angle() + PI - PI/2
 		else:
-			desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
+			if decelerate:
+				desiredRotation = relativeVelocity.angle() - asin(desiredAccel/acceleration)
+			else:
+				desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
 			
 	else:
 		if velocity.length() < acceleration:
@@ -204,6 +213,10 @@ func getPDCTarget():
 			closest = $/root/Node.MCRNShips[i]
 			PDCMinDistance = ($/root/Node.MCRNShips[i].position - position).length()
 	return closest
+	
+func movementAlgorithm():
+	var shouldDecelerate = (relativeVelocity.dot(relativeDisplacement) < 0 && relativeVelocity.length()**2 > 2*acceleration*relativeDisplacement.length())
+	proportionalNavigation(shouldDecelerate)
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -238,12 +251,7 @@ func _physics_process(delta: float) -> void:
 	
 	getTelemetry()
 	
-	if relativeDisplacement.length() > maxDistance:
-		proportionalNavigation()
-	elif relativeDisplacement.length() < minDistance:
-		desiredRotation = relativeDisplacement.angle() + PI
-	elif relativeVelocity != Vector2(0,0):
-		desiredRotation = relativeVelocity.angle()
+	movementAlgorithm()
 
 	rotation = fmod(rotation, 2*PI)
 	desiredRotation = fmod(desiredRotation, 2*PI)
@@ -258,7 +266,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		rotation += max(diffRotation, -turnSpeed)
 	
-	velocity += Vector2(min(acceleration,relativeVelocity.length()),0).rotated(rotation)
+	velocity += Vector2(acceleration,0).rotated(rotation)
 
 	prevTargetDirection = currTargetDirection
 

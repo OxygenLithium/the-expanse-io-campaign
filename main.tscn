@@ -18,7 +18,7 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_4c6h0"]
 font_size = 36
-font_color = Color(0.705882, 0.172549, 0.164706, 1)
+font_color = Color(0.156863, 0.839216, 0.164706, 1)
 
 [node name="Node" type="Node" node_paths=PackedStringArray("map_canvas", "hud_canvas")]
 script = ExtResource("1_21lp1")
@@ -52,11 +52,19 @@ script = ExtResource("1_xmbv8")
 mainCamera = NodePath("../../mainCamera")
 
 [node name="autotrack_label" type="Label" parent="map_canvas"]
-offset_left = 61.0
-offset_top = 1288.0
-offset_right = 389.0
-offset_bottom = 1338.0
+offset_left = 58.0
+offset_top = 1149.0
+offset_right = 386.0
+offset_bottom = 1199.0
 text = "PDC Autotrack: ON"
+label_settings = SubResource("LabelSettings_4c6h0")
+
+[node name="target_label" type="Label" parent="map_canvas"]
+offset_left = 58.0
+offset_top = 1208.0
+offset_right = 424.0
+offset_bottom = 1258.0
+text = "No Target Selected"
 label_settings = SubResource("LabelSettings_4c6h0")
 
 [node name="hud_canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("health_bar", "mission_failed", "mission_accomplished")]
@@ -99,7 +107,6 @@ texture = ExtResource("14_dx5h7")
 
 [node name="railgun_pivot" type="Node2D" parent="Sprite2D"]
 position = Vector2(-299.271, -185.004)
-scale = Vector2(1, 1)
 
 [node name="railgun_sprite" type="Sprite2D" parent="Sprite2D/railgun_pivot"]
 position = Vector2(81.6195, 3.05176e-05)

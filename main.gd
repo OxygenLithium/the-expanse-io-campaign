@@ -4,6 +4,7 @@ extends Node
 @export var hud_canvas : CanvasLayer
 
 var frigateFile = load("res://scenes/unn_frigate.tscn")
+var andronicusFile = load("res://scenes/andronicus_destroyer.tscn")
 var destroyerFile = load("res://scenes/murphy_destroyer.tscn")
 var cruiserFile = load("res://scenes/trenton_cruiser.tscn")
 
@@ -49,16 +50,19 @@ func _ready() -> void:
 	#add_child(enemy)
 	
 	enemy = frigateFile.instantiate()
-	enemy.position = Vector2(20000,200)
-	add_child(enemy)
-	
-	enemy = frigateFile.instantiate()
-	enemy.position = Vector2(20000,-400)
-	add_child(enemy)
-	
-	enemy = frigateFile.instantiate()
 	enemy.position = Vector2(20000,400)
+	enemy.displayName = "UNN Nightwing"
 	add_child(enemy)
+	
+	#enemy = frigateFile.instantiate()
+	#enemy.position = Vector2(20000,-800)
+	#enemy.displayName = "UNN Balsamic Vinegar"
+	#add_child(enemy)
+	#
+	#enemy = frigateFile.instantiate()
+	#enemy.position = Vector2(20000,800)
+	#enemy.displayName = "UNN Sundial"
+	#add_child(enemy)
 	
 	#enemy = destroyerFile.instantiate()
 	#enemy.position = Vector2(26000,-100)
@@ -68,9 +72,15 @@ func _ready() -> void:
 	#enemy.position = Vector2(20000,0)
 	#add_child(enemy)
 	
-	enemy = destroyerFile.instantiate()
-	enemy.position = Vector2(22000,2000)
-	add_child(enemy)
+	#enemy = andronicusFile.instantiate()
+	#enemy.position = Vector2(22000,2000)
+	#enemy.displayName = "UNN Chad Japeeti"
+	#add_child(enemy)
+	#
+	#enemy = destroyerFile.instantiate()
+	#enemy.position = Vector2(22000,0)
+	#enemy.displayName = "UNN Cyra Practer"
+	#add_child(enemy)
 	
 	#enemy = cruiserFile.instantiate()
 	#enemy.position = Vector2(25500,000)

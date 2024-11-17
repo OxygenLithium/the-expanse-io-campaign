@@ -1,5 +1,7 @@
 extends "res://scripts/unn_ships/enemy_ship.gd"
 
+const displayType = "Murphy-class Destroyer"
+var displayName = ""
 
 #Railgun stuff
 @export var railgun : Node2D
@@ -7,8 +9,10 @@ var railgunRoundFile = load("res://scenes/weapon/enemyRailgunRound.tscn")
 var railgunRoundMarkerFile = load("res://radar_map/railgun_round_marker.tscn")
 var railgunWarning = load("res://hud/railgunWarning.tscn")
 var railgunTimer = rng.randi_range(0,150)
-const railgunRoundSpeed = 15000
-const railgunRange = 15000
+const railgunMaxRange = 15000
+const railgunMinRange = 5000
+
+var railgunRoundSpeed = 15000
 
 func special_init():
 	health = 100
@@ -44,7 +48,8 @@ func calc_railgun_lead():
 func special_actions():
 	railgun.look_at(target.global_position + calc_railgun_lead())
 	railgunTimer += 1
-	if railgunTimer > 600 and (target.global_position-global_position).length() < railgunRange:
+	if railgunTimer > 600 and (target.global_position-global_position).length() < railgunMaxRange and (target.global_position-global_position).length() > railgunMinRange:
+		railgunRoundSpeed = (target.global_position-global_position).length()
 		shoot_railgun()
 		railgunTimer = rng.randi_range(0,60)
 	pass

@@ -1,6 +1,6 @@
 extends "res://scripts/unn_ships/enemy_ship.gd"
 
-const displayType = "Munroe-class Frigate"
+const displayType = "Andronicus-class Destroyer"
 var displayName = ""
 
 func special_init():

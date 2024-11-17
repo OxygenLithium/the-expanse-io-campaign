@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 var type = "missile"
+var displayType = "Missile"
 var allegiance
 
 var target
@@ -39,8 +40,8 @@ var proportionalNavTimer = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	currTargetDirection = 0
-	prevTargetDirection = 0
+	getTelemetry()
+	prevTargetDirection = currTargetDirection
 	accelerationGrade = 1
 	
 	if target and "incomingMissiles" in target:
@@ -51,6 +52,9 @@ func getTelemetry():
 	targetPosition = target.position
 	targetVelocity = target.velocity
 	relativeDisplacement = targetPosition - position
+	print("----")
+	print(targetVelocity)
+	print(velocity)
 	relativeVelocity = targetVelocity - velocity
 	currTargetDirection = relativeDisplacement.angle()
 	velocityDirection = velocity.angle()
@@ -155,20 +159,22 @@ func _physics_process(delta: float) -> void:
 	desiredRotation = fmod(desiredRotation, 2*PI)
 	
 	var diffRotation = fmod(desiredRotation - rotation, 2*PI)
+	
 	if diffRotation < -PI:
 		diffRotation += 2*PI
 	elif diffRotation > PI:
 		diffRotation -= 2*PI
-	if timer < 60:
-		if diffRotation >= 0:
-			rotation += min(diffRotation, PI/30)
+	if timer > 30:
+		if timer < 60:
+			if diffRotation >= 0:
+				rotation += min(diffRotation, PI/30)
+			else:
+				rotation += max(diffRotation, -PI/30)
 		else:
-			rotation += max(diffRotation, -PI/30)
-	else:
-		if diffRotation >= 0:
-			rotation += min(diffRotation, PI/30)
-		else:
-			rotation += max(diffRotation, -PI/30)
+			if diffRotation >= 0:
+				rotation += min(diffRotation, PI/30)
+			else:
+				rotation += max(diffRotation, -PI/30)
 	
 		
 	acceleration = accelerations[accelerationGrade]
