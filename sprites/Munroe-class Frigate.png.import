@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://s4l6scdklqui"
-path="res://.godot/imported/Munroe-class Frigate.png-ed2af6d8076d53deef75d0507035ddb7.ctex"
+uid="uid://b81546bktljvk"
+path="res://.godot/imported/Munroe-class Frigate.png-ed50b8dcd197e079d0ee750bcf457ef4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ship_and_parts/Munroe-class Frigate.png"
-dest_files=["res://.godot/imported/Munroe-class Frigate.png-ed2af6d8076d53deef75d0507035ddb7.ctex"]
+source_file="res://sprites/Munroe-class Frigate.png"
+dest_files=["res://.godot/imported/Munroe-class Frigate.png-ed50b8dcd197e079d0ee750bcf457ef4.ctex"]
 
 [params]
 

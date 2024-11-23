@@ -5,6 +5,7 @@ extends Node
 
 var frigateFile = load("res://scenes/unn_frigate.tscn")
 var andronicusFile = load("res://scenes/andronicus_destroyer.tscn")
+var munroeFile = load("res://scenes/munroe_frigate.tscn")
 var destroyerFile = load("res://scenes/murphy_destroyer.tscn")
 var cruiserFile = load("res://scenes/trenton_cruiser.tscn")
 
@@ -49,55 +50,55 @@ func _ready() -> void:
 	#enemy.position = Vector2(300,300)
 	#add_child(enemy)
 	
-	enemy = frigateFile.instantiate()
-	enemy.position = Vector2(20000,400)
-	enemy.displayName = "UNN Nightwing"
-	add_child(enemy)
-	
 	#enemy = frigateFile.instantiate()
-	#enemy.position = Vector2(20000,-800)
+	#enemy.position = Vector2(20000,1500)
+	#enemy.displayName = "UNN Nightwing"
+	#add_child(enemy)
+	#
+	#enemy = frigateFile.instantiate()
+	#enemy.position = Vector2(20000,0)
 	#enemy.displayName = "UNN Balsamic Vinegar"
 	#add_child(enemy)
-	#
+#
 	#enemy = frigateFile.instantiate()
-	#enemy.position = Vector2(20000,800)
+	#enemy.position = Vector2(20000,-1500)
 	#enemy.displayName = "UNN Sundial"
 	#add_child(enemy)
-	
-	#enemy = destroyerFile.instantiate()
-	#enemy.position = Vector2(26000,-100)
-	#add_child(enemy)
-	
-	#enemy = destroyerFile.instantiate()
-	#enemy.position = Vector2(20000,0)
-	#add_child(enemy)
-	
+	#
 	#enemy = andronicusFile.instantiate()
-	#enemy.position = Vector2(22000,2000)
-	#enemy.displayName = "UNN Chad Japeeti"
-	#add_child(enemy)
-	#
-	#enemy = destroyerFile.instantiate()
-	#enemy.position = Vector2(22000,0)
-	#enemy.displayName = "UNN Cyra Practer"
+	#enemy.position = Vector2(20000,700)
+	#enemy.displayName = "UNN T. Moe"
 	#add_child(enemy)
 	
-	#enemy = cruiserFile.instantiate()
-	#enemy.position = Vector2(25500,000)
-	#add_child(enemy)
+	enemy = munroeFile.instantiate()
+	enemy.position = Vector2(20000,5000)
+	enemy.displayName = "UNN Branta"
+	add_child(enemy)
 	
-	#enemy = frigateFile.instantiate()
-	#enemy.position = Vector2(20000,0)
-	#add_child(enemy)
-	#
-	#enemy = frigateFile.instantiate()
-	#enemy.position = Vector2(15000,10000)
-	#add_child(enemy)
-	#
-	#enemy = frigateFile.instantiate()
-	#enemy.position = Vector2(17000,8000)
-	#add_child(enemy)
-	#return
+	enemy = munroeFile.instantiate()
+	enemy.position = Vector2(20000,0)
+	enemy.displayName = "UNN Tom Honks"
+	add_child(enemy)
+	
+	enemy = munroeFile.instantiate()
+	enemy.position = Vector2(20000,-5000)
+	enemy.displayName = "UNN Mr Goose"
+	add_child(enemy)
+	
+	enemy = munroeFile.instantiate()
+	enemy.position = Vector2(30000,5000)
+	enemy.displayName = "UNN Goose on the Loose"
+	add_child(enemy)
+	
+	enemy = munroeFile.instantiate()
+	enemy.position = Vector2(30000,0)
+	enemy.displayName = "UNN Maverick"
+	add_child(enemy)
+	
+	enemy = munroeFile.instantiate()
+	enemy.position = Vector2(30000,-5000)
+	enemy.displayName = "UNN Canada Goose"
+	add_child(enemy)
 
 func unn_ship_destroyed():
 	if UNNShips.size() < 1:

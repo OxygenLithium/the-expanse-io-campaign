@@ -21,7 +21,7 @@ var getPDCTargetTimer = 0
 
 #Files
 var bulletFile = load("res://scenes/weapon/bullet.tscn")
-var missileFile = load("res://scenes/weapon/missile.tscn")
+var missileFile = load("res://scenes/weapon/MCRNMissile.tscn")
 var missileMarkerFile = load("res://radar_map/mcrn_missile_marker.tscn")
 
 var smallShipExplosionFile = load("res://scenes/weapon/smallShipExplosion.tscn")
@@ -63,7 +63,7 @@ func _ready():
 	drivePlume.visible = false
 	
 	PDCAutotrack = true
-	$/root/Node/map_canvas/autotrack_label.text = "PDC Autotrack: ON"
+	$/root/Node/hud_canvas/autotrack_label.text = "PDC Autotrack: ON"
 	
 	$/root/Node.MCRNShips.push_back(self)
 
@@ -71,11 +71,11 @@ func getPDCTarget():
 	var futurePos = position + velocity + Vector2(acceleration,0).rotated(rotation)/120
 	
 	if target == null:
-		$/root/Node/map_canvas/target_label.text = "No Target Selected" 
+		$/root/Node/hud_canvas/target_label.text = "No Target Selected" 
 	elif "displayType" in target:
-		$/root/Node/map_canvas/target_label.text = "Target:\n" + target.displayType
+		$/root/Node/hud_canvas/target_label.text = "Target:\n" + target.displayType
 		if "displayName" in target:
-			$/root/Node/map_canvas/target_label.text += "\n"+target.displayName
+			$/root/Node/hud_canvas/target_label.text += "\n"+target.displayName
 	
 	if incomingMissiles.size() + $/root/Node.UNNShips.size() == 0:
 		return null
@@ -219,9 +219,9 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("key_t"):
 		PDCAutotrack = !PDCAutotrack
 		if PDCAutotrack:
-			$/root/Node/map_canvas/autotrack_label.text = "PDC Autotrack: ON"
+			$/root/Node/hud_canvas/autotrack_label.text = "PDC Autotrack: ON"
 		else:
-			$/root/Node/map_canvas/autotrack_label.text = "PDC Autotrack: OFF"
+			$/root/Node/hud_canvas/autotrack_label.text = "PDC Autotrack: OFF"
 	if PDCAutotrack && PDCTarget && shootCooldown == 0:
 		shoot_PDC()
 		shootCooldown = 3

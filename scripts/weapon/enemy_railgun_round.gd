@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 var type = "bullet"
 var allegiance
+var damage = 20
 
 var timer = 0
 
@@ -15,7 +16,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
 	timer += 1
-	if timer > 150:
+	if timer > 300:
 		queue_free()
 	
 	for i in get_slide_collision_count():
@@ -28,7 +29,7 @@ func _physics_process(delta: float) -> void:
 		if (collider.type == "missile"):
 			collider.hit_by_railgun()
 		elif (collider.type == "ship"):
-			collider.take_damage_railgun(20)
+			collider.take_damage_railgun(damage)
 		
 		queue_free()
 		break

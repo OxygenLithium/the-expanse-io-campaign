@@ -4,6 +4,10 @@ extends Label
 @export var arrow : Polygon2D
 var target
 
+func _ready():
+	if "type" in target:
+		print(target.type)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if !is_instance_valid(target) or !is_instance_valid($/root/Node/player):

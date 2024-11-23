@@ -51,22 +51,6 @@ color = Color(0.235294, 0.235294, 0.235294, 0.862745)
 script = ExtResource("1_xmbv8")
 mainCamera = NodePath("../../mainCamera")
 
-[node name="autotrack_label" type="Label" parent="map_canvas"]
-offset_left = 58.0
-offset_top = 1149.0
-offset_right = 386.0
-offset_bottom = 1199.0
-text = "PDC Autotrack: ON"
-label_settings = SubResource("LabelSettings_4c6h0")
-
-[node name="target_label" type="Label" parent="map_canvas"]
-offset_left = 58.0
-offset_top = 1208.0
-offset_right = 424.0
-offset_bottom = 1258.0
-text = "No Target Selected"
-label_settings = SubResource("LabelSettings_4c6h0")
-
 [node name="hud_canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("health_bar", "mission_failed", "mission_accomplished")]
 script = ExtResource("8_dow45")
 health_bar = NodePath("health_bar")
@@ -90,6 +74,22 @@ offset_top = 1400.0
 offset_right = 945.0
 offset_bottom = 1450.0
 script = ExtResource("3_e6103")
+
+[node name="autotrack_label" type="Label" parent="hud_canvas"]
+offset_left = 58.0
+offset_top = 1149.0
+offset_right = 386.0
+offset_bottom = 1199.0
+text = "PDC Autotrack: ON"
+label_settings = SubResource("LabelSettings_4c6h0")
+
+[node name="target_label" type="Label" parent="hud_canvas"]
+offset_left = 58.0
+offset_top = 1208.0
+offset_right = 424.0
+offset_bottom = 1258.0
+text = "No Target Selected"
+label_settings = SubResource("LabelSettings_4c6h0")
 
 [node name="Jupiter" type="Sprite2D" parent="."]
 visible = false

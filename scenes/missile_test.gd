@@ -17,8 +17,8 @@ var prevTargetDirection
 var velocityDirection
 var relativeVelocityDireciton
 
-const lifespan = 900
-const accelerations = [0,6,18]
+const lifespan = 1800
+const accelerations = [0,9,27]
 
 var acceleration = 4
 var accelerationGrade
@@ -26,7 +26,7 @@ var accelerationGrade
 var desiredRotation = 0
 
 var cutAcceleration
-const cutAccelerationSpeed = 1200
+const cutAccelerationSpeed = 6000
 const cutAccelerationDistance = 3000
 
 var approxImpactTime = INF
@@ -40,7 +40,8 @@ var proportionalNavTimer = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	getTelemetry()
+	if target:
+		getTelemetry()
 	prevTargetDirection = currTargetDirection
 	accelerationGrade = 1
 	
@@ -52,26 +53,17 @@ func getTelemetry():
 	targetPosition = target.position
 	targetVelocity = target.velocity
 	relativeDisplacement = targetPosition - position
-	print("----")
-	print(targetVelocity)
-	print(velocity)
 	relativeVelocity = targetVelocity - velocity
 	currTargetDirection = relativeDisplacement.angle()
 	velocityDirection = velocity.angle()
-	
-
-func getVelocityDirection():
-	var fixedVX = velocity.x
-	if fixedVX == 0:
-		fixedVX = 0.01
-	var angle = atan(velocity.y/fixedVX)
-	if (sign(velocity.x) == -1):
-		angle += PI
-	return angle
 
 func getClosingVelocity():
 	#vector projection of rel. velocity onto rel. displacement
 	return -relativeVelocity.dot(relativeDisplacement)/relativeDisplacement.dot(relativeDisplacement)*relativeDisplacement.length()
+	
+func getPerpendicularVelocityVector():
+	#vector projection of rel. velocity onto rel. displacement
+	return -relativeVelocity+relativeVelocity.dot(relativeDisplacement)/relativeDisplacement.dot(relativeDisplacement)*relativeDisplacement
 	
 func getClosingAcceleration():
 	#vector projection of rel. velocity onto rel. displacement
@@ -79,11 +71,13 @@ func getClosingAcceleration():
 		return 0
 	return -Vector2(target.acceleration,0).rotated(target.rotation).dot(relativeDisplacement)/relativeDisplacement.dot(relativeDisplacement)*relativeDisplacement.length()
 
-func validCutAcceleration():
-	return (relativeVelocity.length() < cutAccelerationSpeed && relativeDisplacement.length() < cutAccelerationDistance)
-
 func approximateImpactTime(closingVelocity):
 	return (-(closingVelocity*60) + sqrt((closingVelocity*60)**2 + 4*(acceleration+getClosingAcceleration())*relativeDisplacement.length()))/2*acceleration
+
+func nonzeroAcceleration():
+	if acceleration == 0:
+		return 9
+	return acceleration
 
 func proportionalNavigation():
 	if relativeVelocity.dot(relativeDisplacement) < 0:
@@ -99,9 +93,9 @@ func proportionalNavigation():
 			desiredRotation = relativeVelocity.angle() + PI - PI/2
 		else:
 			desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
-		if (desiredAccel < accelerations[accelerationGrade]/4 && validCutAcceleration()):
-			cutAcceleration = true
-			
+			if closingVelocity > cutAccelerationSpeed:
+				cutAcceleration = true
+				velocity += Vector2(0,desiredAccel).rotated(relativeVelocity.angle())
 	else:
 		if velocity.length() < acceleration:
 			velocity = Vector2(0,0)
@@ -135,6 +129,9 @@ func _physics_process(delta: float) -> void:
 	#fetches and calculates parameters about the target
 	cutAcceleration = false
 	
+	if !is_instance_valid(target):
+		target = null
+	
 	if !target:
 		velocity += Vector2(acceleration,0).rotated(rotation)
 		move_and_slide()
@@ -143,12 +140,29 @@ func _physics_process(delta: float) -> void:
 	getTelemetry()
 	
 	if timer >= 30:
-		if approxImpactTime < finalManeuverTime || proportionalNavTimer > 10:
+		if approxImpactTime < finalManeuverTime:
+			accelerationGrade = 2
 			proportionalNavigation()
+			proportionalNavTimer = 0
+		if proportionalNavTimer > 5:
+			proportionalNavigation()
+			#var shouldBrake = getClosingVelocity() > cutAccelerationSpeed
+			#print(shouldBrake)
+			#if shouldBrake:
+				#velocity -= Vector2(acceleration*5,0).rotated(relativeDisplacement.angle())
+			#var desiredAccel = proportionalNavigation(shouldBrake)
+			#
+			#if desiredAccel < 9:
+				#cutAcceleration = true
+				#desiredRotation = relativeVelocity.angle()
+				#velocity += Vector2(0,desiredAccel).rotated(relativeVelocity.angle())
+			
 			proportionalNavTimer = 0
 		
 	if timer == 30:
 		accelerationGrade = 2
+	if timer == 120:
+		accelerationGrade = 1
 	elif timer == lifespan:
 		if "incomingMissiles" in target:
 			target.incomingMissiles.erase(self)
@@ -167,18 +181,21 @@ func _physics_process(delta: float) -> void:
 	if timer > 30:
 		if timer < 60:
 			if diffRotation >= 0:
-				rotation += min(diffRotation, PI/30)
+				rotation += min(diffRotation, PI/60)
 			else:
-				rotation += max(diffRotation, -PI/30)
+				rotation += max(diffRotation, -PI/60)
 		else:
 			if diffRotation >= 0:
-				rotation += min(diffRotation, PI/30)
+				rotation += min(diffRotation, PI/90)
 			else:
-				rotation += max(diffRotation, -PI/30)
+				rotation += max(diffRotation, -PI/90)
+	
+	if abs(diffRotation) > PI/18:
+		cutAcceleration = true
 	
 		
 	acceleration = accelerations[accelerationGrade]
-	if (!cutAcceleration):
+	if !cutAcceleration:
 		velocity += Vector2(acceleration,0).rotated(rotation)
 	
 	timer += 1

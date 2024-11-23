@@ -21,7 +21,7 @@ var rng = RandomNumberGenerator.new()
 @onready var player = get_node("/root/Node/player")
 @onready var target = player
 
-var missileFile = load("res://scenes/weapon/missile.tscn")
+var missileFile = load("res://scenes/weapon/UNNMissile.tscn")
 var missileMarkerFile = load("res://radar_map/unn_missile_marker.tscn")
 var bulletFile = load("res://scenes/weapon/enemyBullet.tscn")
 var bulletMarkerFile = load("res://radar_map/bullet_marker.tscn")
@@ -32,6 +32,7 @@ var enemyMarkerFile = load("res://radar_map/enemy_marker.tscn")
 
 var smallShipExplosionFile = load("res://scenes/weapon/smallShipExplosion.tscn")
 
+const standardAcceleration = 1.5
 var acceleration = 1.5
 
 #AI Distance Control
@@ -40,6 +41,7 @@ const maxDistance = 0
 
 #AI Navigation
 var desiredRotation = 0
+var shouldAccelerate = true
 
 #Weaponry control
 var missileCooldown = rng.randi_range(0,150)
@@ -132,7 +134,8 @@ func shoot_missile():
 	missile.global_position = global_position
 	get_parent().add_child(missile)
 	missile.rotation = rotation
-	missile.velocity = Vector2(300,0).rotated(rotation)
+	missile.velocity = velocity
+	missile.velocity += Vector2(300,0).rotated(rotation)
 	
 	var missile_marker = missileMarkerFile.instantiate()
 	missile_marker.markerTarget = missile
@@ -169,30 +172,28 @@ func getClosingVelocity():
 	return sqrt(closingVelocityVector.dot(closingVelocityVector))
 
 func proportionalNavigation(decelerate = false):
-	if relativeVelocity.dot(relativeDisplacement) < 0:
+	if relativeVelocity.dot(relativeDisplacement) < 0 or decelerate:
 		#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
 		var LOSRate = (currTargetDirection-prevTargetDirection)*60
 		var closingVelocity = getClosingVelocity()
 		var desiredAccel
 		desiredAccel = 4*LOSRate*closingVelocity
-		if (desiredAccel > acceleration):
-			if decelerate:
-				desiredRotation = relativeVelocity.angle() - PI/2
-			else:
-				desiredRotation = relativeVelocity.angle() + PI + PI/2
-		elif (desiredAccel < -acceleration):
-			if decelerate:
-				desiredRotation = relativeVelocity.angle() + PI/2
-			else:
-				desiredRotation = relativeVelocity.angle() + PI - PI/2
+		if (desiredAccel > standardAcceleration):
+			desiredRotation = relativeVelocity.angle() - PI/2
+		elif (desiredAccel < -standardAcceleration):
+			desiredRotation = relativeVelocity.angle() + PI/2
 		else:
 			if decelerate:
-				desiredRotation = relativeVelocity.angle() - asin(desiredAccel/acceleration)
+				if relativeVelocity.dot(relativeDisplacement) < 0:
+					desiredRotation = relativeVelocity.angle() - asin(desiredAccel/standardAcceleration)
+				else:
+					desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/standardAcceleration)
+					
 			else:
-				desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
+				desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/standardAcceleration)
 			
 	else:
-		if velocity.length() < acceleration:
+		if velocity.length() < standardAcceleration:
 			velocity = Vector2(0,0)
 			desiredRotation = relativeDisplacement.angle()
 		else:
@@ -215,8 +216,18 @@ func getPDCTarget():
 	return closest
 	
 func movementAlgorithm():
-	var shouldDecelerate = (relativeVelocity.dot(relativeDisplacement) < 0 && relativeVelocity.length()**2 > 2*acceleration*relativeDisplacement.length())
+	var shouldDecelerate = (relativeVelocity.dot(relativeDisplacement) < 0 && relativeVelocity.length()**2 > float(standardAcceleration)*120*(relativeDisplacement.length()-relativeVelocity.length()*PI/turnSpeed/60))
 	proportionalNavigation(shouldDecelerate)
+
+func getDiffRotation():
+	rotation = fmod(rotation, 2*PI)
+	
+	var diffRotation = fmod(desiredRotation - rotation, 2*PI)
+	if diffRotation < -PI:
+		diffRotation += 2*PI
+	elif diffRotation > PI:
+		diffRotation -= 2*PI
+	return diffRotation
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -251,20 +262,22 @@ func _physics_process(delta: float) -> void:
 	
 	getTelemetry()
 	
+	acceleration = standardAcceleration
+	shouldAccelerate = true
+	
 	movementAlgorithm()
 
-	rotation = fmod(rotation, 2*PI)
-	desiredRotation = fmod(desiredRotation, 2*PI)
-	
-	var diffRotation = fmod(desiredRotation - rotation, 2*PI)
-	if diffRotation < -PI:
-		diffRotation += 2*PI
-	elif diffRotation > PI:
-		diffRotation -= 2*PI
+	var diffRotation = getDiffRotation()
 	if diffRotation >= 0:
 		rotation += min(diffRotation, turnSpeed)
 	else:
 		rotation += max(diffRotation, -turnSpeed)
+		
+	if shouldAccelerate:
+		shouldAccelerate =  (abs(diffRotation) < PI/6)
+	
+	if !shouldAccelerate:
+		acceleration = 0
 	
 	velocity += Vector2(acceleration,0).rotated(rotation)
 

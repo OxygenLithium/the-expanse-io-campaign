@@ -1,7 +1,7 @@
 extends "res://scripts/unn_ships/enemy_ship.gd"
 
 const displayType = "Murphy-class Destroyer"
-var displayName = ""
+var displayName
 
 #Railgun stuff
 @export var railgun : Node2D
