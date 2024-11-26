@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=3 uid="uid://fprgjujmqhf6"]
+
+[ext_resource type="Script" path="res://scripts/ships/unn/munroe_frigate.gd" id="1_oahke"]
+[ext_resource type="Script" path="res://scripts/ship_parts/unn/enemyPDC.gd" id="2_7fmrn"]
+[ext_resource type="Texture2D" uid="uid://ci6caan12shp0" path="res://sprites/ship_parts/common/minigun.png" id="4_i3lsr"]
+[ext_resource type="Script" path="res://scripts/ship_parts/common/drive_plume.gd" id="4_m3clb"]
+[ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="4_ywmov"]
+[ext_resource type="Texture2D" uid="uid://s4l6scdklqui" path="res://sprites/ships/unn/Munroe-class Frigate.png" id="6_lvwup"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ypt78"]
+size = Vector2(643.124, 140.535)
+
+[node name="unn_frigate" type="CharacterBody2D" node_paths=PackedStringArray("pdcPivots", "pdcMarkers")]
+position = Vector2(7, -3)
+collision_layer = 256
+collision_mask = 257
+script = ExtResource("1_oahke")
+pdcPivots = [NodePath("pdc_pivot_upper_left"), NodePath("pdc_pivot_upper_right")]
+pdcMarkers = [NodePath("pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-4.5, 1.24998)
+scale = Vector2(0.209913, 0.209913)
+shape = SubResource("RectangleShape2D_ypt78")
+
+[node name="pdc_pivot_upper_left" type="Node2D" parent="."]
+position = Vector2(-6, -31)
+scale = Vector2(0.145, 0.145)
+script = ExtResource("2_7fmrn")
+
+[node name="pdc_upper_left" type="Sprite2D" parent="pdc_pivot_upper_left"]
+position = Vector2(55.1724, 0)
+texture = ExtResource("4_i3lsr")
+
+[node name="pdc_marker_upper_left" type="Marker2D" parent="pdc_pivot_upper_left/pdc_upper_left"]
+position = Vector2(27.5862, 6.89655)
+
+[node name="pdc_pivot_upper_right" type="Node2D" parent="."]
+position = Vector2(-6, 28)
+script = ExtResource("2_7fmrn")
+
+[node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_right"]
+position = Vector2(6.99999, -1.90735e-06)
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("4_i3lsr")
+
+[node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_upper_right/pdc_upper_right"]
+position = Vector2(27.5863, 6.89652)
+
+[node name="Drive Plume" type="Sprite2D" parent="."]
+position = Vector2(-120.546, 1.11403)
+scale = Vector2(0.153852, 0.106063)
+texture = ExtResource("4_ywmov")
+script = ExtResource("4_m3clb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-3, 1)
+scale = Vector2(0.198574, 0.198574)
+texture = ExtResource("6_lvwup")

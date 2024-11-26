@@ -1,0 +1,116 @@
+[gd_scene load_steps=15 format=3 uid="uid://ceku4w7mjgf8o"]
+
+[ext_resource type="PackedScene" uid="uid://c25hobfh6ie7u" path="res://scenes/map/radar_map.tscn" id="1_6607f"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_is4t5"]
+[ext_resource type="Script" path="res://scripts/camera/camera_main.gd" id="2_30754"]
+[ext_resource type="PackedScene" uid="uid://bb26ohp7arwpb" path="res://scenes/ships/mcrn/player.tscn" id="2_i60sp"]
+[ext_resource type="Texture2D" uid="uid://b504jwcjll4eg" path="res://sprites/ambience/space.png" id="3_fswy2"]
+[ext_resource type="Script" path="res://scripts/map/map_canvas.gd" id="4_ofe41"]
+[ext_resource type="Texture2D" uid="uid://cjf0v01yrwnad" path="res://sprites/ambience/jupiter.png" id="5_v2q78"]
+[ext_resource type="Script" path="res://scripts/map/radar_map.gd" id="6_y7poa"]
+[ext_resource type="Script" path="res://scripts/hud/hud_canvas.gd" id="7_r22cw"]
+[ext_resource type="Script" path="res://scripts/hud/healthbar.gd" id="8_s2h57"]
+[ext_resource type="Script" path="res://scripts/messages/message_canvas.gd" id="9_u2pfw"]
+[ext_resource type="Texture2D" uid="uid://drli6mbq3150" path="res://sprites/ships/mcrn/Scirocco-class Cruiser.png" id="14_dx5h7"]
+[ext_resource type="Texture2D" uid="uid://c5qtexwsx0085" path="res://sprites/ship_parts/unn/Murphy Railgun.png" id="15_d0gci"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4c6h0"]
+font_size = 36
+font_color = Color(0.156863, 0.839216, 0.164706, 1)
+
+[node name="Node" type="Node" node_paths=PackedStringArray("map_canvas", "hud_canvas", "message_canvas")]
+script = ExtResource("1_is4t5")
+map_canvas = NodePath("map_canvas")
+hud_canvas = NodePath("hud_canvas")
+message_canvas = NodePath("message_canvas")
+
+[node name="mainCamera" type="Camera2D" parent="."]
+position = Vector2(-1, 0)
+script = ExtResource("2_30754")
+
+[node name="TextureRect" type="TextureRect" parent="mainCamera"]
+texture_filter = 1
+offset_left = -1846.0
+offset_top = -1226.0
+offset_right = 1854.0
+offset_bottom = 1226.0
+texture = ExtResource("3_fswy2")
+
+[node name="map_canvas" type="CanvasLayer" parent="."]
+script = ExtResource("4_ofe41")
+
+[node name="radar_map" parent="map_canvas" node_paths=PackedStringArray("mainCamera") instance=ExtResource("1_6607f")]
+offset_left = 450.0
+offset_top = 150.0
+offset_right = 1650.0
+offset_bottom = 1350.0
+color = Color(0.235294, 0.235294, 0.235294, 0.862745)
+script = ExtResource("6_y7poa")
+mainCamera = NodePath("../../mainCamera")
+
+[node name="hud_canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("health_bar", "mission_failed", "mission_accomplished")]
+script = ExtResource("7_r22cw")
+health_bar = NodePath("health_bar")
+mission_failed = NodePath("../message_canvas/Mission Failed")
+mission_accomplished = NodePath("../message_canvas/Mission Accomplished")
+
+[node name="health_bar" type="ProgressBar" parent="hud_canvas"]
+modulate = Color(0, 1, 0, 1)
+offset_left = 45.0
+offset_top = 1400.0
+offset_right = 945.0
+offset_bottom = 1450.0
+script = ExtResource("8_s2h57")
+
+[node name="autotrack_label" type="Label" parent="hud_canvas"]
+offset_left = 58.0
+offset_top = 1149.0
+offset_right = 386.0
+offset_bottom = 1199.0
+text = "PDC Autotrack: ON"
+label_settings = SubResource("LabelSettings_4c6h0")
+
+[node name="target_label" type="Label" parent="hud_canvas"]
+offset_left = 58.0
+offset_top = 1208.0
+offset_right = 424.0
+offset_bottom = 1258.0
+text = "No Target Selected"
+label_settings = SubResource("LabelSettings_4c6h0")
+
+[node name="message_canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("missionFailedScreen", "missionAccomplishedScreen")]
+script = ExtResource("9_u2pfw")
+missionFailedScreen = NodePath("Mission Failed")
+missionAccomplishedScreen = NodePath("Mission Accomplished")
+
+[node name="Mission Failed" type="Sprite2D" parent="message_canvas"]
+position = Vector2(1056, 729)
+scale = Vector2(1.09034, 1.192)
+
+[node name="Mission Accomplished" type="Sprite2D" parent="message_canvas"]
+position = Vector2(1054, 738)
+scale = Vector2(1.09034, 1.192)
+
+[node name="Jupiter" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(1203, 1117)
+scale = Vector2(5.62598, 5.62598)
+texture = ExtResource("5_v2q78")
+
+[node name="player" parent="." node_paths=PackedStringArray("pdcMarkers") instance=ExtResource("2_i60sp")]
+position = Vector2(-1, 0)
+pdcMarkers = []
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-27, -345)
+scale = Vector2(0.367559, 0.36756)
+texture = ExtResource("14_dx5h7")
+
+[node name="railgun_pivot" type="Node2D" parent="Sprite2D"]
+position = Vector2(-299.271, -185.004)
+
+[node name="railgun_sprite" type="Sprite2D" parent="Sprite2D/railgun_pivot"]
+position = Vector2(81.6195, 3.05176e-05)
+scale = Vector2(1.20987, 1.39048)
+texture = ExtResource("15_d0gci")
