@@ -118,7 +118,8 @@ func shoot_missile():
 	missile.global_position = global_position + Vector2(50,0).rotated(rotation)
 	missile.velocity = velocity
 	missile.rotation = rotation
-	missile.velocity += Vector2(300,0).rotated(rotation)
+	missile.velocity += Vector2(100,0).rotated(rotation)
+	missile.velocity += Vector2(300,0).rotated(rng.randf_range(-PI/2,PI/2))
 	get_parent().add_child(missile)
 	
 	var missile_marker = missileMarkerFile.instantiate()

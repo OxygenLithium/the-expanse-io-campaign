@@ -7,7 +7,7 @@ extends Node
 var frigateFile = load("res://scenes/ships/unn/unn_frigate.tscn")
 var andronicusFile = load("res://scenes/ships/unn/andronicus_destroyer.tscn")
 var munroeFile = load("res://scenes/ships/unn/munroe_frigate.tscn")
-var destroyerFile = load("res://scenes/ships/unn/murphy_destroyer.tscn")
+var murphyFile = load("res://scenes/ships/unn/murphy_destroyer.tscn")
 var cruiserFile = load("res://scenes/ships/unn/trenton_cruiser.tscn")
 
 var UNNShips = []
@@ -54,33 +54,43 @@ func _ready() -> void:
 	#enemy.position = Vector2(300,300)
 	#add_child(enemy)
 	
-	enemy = frigateFile.instantiate()
-	enemy.position = Vector2(20000,1500)
-	enemy.displayName = "UNN Nightwing"
+	#enemy = frigateFile.instantiate()
+	#enemy.position = Vector2(20000,1500)
+	#enemy.displayName = "UNN Nightwing"
+	#add_child(enemy)
+	#
+	#enemy = frigateFile.instantiate()
+	#enemy.position = Vector2(20000,0)
+	#enemy.displayName = "UNN Balsamic Vinegar"
+	#add_child(enemy)
+#
+	#enemy = frigateFile.instantiate()
+	#enemy.position = Vector2(20000,-1500)
+	#enemy.displayName = "UNN Sundial"
+	#add_child(enemy)
+	#
+	#enemy = andronicusFile.instantiate()
+	#enemy.position = Vector2(20000,700)
+	#enemy.displayName = "UNN T. Moe"
+	#add_child(enemy)
+	#
+	#enemy = munroeFile.instantiate()
+	#enemy.position = Vector2(20000,5000)
+	#enemy.displayName = "UNN Branta"
+	#add_child(enemy)
+	#
+	#enemy = munroeFile.instantiate()
+	#enemy.position = Vector2(30000,-5000)
+	#enemy.displayName = "UNN Canada Goose"
+	#add_child(enemy)
+	
+	enemy = murphyFile.instantiate()
+	enemy.position = Vector2(45000,-5000)
+	enemy.displayName = "UNN Canada Goose"
 	add_child(enemy)
 	
-	enemy = frigateFile.instantiate()
-	enemy.position = Vector2(20000,0)
-	enemy.displayName = "UNN Balsamic Vinegar"
-	add_child(enemy)
-
-	enemy = frigateFile.instantiate()
-	enemy.position = Vector2(20000,-1500)
-	enemy.displayName = "UNN Sundial"
-	add_child(enemy)
-	
-	enemy = andronicusFile.instantiate()
-	enemy.position = Vector2(20000,700)
-	enemy.displayName = "UNN T. Moe"
-	add_child(enemy)
-	
-	enemy = munroeFile.instantiate()
-	enemy.position = Vector2(20000,5000)
-	enemy.displayName = "UNN Branta"
-	add_child(enemy)
-	
-	enemy = munroeFile.instantiate()
-	enemy.position = Vector2(30000,-5000)
+	enemy = murphyFile.instantiate()
+	enemy.position = Vector2(46000,-6000)
 	enemy.displayName = "UNN Canada Goose"
 	add_child(enemy)
 

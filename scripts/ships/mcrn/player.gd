@@ -146,6 +146,8 @@ func gforceCheck():
 	gforce += max(acceleration-1.5,0)
 	if gforce > 1:
 		gforce -= 1
+	if gforce > 950 && acceleration > 2:
+		acceleration = 2
 	if gforce > 1000:
 		death()
 	$/root/Node/hud_canvas/g_limit_bar.value = gforce
