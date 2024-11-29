@@ -1,7 +1,7 @@
 extends CanvasLayer
 
-@export var missionFailedScreen : Sprite2D
-@export var missionAccomplishedScreen : Sprite2D
+@export var missionFailedScreen : Label
+@export var missionAccomplishedScreen : Label
 
 
 # Called when the node enters the scene tree for the first time.

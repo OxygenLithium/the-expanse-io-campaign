@@ -79,7 +79,7 @@ func nonzeroAcceleration():
 		return 9
 	return acceleration
 
-func proportionalNavigation():
+func proportionalNavigation(limitSpeed = true):
 	if relativeVelocity.dot(relativeDisplacement) < 0:
 		#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
 		var LOSRate = (currTargetDirection-prevTargetDirection)
@@ -92,10 +92,16 @@ func proportionalNavigation():
 		elif (desiredAccel < -acceleration):
 			desiredRotation = relativeVelocity.angle() + PI - PI/2
 		else:
-			desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
-			if closingVelocity > cutAccelerationSpeed:
-				cutAcceleration = true
-				velocity += Vector2(0,desiredAccel).rotated(relativeVelocity.angle())
+			if limitSpeed:
+				if closingVelocity > cutAccelerationSpeed*1.5:
+					desiredRotation = relativeVelocity.angle() - asin(desiredAccel/acceleration)
+				else:
+					desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
+					if closingVelocity > cutAccelerationSpeed:
+						cutAcceleration = true
+						velocity += Vector2(0,desiredAccel).rotated(relativeVelocity.angle())
+			else:
+				desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
 	else:
 		if velocity.length() < acceleration:
 			velocity = Vector2(0,0)
@@ -142,7 +148,7 @@ func _physics_process(delta: float) -> void:
 	if timer >= 30:
 		if approxImpactTime < finalManeuverTime:
 			accelerationGrade = 2
-			proportionalNavigation()
+			proportionalNavigation(false)
 			proportionalNavTimer = 0
 		if proportionalNavTimer > 5:
 			proportionalNavigation()
@@ -161,8 +167,8 @@ func _physics_process(delta: float) -> void:
 		
 	if timer == 30:
 		accelerationGrade = 2
-	if timer == 120:
-		accelerationGrade = 1
+	#if timer == 120:
+		#accelerationGrade = 1
 	elif timer == lifespan:
 		if "incomingMissiles" in target:
 			target.incomingMissiles.erase(self)

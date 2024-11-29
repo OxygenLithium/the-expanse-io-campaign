@@ -1,39 +1,38 @@
-extends CharacterBody2D
-
-@export var pdcPivots: Array[Node2D]
-@export var pdcMarkers: Array[Node2D]
+extends "res://scripts/ships/common/ship.gd"
 
 #Stats called by others
-const type = "ship"
-const allegiance = "UNN"
-
-var health = 50
-
-@onready var incomingMissiles = []
-var PDCTarget = null
-var getPDCTargetTimer = 0
-
-var bulletSpeed = 3000
-
-var rng = RandomNumberGenerator.new()
 
 #Imported paths
 @onready var player = get_node("/root/Node/player")
-@onready var target = player
-
-var missileFile = load("res://scenes/projectiles/unn/UNNMissile.tscn")
-var missileMarkerFile = load("res://scenes/map/unn_missile_marker.tscn")
-var bulletFile = load("res://scenes/projectiles/unn/enemyBullet.tscn")
-var bulletMarkerFile = load("res://scenes/map/bullet_marker.tscn")
-
-var missileWarning = load("res://scenes/hud/missileWarning.tscn")
 
 var enemyMarkerFile = load("res://scenes/map/enemy_marker.tscn")
+var missileWarning = load("res://scenes/hud/missileWarning.tscn")
 
-var smallShipExplosionFile = load("res://scenes/projectiles/common/smallShipExplosion.tscn")
+func custom_init():
+	#Defining variables
+	missileFile = load("res://scenes/projectiles/unn/UNNMissile.tscn")
+	missileMarkerFile = load("res://scenes/map/unn_missile_marker.tscn")
+	bulletFile = load("res://scenes/projectiles/unn/enemyBullet.tscn")
+	bulletMarkerFile = load("res://scenes/map/bullet_marker.tscn")
+	smallShipExplosionFile = load("res://scenes/projectiles/common/smallShipExplosion.tscn")
+	missileCooldown = rng.randi_range(0,150)
+	
+	target = player
+	allegiance = "UNN"
+	
+	health = 50
+	acceleration = 1.5
+	
+	#Initiation operations
+	var marker = enemyMarkerFile.instantiate()
+	marker.markerTarget = self
+	$/root/Node/map_canvas/radar_map.add_child(marker)
+	
+	$/root/Node.UNNShips.push_back(self)
+	
+	special_init()
 
 const standardAcceleration = 1.5
-var acceleration = 1.5
 
 #AI Distance Control
 const minDistance = 0
@@ -42,10 +41,6 @@ const maxDistance = 0
 #AI Navigation
 var desiredRotation = 0
 var shouldAccelerate = true
-
-#Weaponry control
-var missileCooldown = rng.randi_range(0,150)
-var shootCooldown = 0
 
 
 var PDCLockDistance = 1500
@@ -67,15 +62,6 @@ var prevTargetDirection
 func special_init():
 	pass
 
-func _ready():
-	var marker = enemyMarkerFile.instantiate()
-	marker.markerTarget = self
-	$/root/Node/map_canvas/radar_map.add_child(marker)
-	
-	$/root/Node.UNNShips.push_back(self)
-	
-	special_init()
-
 func death():
 	$/root/Node.UNNShips.erase(self)
 	$/root/Node.unn_ship_destroyed()
@@ -90,11 +76,11 @@ func special_actions():
 	pass
 
 func missile_cooldowns():
-	if missileCooldown == 500:
+	if missileCooldown == 1185:
 		shoot_missile()
-	if missileCooldown > 600:
+	if missileCooldown > 1200:
 		shoot_missile()
-		missileCooldown = rng.randi_range(0,150)
+		missileCooldown = rng.randi_range(-150,150)
 
 func getTelemetry():
 	targetPosition = target.position + Vector2(desiredDistance,0).rotated((target.position-position).angle() + PI/3*favouredSide)
@@ -102,27 +88,6 @@ func getTelemetry():
 	relativeDisplacement = targetPosition - position
 	relativeVelocity = targetVelocity - velocity
 	currTargetDirection = relativeDisplacement.angle()
-
-func shoot_PDC():
-	for i in range(pdcMarkers.size()):
-		var bullet = bulletFile.instantiate()
-		bullet.allegiance = "UNN"
-		bullet.position = pdcMarkers[i].global_position + velocity/60
-		bullet.set_collision_layer_value(11, true)
-		bullet.set_collision_mask_value(1, true)
-		bullet.set_collision_mask_value(2, true)
-		
-		get_parent().add_child(bullet)
-		bullet.rotation = pdcPivots[i].rotation + rotation
-		bullet.rotation += rng.randf_range(-PI/60, PI/60)
-		bullet.velocity = velocity
-		bullet.velocity += Vector2(bulletSpeed,0).rotated(bullet.rotation)
-		bullet.set_visible(true)
-		
-		var bullet_marker = bulletMarkerFile.instantiate()
-		bullet_marker.markerTarget = bullet
-		$/root/Node/map_canvas/radar_map.add_child(bullet_marker)
-		
 
 func shoot_missile():
 	var missile = missileFile.instantiate()
@@ -143,7 +108,7 @@ func shoot_missile():
 	
 	var missile_warning = missileWarning.instantiate()
 	missile_warning.target = missile
-	$/root/Node/map_canvas.add_child(missile_warning)
+	$/root/Node/hud_canvas.add_child(missile_warning)
 
 func take_damage_missile():
 	health -= 20
@@ -153,18 +118,9 @@ func take_damage_bullet():
 	health -= 1
 	pass
 	
-func tanke_damage_railgun(damage):
+func take_damage_railgun(damage):
 	health -= damage
 	pass
-
-func getVelocityDirection():
-	var fixedVX = velocity.x
-	if fixedVX == 0:
-		fixedVX = 0.01
-	var angle = atan(velocity.y/fixedVX)
-	if (sign(velocity.x) == -1):
-		angle += PI
-	return angle
 
 func getClosingVelocity():
 	#vector projection of rel. velocity onto rel. displacement
@@ -199,22 +155,6 @@ func proportionalNavigation(decelerate = false):
 		else:
 			desiredRotation = relativeVelocity.angle()
 
-func getPDCTarget():
-	if incomingMissiles.size() + $/root/Node.MCRNShips.size() == 0:
-		return null
-	var closest = null
-	var PDCMinDistance = PDCLockDistance
-	for i in range(incomingMissiles.size()):
-		if (incomingMissiles[i].position - position).length() < PDCMinDistance:
-			closest = incomingMissiles[i]
-			PDCMinDistance = (incomingMissiles[i].position - position).length()
-	
-	for i in range($/root/Node.MCRNShips.size()):
-		if ($/root/Node.MCRNShips[i].position - position).length() < minDistance:
-			closest = $/root/Node.MCRNShips[i]
-			PDCMinDistance = ($/root/Node.MCRNShips[i].position - position).length()
-	return closest
-	
 func movementAlgorithm():
 	var shouldDecelerate = (relativeVelocity.dot(relativeDisplacement) < 0 && relativeVelocity.length()**2 > float(standardAcceleration)*120*(relativeDisplacement.length()-relativeVelocity.length()*PI/turnSpeed/60))
 	proportionalNavigation(shouldDecelerate)
@@ -229,6 +169,22 @@ func getDiffRotation():
 		diffRotation -= 2*PI
 	return diffRotation
 
+func PDCFunctions():
+	if PDCTarget and !is_instance_valid(PDCTarget):
+		PDCTarget = getPDCTarget($/root/Node.MCRNShips)
+	
+	if getPDCTargetTimer > 30:
+		PDCTarget = getPDCTarget($/root/Node.MCRNShips)
+		getPDCTargetTimer = 0
+	getPDCTargetTimer += 1
+	
+	if PDCTarget and shootCooldown == 0:
+		shoot_PDC()
+		shootCooldown = 3
+	
+	if shootCooldown > 0:
+		shootCooldown -= 1
+
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if !player:
@@ -239,28 +195,12 @@ func _physics_process(delta: float) -> void:
 		death()
 		return
 	
-	if PDCTarget and !is_instance_valid(PDCTarget):
-		PDCTarget = getPDCTarget()
-	
-	if getPDCTargetTimer > 30:
-		PDCTarget = getPDCTarget()
-		getPDCTargetTimer = 0
-	getPDCTargetTimer += 1
-	
-	if PDCTarget and shootCooldown == 0:
-		shoot_PDC()
-		shootCooldown = 3
-	
-	if shootCooldown > 0:
-		shootCooldown -= 1
-	
+	getTelemetry()
+	PDCFunctions()
 	special_actions()
 	
 	missile_cooldowns()
-	
 	missileCooldown += 1
-	
-	getTelemetry()
 	
 	acceleration = standardAcceleration
 	shouldAccelerate = true
@@ -275,12 +215,10 @@ func _physics_process(delta: float) -> void:
 		
 	if shouldAccelerate:
 		shouldAccelerate =  (abs(diffRotation) < PI/6)
-	
 	if !shouldAccelerate:
 		acceleration = 0
 	
 	velocity += Vector2(acceleration,0).rotated(rotation)
 
 	prevTargetDirection = currTargetDirection
-
 	move_and_slide()

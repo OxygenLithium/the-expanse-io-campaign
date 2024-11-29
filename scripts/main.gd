@@ -20,6 +20,7 @@ func player_death():
 		return
 	var gameOver = true
 	map_canvas.visible = false
+	hud_canvas.visible = false
 	message_canvas.missionFailed()
 	
 func victory():
@@ -27,6 +28,7 @@ func victory():
 		return
 	var gameOver = true
 	map_canvas.visible = false
+	hud_canvas.visible = false
 	message_canvas.missionAccomplished()
 
 # Called when the node enters the scene tree for the first time.

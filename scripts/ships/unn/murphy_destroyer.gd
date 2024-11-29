@@ -38,7 +38,7 @@ func shoot_railgun():
 	
 	var railgun_warning = railgunWarning.instantiate()
 	railgun_warning.target = railgunRound
-	$/root/Node/map_canvas.add_child(railgun_warning)
+	$/root/Node/hud_canvas.add_child(railgun_warning)
 
 func calc_railgun_lead():
 	if "acceleration" in target:
