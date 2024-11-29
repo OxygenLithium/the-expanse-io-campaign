@@ -5,7 +5,7 @@ extends "res://scripts/ships/common/ship.gd"
 
 var maxhealth = 100
 var missileReplenish = 1080
-var gforce = 0
+var gforce = 0.0
 
 #Movement stats
 
@@ -51,36 +51,36 @@ func RCSControl():
 		if Input.is_action_just_pressed("key_w") && RCSCooldowns[0] == 0:
 			RCSHard(0)
 			RCSCooldowns[0] = RCSCooldownLength
-			gforce += 100
+			gforce += 200
 		if Input.is_action_just_pressed("key_a") && RCSCooldowns[1] == 0:
 			RCSHard(PI/2)
 			RCSCooldowns[1] = RCSCooldownLength
-			gforce += 100
+			gforce += 200
 		if Input.is_action_just_pressed("key_s") && RCSCooldowns[2] == 0:
 			RCSHard(PI)
 			RCSCooldowns[2] = RCSCooldownLength
-			gforce += 100
+			gforce += 200
 		if Input.is_action_just_pressed("key_d") && RCSCooldowns[3] == 0:
 			RCSHard(-PI/2)
 			RCSCooldowns[3] = RCSCooldownLength
-			gforce += 100
+			gforce += 200
 	else:
 		if Input.is_action_just_pressed("key_w") && RCSCooldowns[0] == 0:
 			RCSSoft(0)
 			RCSCooldowns[0] = RCSLightCooldownLength
-			gforce += 10
+			gforce += 50
 		if Input.is_action_just_pressed("key_a") && RCSCooldowns[1] == 0:
 			RCSSoft(PI/2)
 			RCSCooldowns[1] = RCSLightCooldownLength
-			gforce += 10
+			gforce += 50
 		if Input.is_action_just_pressed("key_s") && RCSCooldowns[2] == 0:
 			RCSSoft(PI)
 			RCSCooldowns[2] = RCSLightCooldownLength
-			gforce += 10
+			gforce += 50
 		if Input.is_action_just_pressed("key_d") && RCSCooldowns[3] == 0:
 			RCSSoft(-PI/2)
 			RCSCooldowns[3] = RCSLightCooldownLength
-			gforce += 10
+			gforce += 50
 	
 	for i in range(4):
 		if RCSCooldowns[i] > 0:
@@ -143,7 +143,7 @@ func missileFunctions():
 	$/root/Node/hud_canvas/missile_ammo_bar.value = missileReplenish
 
 func gforceCheck():
-	gforce += max(acceleration-2,0)
+	gforce += max(acceleration-1.5,0)
 	if gforce > 1:
 		gforce -= 1
 	if gforce > 1000:

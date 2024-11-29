@@ -42,8 +42,8 @@ var bulletSpeed = 3000
 
 const RCSThrust = 300
 const RCSLightThrust = 30
-const RCSCooldownLength = 60
-const RCSLightCooldownLength = 30
+const RCSCooldownLength = 30
+const RCSLightCooldownLength = 10
 var RCSCooldowns = [0,0,0,0]
 
 #Cooldowns
