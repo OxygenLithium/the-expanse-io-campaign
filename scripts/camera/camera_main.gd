@@ -1,8 +1,12 @@
 extends Camera2D
 
-@onready var player = get_node("/root/Node/player")
-@onready var target = get_node("/root/Node/player")
+var player = null
+var target = null
 var prevTarget = null
+
+func gameStart(player):
+	self.player = player
+	target = player
 
 func getTarget():
 	if is_instance_valid(target):
@@ -30,6 +34,10 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if !get_parent().inGame:
+		position = Vector2(0,0)
+		return
+	
 	if !target:
 		if target == prevTarget:
 			prevTarget = null

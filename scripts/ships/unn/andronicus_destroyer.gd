@@ -15,4 +15,4 @@ func missile_cooldowns():
 		missileCooldown = rng.randi_range(-150,150)
 
 func special_init():
-	PDCLockDistance = 2500
+	PDCTargetingEffectiveness = 8

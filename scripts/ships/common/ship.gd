@@ -63,20 +63,20 @@ func _ready():
 	custom_init()
 	ready_functions()
 
-func getPDCTarget(enemyShips):
+func getPDCTarget(enemyShips, PDCTargetingEffectiveness = 12):
 	var futurePos = position + velocity + Vector2(acceleration,0).rotated(rotation)/120
 	
 	if target == null:
-		$/root/Node/hud_canvas/target_label.text = "No Target Selected" 
+		$/root/Node.game_map.hud_canvas.target_label.text = "No Target Selected" 
 	elif "displayType" in target:
-		$/root/Node/hud_canvas/target_label.text = "Target:\n" + target.displayType
+		$/root/Node.game_map.hud_canvas.target_label.text = "Target:\n" + target.displayType
 		if "displayName" in target:
-			$/root/Node/hud_canvas/target_label.text += "\n"+target.displayName
+			$/root/Node.game_map.hud_canvas.target_label.text += "\n"+target.displayName
 	
 	if incomingMissiles.size() +enemyShips.size() == 0:
 		return null
 	var closest = null
-	var minDistance = 12
+	var minDistance = PDCTargetingEffectiveness
 	for i in range(incomingMissiles.size()):
 		if incomingMissiles[i].approxImpactTime < minDistance:
 			closest = incomingMissiles[i]
@@ -107,7 +107,7 @@ func shoot_PDC():
 		
 		var bullet_marker = bulletMarkerFile.instantiate()
 		bullet_marker.markerTarget = bullet
-		$/root/Node/map_canvas/radar_map.add_child(bullet_marker)
+		$/root/Node.game_map.map_canvas.radar_map.add_child(bullet_marker)
 		
 
 func shoot_missile():
@@ -115,7 +115,7 @@ func shoot_missile():
 	missile.allegiance = allegiance
 	
 	missile.target = target
-	missile.global_position = global_position + Vector2(50,0).rotated(rotation)
+	missile.global_position = global_position + Vector2(50,0).rotated(rotation) + velocity/60
 	missile.velocity = velocity
 	missile.rotation = rotation
 	missile.velocity += Vector2(100,0).rotated(rotation)
@@ -124,7 +124,7 @@ func shoot_missile():
 	
 	var missile_marker = missileMarkerFile.instantiate()
 	missile_marker.markerTarget = missile
-	$/root/Node/map_canvas/radar_map.add_child(missile_marker)
+	$/root/Node.game_map.map_canvas.radar_map.add_child(missile_marker)
 
 func on_take_damage():
 	pass

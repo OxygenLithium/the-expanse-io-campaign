@@ -1,6 +1,6 @@
 extends Node2D
 
-var shooter = "/root/Node/player"
+@onready var shooter = get_parent()
 
 var currPDCTargetAngle = 0
 var prevPDCTargetAngle = 0
@@ -38,7 +38,7 @@ func _process(delta: float) -> void:
 				look_at(get_parent().PDCTarget.global_position + firstApproxPosition + get_parent().velocity/60)
 			prevPDCTargetAngle = currPDCTargetAngle
 	else:
-		if $/root/Node/map_canvas.visible:
-			look_at((get_global_mouse_position()-$/root/Node/mainCamera.target.position)*$/root/Node/map_canvas/radar_map.mapScale + $/root/Node/map_canvas/radar_map.mapCenter + get_node(shooter).velocity/60)
+		if $/root/Node.game_map.map_canvas.visible:
+			look_at((get_global_mouse_position()-$/root/Node.mainCamera.target.position)*$/root/Node.game_map.map_canvas.radar_map.mapScale + $/root/Node.game_map.map_canvas.radar_map.mapCenter + shooter.velocity/60)
 		else:
-			look_at(get_global_mouse_position() + get_node(shooter).velocity/60)
+			look_at(get_global_mouse_position() + shooter.velocity/60)

@@ -15,7 +15,7 @@ func _process(delta: float) -> void:
 		queue_free()
 	else:
 		rotation = markerTarget.rotation
-		position = Vector2(600,600) + (markerTarget.position-$/root/Node/map_canvas/radar_map.mapCenter)/$/root/Node/map_canvas/radar_map.mapScale
+		position = Vector2(600,600) + (markerTarget.position-$/root/Node.game_map.map_canvas.radar_map.mapCenter)/$/root/Node.game_map.map_canvas.radar_map.mapScale
 		if abs(position.x - 600) > 600 or abs(position.y-600) > 600:
 			visible = false
 		else:

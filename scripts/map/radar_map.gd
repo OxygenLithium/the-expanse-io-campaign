@@ -1,6 +1,6 @@
 extends ColorRect
 
-@export var mainCamera : Node2D
+@onready var mainCamera = $/root/Node/mainCamera
 
 var cameraLockable = []
 var cameraLockable2 = []
@@ -39,14 +39,16 @@ func _process(delta: float) -> void:
 		mapScale = mapScales[mapSizeNumber]
 	if mapSizeNumber > 0:
 		mapCenter = cameraTarget.position
+		
 	if Input.is_action_just_pressed("key_v"):
-		if cameraTarget != $/root/Node/mainCamera.player:
+		if cameraTarget != $/root/Node.mainCamera.player:
 			mainCamera.setPrevTarget(cameraTarget)
-		mainCamera.setTarget($/root/Node/mainCamera.player)
+		mainCamera.setTarget($/root/Node.mainCamera.player)
+		
 	if Input.is_action_just_pressed("key_c"):
 		var minDistance = INF
 		var closestMarker = null
-		if $/root/Node/map_canvas.visible:
+		if $/root/Node.game_map.map_canvas.visible:
 			for el in cameraLockable:
 				if (el.global_position - get_global_mouse_position()).length() < min(cameraLockDistanceInMap,minDistance):
 					minDistance = (el.global_position - get_global_mouse_position()).length()
@@ -58,7 +60,7 @@ func _process(delta: float) -> void:
 						closestMarker = el
 			if closestMarker:
 				mainCamera.setTarget(closestMarker.markerTarget)
-			elif $/root/Node/mainCamera.prevTarget:
+			elif $/root/Node.mainCamera.prevTarget:
 				mainCamera.setTarget(cameraPrevTarget)
 		#else:
 			#var absoluteMousePos = get_global_mouse_position() + cameraTarget.position
@@ -74,7 +76,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("key_f"):
 		var minDistance = INF
 		var closestMarker = null
-		if $/root/Node/map_canvas.visible:
+		if $/root/Node.game_map.map_canvas.visible:
 			for el in cameraLockable:
 				if (el.global_position - get_global_mouse_position()).length() < min(cameraLockDistanceInMap,minDistance):
 					minDistance = (el.global_position - get_global_mouse_position()).length()
@@ -85,4 +87,4 @@ func _process(delta: float) -> void:
 						minDistance = (el.global_position - get_global_mouse_position()).length()
 						closestMarker = el
 			if closestMarker:
-				$/root/Node/player.target = closestMarker.markerTarget
+				$/root/Node.game_map.player.target = closestMarker.markerTarget

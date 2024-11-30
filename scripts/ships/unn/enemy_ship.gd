@@ -3,10 +3,12 @@ extends "res://scripts/ships/common/ship.gd"
 #Stats called by others
 
 #Imported paths
-@onready var player = get_node("/root/Node/player")
+@onready var player = get_parent().player
 
 var enemyMarkerFile = load("res://scenes/map/enemy_marker.tscn")
 var missileWarning = load("res://scenes/hud/missileWarning.tscn")
+
+var PDCTargetingEffectiveness = 8
 
 func custom_init():
 	#Defining variables
@@ -26,9 +28,9 @@ func custom_init():
 	#Initiation operations
 	var marker = enemyMarkerFile.instantiate()
 	marker.markerTarget = self
-	$/root/Node/map_canvas/radar_map.add_child(marker)
+	$/root/Node.game_map.map_canvas.radar_map.add_child(marker)
 	
-	$/root/Node.UNNShips.push_back(self)
+	$/root/Node.game_map.UNNShips.push_back(self)
 	
 	special_init()
 
@@ -57,14 +59,14 @@ var relativeDisplacement
 var relativeVelocity
 
 var currTargetDirection
-var prevTargetDirection
+var prevTargetDirection = 0
 
 func special_init():
 	pass
 
 func death():
-	$/root/Node.UNNShips.erase(self)
-	$/root/Node.unn_ship_destroyed()
+	$/root/Node.game_map.UNNShips.erase(self)
+	$/root/Node.game_map.unn_ship_destroyed()
 	
 	var small_ship_explosion = smallShipExplosionFile.instantiate()
 	small_ship_explosion.position = global_position
@@ -92,7 +94,7 @@ func getTelemetry():
 func shoot_missile():
 	var missile = missileFile.instantiate()
 	missile.allegiance = "UNN"
-	missile.target = $/root/Node/player
+	missile.target = $/root/Node.game_map.player
 	missile.set_collision_layer_value(10, true)
 	missile.set_collision_mask_value(1, true)
 	missile.set_collision_mask_value(2, true)
@@ -104,11 +106,11 @@ func shoot_missile():
 	
 	var missile_marker = missileMarkerFile.instantiate()
 	missile_marker.markerTarget = missile
-	$/root/Node/map_canvas/radar_map.add_child(missile_marker)
+	$/root/Node.game_map.map_canvas.radar_map.add_child(missile_marker)
 	
 	var missile_warning = missileWarning.instantiate()
 	missile_warning.target = missile
-	$/root/Node/hud_canvas.add_child(missile_warning)
+	$/root/Node.game_map.hud_canvas.add_child(missile_warning)
 
 func take_damage_missile():
 	health -= 20
@@ -171,10 +173,10 @@ func getDiffRotation():
 
 func PDCFunctions():
 	if PDCTarget and !is_instance_valid(PDCTarget):
-		PDCTarget = getPDCTarget($/root/Node.MCRNShips)
+		PDCTarget = getPDCTarget($/root/Node.game_map.MCRNShips, PDCTargetingEffectiveness)
 	
 	if getPDCTargetTimer > 30:
-		PDCTarget = getPDCTarget($/root/Node.MCRNShips)
+		PDCTarget = getPDCTarget($/root/Node.game_map.MCRNShips, PDCTargetingEffectiveness)
 		getPDCTargetTimer = 0
 	getPDCTargetTimer += 1
 	

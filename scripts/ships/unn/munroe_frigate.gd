@@ -29,9 +29,10 @@ func getTelemetry():
 	currTargetDirection = relativeDisplacement.angle()
 	
 func calc_railgun_lead():
+	var closingVelocity = getClosingVelocity()
 	if "acceleration" in target:
-		return (target.velocity - velocity)*((target.global_position-global_position).length()/railgunRoundSpeed) + Vector2(target.acceleration,0).rotated(target.rotation)*(((target.global_position-global_position).length()/railgunRoundSpeed)**2)*30
-	return (target.velocity - velocity)*((target.global_position-global_position).length()/railgunRoundSpeed)
+		return (target.velocity - velocity)*((target.global_position-global_position).length()/(railgunRoundSpeed + closingVelocity)) + Vector2(target.acceleration,0).rotated(target.rotation)*(((target.global_position-global_position).length()/(railgunRoundSpeed + closingVelocity))**2)*30
+	return (target.velocity - velocity)*((target.global_position-global_position).length()/(railgunRoundSpeed + closingVelocity))
 
 func special_actions():
 	railgunTimer += 1
@@ -61,11 +62,11 @@ func shoot_railgun():
 		
 	var railgun_round_marker = railgunRoundMarkerFile.instantiate()
 	railgun_round_marker.markerTarget = railgunRound
-	$/root/Node/map_canvas/radar_map.add_child(railgun_round_marker)
+	$/root/Node.game_map.map_canvas.radar_map.add_child(railgun_round_marker)
 	
 	var railgun_warning = railgunWarning.instantiate()
 	railgun_warning.target = railgunRound
-	$/root/Node/hud_canvas.add_child(railgun_warning)
+	$/root/Node.game_map.hud_canvas.add_child(railgun_warning)
 
 func movementAlgorithm():
 	acceleration = 1.5

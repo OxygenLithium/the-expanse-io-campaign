@@ -1,7 +1,7 @@
 extends "res://scripts/ships/common/ship.gd"
 
 #Healthbar
-@onready var healthBar = get_node("/root/Node/hud_canvas/health_bar")
+@onready var healthBar = get_parent().hud_canvas.health_bar
 
 var maxhealth = 100
 var missileReplenish = 1080
@@ -25,8 +25,8 @@ func on_take_damage():
 	healthBar.recalculate(health,maxhealth)
 
 func death():
-	$/root/Node.player_death()
-	$/root/Node.MCRNShips.erase(self)
+	$/root/Node.game_map.player_death()
+	$/root/Node.game_map.MCRNShips.erase(self)
 	
 	var small_ship_explosion = smallShipExplosionFile.instantiate()
 	small_ship_explosion.position = global_position
@@ -48,19 +48,19 @@ func rotationControl():
 
 func RCSControl():
 	if !Input.is_action_pressed("key_shift"):
-		if Input.is_action_just_pressed("key_w") && RCSCooldowns[0] == 0:
+		if Input.is_action_just_pressed("key_w") && RCSCooldowns[0] == 0 && gforce < 800:
 			RCSHard(0)
 			RCSCooldowns[0] = RCSCooldownLength
 			gforce += 200
-		if Input.is_action_just_pressed("key_a") && RCSCooldowns[1] == 0:
+		if Input.is_action_just_pressed("key_a") && RCSCooldowns[1] == 0 && gforce < 800:
 			RCSHard(PI/2)
 			RCSCooldowns[1] = RCSCooldownLength
 			gforce += 200
-		if Input.is_action_just_pressed("key_s") && RCSCooldowns[2] == 0:
+		if Input.is_action_just_pressed("key_s") && RCSCooldowns[2] == 0 && gforce < 800:
 			RCSHard(PI)
 			RCSCooldowns[2] = RCSCooldownLength
 			gforce += 200
-		if Input.is_action_just_pressed("key_d") && RCSCooldowns[3] == 0:
+		if Input.is_action_just_pressed("key_d") && RCSCooldowns[3] == 0 && gforce < 800:
 			RCSHard(-PI/2)
 			RCSCooldowns[3] = RCSCooldownLength
 			gforce += 200
@@ -68,19 +68,15 @@ func RCSControl():
 		if Input.is_action_just_pressed("key_w") && RCSCooldowns[0] == 0:
 			RCSSoft(0)
 			RCSCooldowns[0] = RCSLightCooldownLength
-			gforce += 50
 		if Input.is_action_just_pressed("key_a") && RCSCooldowns[1] == 0:
 			RCSSoft(PI/2)
 			RCSCooldowns[1] = RCSLightCooldownLength
-			gforce += 50
 		if Input.is_action_just_pressed("key_s") && RCSCooldowns[2] == 0:
 			RCSSoft(PI)
 			RCSCooldowns[2] = RCSLightCooldownLength
-			gforce += 50
 		if Input.is_action_just_pressed("key_d") && RCSCooldowns[3] == 0:
 			RCSSoft(-PI/2)
 			RCSCooldowns[3] = RCSLightCooldownLength
-			gforce += 50
 	
 	for i in range(4):
 		if RCSCooldowns[i] > 0:
@@ -100,8 +96,8 @@ func driveControl():
 		acceleration = ACCELERATIONS[3]
 	
 func cameraFunctions():
-	if "allegiance" in $/root/Node/mainCamera.target and $/root/Node/mainCamera.target.allegiance != "MCRN":
-		target = $/root/Node/mainCamera.target
+	if "allegiance" in $/root/Node.mainCamera.target and $/root/Node.mainCamera.target.allegiance != "MCRN":
+		target = $/root/Node.mainCamera.target
 	if !target or !is_instance_valid(target):
 		target = null
 	
@@ -109,9 +105,9 @@ func PDCFunctions():
 	if Input.is_action_just_pressed("key_t"):
 		PDCAutotrack = !PDCAutotrack
 		if PDCAutotrack:
-			$/root/Node/hud_canvas/autotrack_label.text = "PDC Autotrack: ON"
+			$/root/Node.game_map.hud_canvas.autotrack_label.text = "PDC Autotrack: ON"
 		else:
-			$/root/Node/hud_canvas/autotrack_label.text = "PDC Autotrack: OFF"
+			$/root/Node.game_map.hud_canvas.autotrack_label.text = "PDC Autotrack: OFF"
 	if PDCAutotrack && PDCTarget && shootCooldown == 0:
 		shoot_PDC()
 		shootCooldown = 3
@@ -120,10 +116,10 @@ func PDCFunctions():
 		shootCooldown = 3
 	
 	if PDCTarget and !is_instance_valid(PDCTarget):
-		PDCTarget = getPDCTarget($/root/Node.UNNShips)
+		PDCTarget = getPDCTarget($/root/Node.game_map.UNNShips, 12)
 	
 	if getPDCTargetTimer > 30:
-		PDCTarget = getPDCTarget($/root/Node.UNNShips)
+		PDCTarget = getPDCTarget($/root/Node.game_map.UNNShips, 12)
 		getPDCTargetTimer = 0
 	getPDCTargetTimer += 1
 		
@@ -140,23 +136,22 @@ func missileFunctions():
 		missileCooldown -= 1
 	if missileReplenish < 1080:
 		missileReplenish += 1
-	$/root/Node/hud_canvas/missile_ammo_bar.value = missileReplenish
+	$/root/Node.game_map.hud_canvas.missile_ammo_bar.value = missileReplenish
 
 func gforceCheck():
 	gforce += max(acceleration-1.5,0)
 	if gforce > 1:
 		gforce -= 1
-	if gforce > 950 && acceleration > 2:
+	if gforce > 990 && acceleration > 2:
 		acceleration = 2
 	if gforce > 1000:
 		death()
-	$/root/Node/hud_canvas/g_limit_bar.value = gforce
+	$/root/Node.game_map.hud_canvas.g_limit_bar.value = gforce
 
 func shipFunctions():
 	driveControl()
 	RCSControl()
 	rotationControl()
-	getPDCTarget($/root/Node.UNNShips)
 	gforceCheck()
 	cameraFunctions()
 	PDCFunctions()
