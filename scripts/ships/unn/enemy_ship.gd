@@ -26,7 +26,7 @@ func custom_init():
 	acceleration = 1.5
 	
 	#Initiation operations
-	var marker = enemyMarkerFile.instantiate()
+	marker = enemyMarkerFile.instantiate()
 	marker.markerTarget = self
 	$/root/Node.game_map.map_canvas.radar_map.add_child(marker)
 	

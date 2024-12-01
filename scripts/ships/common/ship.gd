@@ -12,6 +12,8 @@ var allegiance
 #Random number generator
 var rng = RandomNumberGenerator.new()
 
+var marker = null
+
 #Autotrack AI
 var PDCAutotrack = true
 var PDCTarget = null
@@ -60,6 +62,7 @@ func ready_functions():
 	pass
 
 func _ready():
+	
 	custom_init()
 	ready_functions()
 
@@ -124,6 +127,7 @@ func shoot_missile():
 	
 	var missile_marker = missileMarkerFile.instantiate()
 	missile_marker.markerTarget = missile
+	missile.marker = missile_marker
 	$/root/Node.game_map.map_canvas.radar_map.add_child(missile_marker)
 
 func on_take_damage():
