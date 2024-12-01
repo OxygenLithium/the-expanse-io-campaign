@@ -10,12 +10,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cweei"]
 size = Vector2(641.127, 136.366)
 
-[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("pdcPivots", "drivePlume", "pdcMarkers")]
+[node name="player" type="CharacterBody2D"]
 collision_mask = 257
 script = ExtResource("1_4hx5q")
-pdcPivots = [NodePath("pdc_pivot_upper_left"), NodePath("pdc_pivot_upper_right"), NodePath("pdc_pivot_lower_left"), NodePath("pdc_pivot_lower_right")]
-drivePlume = NodePath("Drive Plume")
-pdcMarkers = [NodePath("pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right"), NodePath("pdc_pivot_lower_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_lower_right/pdc_upper_right/pdc_marker_upper_right")]
 
 [node name="pdc_pivot_upper_left" type="Node2D" parent="."]
 position = Vector2(13, -24)
