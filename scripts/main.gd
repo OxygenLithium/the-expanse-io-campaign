@@ -1,5 +1,6 @@
 extends Node
 
+@export var audio_player : AudioStreamPlayer2D
 @export var map_canvas : CanvasLayer
 @export var hud_canvas : CanvasLayer
 @export var message_canvas : CanvasLayer

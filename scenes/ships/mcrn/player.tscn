@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bb26ohp7arwpb"]
+[gd_scene load_steps=11 format=3 uid="uid://bb26ohp7arwpb"]
 
 [ext_resource type="Script" path="res://scripts/ships/mcrn/player.gd" id="1_4hx5q"]
 [ext_resource type="Texture2D" uid="uid://7ex3hj62petl" path="res://sprites/ships/mcrn/tachi.png" id="2_858hr"]
@@ -6,13 +6,19 @@
 [ext_resource type="Texture2D" uid="uid://ci6caan12shp0" path="res://sprites/ship_parts/common/minigun.png" id="3_8vxsh"]
 [ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="4_heho3"]
 [ext_resource type="Script" path="res://scripts/ship_parts/common/drive_plume.gd" id="5_um53v"]
+[ext_resource type="AudioStream" uid="uid://cxb246wrvh1is" path="res://audio/ship_parts/common/pdc-[AudioTrimmer.com].mp3" id="7_rk6hi"]
+[ext_resource type="AudioStream" uid="uid://dcqu1ogkou3lr" path="res://audio/ship_parts/common/missile launch.mp3" id="8_iyh1h"]
+[ext_resource type="AudioStream" uid="uid://dfnjtavfa8ycr" path="res://audio/ship_parts/common/railgun hit.mp3" id="9_u5on8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cweei"]
 size = Vector2(641.127, 136.366)
 
-[node name="player" type="CharacterBody2D"]
+[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("PDC_sound_player", "missile_sound_player", "take_damage_sound_player")]
 collision_mask = 257
 script = ExtResource("1_4hx5q")
+PDC_sound_player = NodePath("PDCSoundPlayer")
+missile_sound_player = NodePath("MissileSoundPlayer")
+take_damage_sound_player = NodePath("TakeDamageRailgunSoundPlayer")
 
 [node name="pdc_pivot_upper_left" type="Node2D" parent="."]
 position = Vector2(13, -24)
@@ -77,3 +83,14 @@ texture = ExtResource("2_858hr")
 position = Vector2(-1.29044, -1.31253)
 scale = Vector2(0.209913, 0.209913)
 shape = SubResource("RectangleShape2D_cweei")
+
+[node name="PDCSoundPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_rk6hi")
+playback_type = 1
+
+[node name="MissileSoundPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_iyh1h")
+
+[node name="TakeDamageRailgunSoundPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_u5on8")
+playback_type = 1

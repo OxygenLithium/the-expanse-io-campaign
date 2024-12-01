@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dfnjtavfa8ycr"
+path="res://.godot/imported/railgun hit.mp3-e5ad39560c7a2aa8cc2d917d162d8052.mp3str"
+
+[deps]
+
+source_file="res://audio/ship_parts/common/railgun hit.mp3"
+dest_files=["res://.godot/imported/railgun hit.mp3-e5ad39560c7a2aa8cc2d917d162d8052.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

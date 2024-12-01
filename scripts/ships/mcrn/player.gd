@@ -3,6 +3,10 @@ extends "res://scripts/ships/common/ship.gd"
 #Healthbar
 @onready var healthBar = get_parent().hud_canvas.health_bar
 
+@export var PDC_sound_player : AudioStreamPlayer2D
+@export var missile_sound_player : AudioStreamPlayer2D
+@export var take_damage_sound_player : AudioStreamPlayer2D
+
 var maxhealth = 100
 var missileReplenish = 1080
 var gforce = 0.0
@@ -18,11 +22,14 @@ func custom_init():
 	smallShipExplosionFile = load("res://scenes/projectiles/common/smallShipExplosion.tscn")
 	bulletMarkerFile = load("res://scenes/map/bullet_marker.tscn")
 	
+	const RCSThrust = 450
+	
 	health = maxhealth
 	healthBar.recalculate(health,maxhealth)
 
 func on_take_damage():
 	healthBar.recalculate(health,maxhealth)
+	take_damage_sound_player.play()
 
 func death():
 	$/root/Node.game_map.player_death()
@@ -100,7 +107,14 @@ func cameraFunctions():
 		target = $/root/Node.mainCamera.target
 	if !target or !is_instance_valid(target):
 		target = null
-	
+
+func shoot_PDC_audio():
+	if !PDC_sound_player.playing:
+		PDC_sound_player.play()
+
+func shoot_missile_audio():
+	missile_sound_player.play()
+
 func PDCFunctions():
 	if Input.is_action_just_pressed("key_t"):
 		PDCAutotrack = !PDCAutotrack
@@ -108,12 +122,18 @@ func PDCFunctions():
 			$/root/Node.game_map.hud_canvas.autotrack_label.text = "PDC Autotrack: ON"
 		else:
 			$/root/Node.game_map.hud_canvas.autotrack_label.text = "PDC Autotrack: OFF"
-	if PDCAutotrack && PDCTarget && shootCooldown == 0:
-		shoot_PDC()
-		shootCooldown = 3
-	if !PDCAutotrack && Input.is_action_pressed("click") && shootCooldown == 0:
-		shoot_PDC()
-		shootCooldown = 3
+	if PDCAutotrack && PDCTarget:
+		shoot_PDC_audio()
+		if shootCooldown == 0:
+			shoot_PDC()
+			shootCooldown = 3
+	elif !PDCAutotrack && Input.is_action_pressed("click"):
+		shoot_PDC_audio()
+		if shootCooldown == 0:
+			shoot_PDC()
+			shootCooldown = 3
+	else:
+		PDC_sound_player.stop()
 	
 	if PDCTarget and !is_instance_valid(PDCTarget):
 		PDCTarget = getPDCTarget($/root/Node.game_map.UNNShips, 12)
@@ -128,9 +148,13 @@ func PDCFunctions():
 
 func missileFunctions():
 	if Input.is_action_pressed("key_space") && missileCooldown == 0 && missileReplenish > 180:
-		shoot_missile()
-		missileCooldown = 15
-		missileReplenish -= 180
+		if target:
+			shoot_missile()
+			shoot_missile_audio()
+			missileCooldown = 15
+			missileReplenish -= 180
+		else:
+			get_parent().hud_canvas.noMissileTargetWarningOn()
 		
 	if missileCooldown > 0:
 		missileCooldown -= 1
