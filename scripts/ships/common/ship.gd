@@ -85,6 +85,9 @@ func getPDCTarget(enemyShips, PDCTargetingEffectiveness = 12):
 			closest = incomingMissiles[i]
 			minDistance = incomingMissiles[i].approxImpactTime
 	
+	if closest:
+		return closest
+	
 	minDistance *= 500
 	for i in range(enemyShips.size()):
 		if (enemyShips[i].position - futurePos).length() < minDistance:

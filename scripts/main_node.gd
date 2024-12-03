@@ -17,7 +17,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if !inGame:
-		if Input.is_action_pressed("key_1") or Input.is_action_pressed("key_2") or Input.is_action_pressed("key_3"):
+		if Input.is_action_pressed("key_1") or Input.is_action_pressed("key_2") or Input.is_action_pressed("key_3") or Input.is_action_pressed("key_4"):
 			inGame = true
 			TitlePage.visible = false
 			game_map = gameMapFile.instantiate()
@@ -28,6 +28,8 @@ func _process(delta: float) -> void:
 				game_map.level = 2
 			if Input.is_action_pressed("key_3"):
 				game_map.level = 3
+			if Input.is_action_pressed("key_4"):
+				game_map.level = 4
 			self.add_child(game_map)
 			mainCamera.gameStart(game_map.player)
 			

@@ -122,6 +122,52 @@ func _ready() -> void:
 		enemy.position = Vector2(45000,-5000)
 		enemy.displayName = "UNN Lafayette"
 		add_child(enemy)
+		
+	elif level == 4:
+		enemy = frigateFile.instantiate()
+		enemy.position = Vector2(13500,1500)
+		enemy.displayName = "UNN Milton"
+		add_child(enemy)
+		
+		enemy = andronicusFile.instantiate()
+		enemy.position = Vector2(12000,0)
+		enemy.displayName = "UNN Jasper"
+		add_child(enemy)
+		
+		enemy = frigateFile.instantiate()
+		enemy.position = Vector2(13500,-1500)
+		enemy.displayName = "UNN Beirut"
+		add_child(enemy)
+		
+		enemy = munroeFile.instantiate()
+		enemy.position = Vector2(20000,700)
+		enemy.displayName = "UNN St. Elmo's Fire"
+		add_child(enemy)
+		
+		enemy = munroeFile.instantiate()
+		enemy.position = Vector2(20000,-700)
+		enemy.displayName = "UNN Maracaibo"
+		add_child(enemy)
+		
+		enemy = andronicusFile.instantiate()
+		enemy.position = Vector2(24000,0)
+		enemy.displayName = "UNN Beowulf"
+		add_child(enemy)
+		
+		enemy = murphyFile.instantiate()
+		enemy.position = Vector2(80000,-5000)
+		enemy.displayName = "UNN Hou Yi"
+		add_child(enemy)
+		
+		enemy = murphyFile.instantiate()
+		enemy.position = Vector2(150000,-6000)
+		enemy.displayName = "UNN Hayha"
+		add_child(enemy)
+		
+		enemy = murphyFile.instantiate()
+		enemy.position = Vector2(140000,-5000)
+		enemy.displayName = "UNN Basilic"
+		add_child(enemy)
 
 func unn_ship_destroyed():
 	if UNNShips.size() < 1:

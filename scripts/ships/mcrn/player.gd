@@ -60,7 +60,7 @@ func RCSControl():
 			RCSCooldowns[0] = RCSCooldownLength
 			gforce += 200
 		if Input.is_action_just_pressed("key_a") && RCSCooldowns[1] == 0 && gforce < 800:
-			RCSHard(PI/2)
+			RCSHard(-PI/2)
 			RCSCooldowns[1] = RCSCooldownLength
 			gforce += 200
 		if Input.is_action_just_pressed("key_s") && RCSCooldowns[2] == 0 && gforce < 800:
@@ -68,7 +68,7 @@ func RCSControl():
 			RCSCooldowns[2] = RCSCooldownLength
 			gforce += 200
 		if Input.is_action_just_pressed("key_d") && RCSCooldowns[3] == 0 && gforce < 800:
-			RCSHard(-PI/2)
+			RCSHard(PI/2)
 			RCSCooldowns[3] = RCSCooldownLength
 			gforce += 200
 	else:

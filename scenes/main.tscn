@@ -40,7 +40,7 @@ offset_left = -680.0
 offset_top = 419.0
 offset_right = 644.0
 offset_bottom = 624.0
-text = "To choose a level, press a number from 1 to 3"
+text = "To choose a level, press a number from 1 to 4"
 label_settings = SubResource("LabelSettings_c3el5")
 
 [node name="ship_sprite" type="Sprite2D" parent="TitlePage"]
