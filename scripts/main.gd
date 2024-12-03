@@ -88,7 +88,7 @@ func _ready() -> void:
 		add_child(enemy)
 		
 		enemy = munroeFile.instantiate()
-		enemy.position = Vector2(22000,-2000)
+		enemy.position = Vector2(22000,2000)
 		enemy.displayName = "UNN Ball Lightning"
 		add_child(enemy)
 		

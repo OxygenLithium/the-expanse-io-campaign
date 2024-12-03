@@ -54,7 +54,7 @@ target_label = NodePath("target_label")
 health_bar = NodePath("health_bar")
 missile_ammo_bar = NodePath("missile_ammo_bar")
 g_limit_bar = NodePath("g_limit_bar")
-no_missile_target_warning = NodePath("no_missile_target_warning")
+no_missile_target_warning = NodePath("fire_missile_warning")
 
 [node name="autotrack_label" type="Label" parent="hud_canvas"]
 offset_left = 50.0
@@ -115,7 +115,7 @@ text = "G-force Tolerance"
 label_settings = SubResource("LabelSettings_4c6h0")
 metadata/_edit_use_anchors_ = true
 
-[node name="no_missile_target_warning" type="Label" parent="hud_canvas"]
+[node name="fire_missile_warning" type="Label" parent="hud_canvas"]
 offset_left = 794.0
 offset_top = 849.0
 offset_right = 1292.0

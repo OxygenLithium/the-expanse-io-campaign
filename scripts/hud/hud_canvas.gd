@@ -20,7 +20,23 @@ func player_death():
 func victory():
 	visible = false
 	
+func tooClose():
+	no_missile_target_warning.text = "Target too close for missiles"
+	no_missile_target_warning.visible = true
+	noMissileTargetWarningTimer = 15
+	
+func badAngle():
+	no_missile_target_warning.text = "Angle to target is too extreme"
+	no_missile_target_warning.visible = true
+	noMissileTargetWarningTimer = 15
+	
+func tooFar():
+	no_missile_target_warning.text = "Target is out of missile range"
+	no_missile_target_warning.visible = true
+	noMissileTargetWarningTimer = 15
+	
 func noMissileTargetWarningOn():
+	no_missile_target_warning.text = "No missile target selected"
 	no_missile_target_warning.visible = true
 	noMissileTargetWarningTimer = 15
 

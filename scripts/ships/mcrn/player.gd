@@ -146,6 +146,25 @@ func PDCFunctions():
 	if shootCooldown > 0:
 		shootCooldown -= 1
 
+func checkFireMissileValid():
+	if !target:
+		get_parent().hud_canvas.noMissileTargetWarningOn()
+		return false
+	var relativeDisplacement = target.global_position - position
+	var relativeAngle = relativeDisplacement.angle() - Vector2(1,0).rotated(rotation).angle()
+	if relativeAngle > PI:
+		relativeAngle - 2*PI
+	elif relativeAngle < -PI:
+		relativeAngle + 2*PI
+	
+	if relativeDisplacement.length() < 3000 and not abs(relativeAngle) < PI/12:
+		get_parent().hud_canvas.tooClose()
+		return false
+	if relativeDisplacement.length() > 100000:
+		get_parent().hud_canvas.tooFar()
+		return false
+	return true
+
 func missileFunctions():
 	if Input.is_action_pressed("key_space") && missileCooldown == 0 && missileReplenish > 180:
 		if target:
