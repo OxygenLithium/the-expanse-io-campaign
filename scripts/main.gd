@@ -58,19 +58,19 @@ func _ready() -> void:
 	
 	if level == 1:
 		enemy = frigateFile.instantiate()
-		enemy.position = Vector2(2000,1500)
+		enemy.position = Vector2(20000,1500)
 		enemy.displayName = "UNN Ashgrove"
 		add_child(enemy)
 		
-		#enemy = frigateFile.instantiate()
-		#enemy.position = Vector2(22000,3000)
-		#enemy.displayName = "UNN Ibadan"
-		#add_child(enemy)
-		#
-		#enemy = frigateFile.instantiate()
-		#enemy.position = Vector2(22000,0)
-		#enemy.displayName = "UNN Nathaniel Palmer"
-		#add_child(enemy)
+		enemy = frigateFile.instantiate()
+		enemy.position = Vector2(22000,3000)
+		enemy.displayName = "UNN Ibadan"
+		add_child(enemy)
+		
+		enemy = frigateFile.instantiate()
+		enemy.position = Vector2(22000,0)
+		enemy.displayName = "UNN Nathaniel Palmer"
+		add_child(enemy)
 		
 	if level == 2:
 		enemy = frigateFile.instantiate()

@@ -11,15 +11,15 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if !is_instance_valid(target) or !is_instance_valid(get_parent().player):
+	if !is_instance_valid(target) or !is_instance_valid(get_parent().get_parent().player):
 		queue_free()
 		return
-	if targetType == "bullet" and target.velocity.dot(get_parent().player.global_position - target.global_position) < 0:
+	if targetType == "bullet" and target.velocity.dot(get_parent().get_parent().player.global_position - target.global_position) < 0:
 		visible = false
 		arrow.visible = false
 	else:
 		visible = true
 		arrow.visible = true
-	var relDistance = target.global_position - get_parent().player.global_position
+	var relDistance = target.global_position - get_parent().get_parent().player.global_position
 	pivot.rotation = relDistance.angle()
 	arrow.scale = Vector2(24.0,24.0)/sqrt(max(500,relDistance.length()))

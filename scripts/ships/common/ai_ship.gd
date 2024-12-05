@@ -22,6 +22,7 @@ func custom_init():
 	#Initiation operations
 	ai_ship_init()
 	
+	target = null
 	friendlyShips.push_back(self)
 
 #AI Navigation
@@ -173,10 +174,13 @@ func _physics_process(delta: float) -> void:
 	if enemyShips.size() < 1:
 		move_and_slide()
 		return
-		
+	
 	if health <= 0:
 		death()
 		return
+	
+	if !target:
+		target = enemyShips.pick_random()
 	
 	getTelemetry()
 	PDCFunctions()
