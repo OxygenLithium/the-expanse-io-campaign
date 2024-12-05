@@ -6,6 +6,7 @@ extends "res://scripts/ships/common/ship.gd"
 @export var PDC_sound_player : AudioStreamPlayer2D
 @export var missile_sound_player : AudioStreamPlayer2D
 @export var take_damage_sound_player : AudioStreamPlayer2D
+@export var drive_sound_player : AudioStreamPlayer2D
 
 var maxhealth = 100
 var missileReplenish = 1080
@@ -26,14 +27,16 @@ func custom_init():
 	
 	health = maxhealth
 	healthBar.recalculate(health,maxhealth)
+	
+	get_parent().MCRNShips.push_back(self)
 
 func on_take_damage():
 	healthBar.recalculate(health,maxhealth)
 	take_damage_sound_player.play()
 
 func death():
-	$/root/Node.game_map.player_death()
-	$/root/Node.game_map.MCRNShips.erase(self)
+	get_parent().player_death()
+	get_parent().MCRNShips.erase(self)
 	
 	var small_ship_explosion = smallShipExplosionFile.instantiate()
 	small_ship_explosion.position = global_position
@@ -102,6 +105,14 @@ func driveControl():
 	if Input.is_action_pressed("key_5"):
 		acceleration = ACCELERATIONS[3]
 	
+	if acceleration != 0:
+		drive_sound_player.volume_db = log(acceleration**4)
+		if !drive_sound_player.playing:
+			drive_sound_player.play()
+	else:
+		if drive_sound_player.playing:
+			drive_sound_player.stop()
+	
 func cameraFunctions():
 	if "allegiance" in $/root/Node.mainCamera.target and $/root/Node.mainCamera.target.allegiance != "MCRN":
 		target = $/root/Node.mainCamera.target
@@ -119,9 +130,9 @@ func PDCFunctions():
 	if Input.is_action_just_pressed("key_t"):
 		PDCAutotrack = !PDCAutotrack
 		if PDCAutotrack:
-			$/root/Node.game_map.hud_canvas.autotrack_label.text = "PDC Autotrack: ON"
+			get_parent().hud_canvas.autotrack_label.text = "PDC Autotrack: ON"
 		else:
-			$/root/Node.game_map.hud_canvas.autotrack_label.text = "PDC Autotrack: OFF"
+			get_parent().hud_canvas.autotrack_label.text = "PDC Autotrack: OFF"
 	if PDCAutotrack && PDCTarget:
 		shoot_PDC_audio()
 		if shootCooldown == 0:
@@ -136,10 +147,10 @@ func PDCFunctions():
 		PDC_sound_player.stop()
 	
 	if PDCTarget and !is_instance_valid(PDCTarget):
-		PDCTarget = getPDCTarget($/root/Node.game_map.UNNShips, 12)
+		PDCTarget = getPDCTarget(get_parent().UNNShips, 12)
 	
 	if getPDCTargetTimer > 30:
-		PDCTarget = getPDCTarget($/root/Node.game_map.UNNShips, 12)
+		PDCTarget = getPDCTarget(get_parent().UNNShips, 12)
 		getPDCTargetTimer = 0
 	getPDCTargetTimer += 1
 		
@@ -179,7 +190,7 @@ func missileFunctions():
 		missileCooldown -= 1
 	if missileReplenish < 1080:
 		missileReplenish += 1
-	$/root/Node.game_map.hud_canvas.missile_ammo_bar.value = missileReplenish
+	get_parent().hud_canvas.missile_ammo_bar.value = missileReplenish
 
 func gforceCheck():
 	gforce += max(acceleration-1.5,0)
@@ -189,7 +200,7 @@ func gforceCheck():
 		acceleration = 2
 	if gforce > 1000:
 		death()
-	$/root/Node.game_map.hud_canvas.g_limit_bar.value = gforce
+	get_parent().hud_canvas.g_limit_bar.value = gforce
 
 func shipFunctions():
 	driveControl()

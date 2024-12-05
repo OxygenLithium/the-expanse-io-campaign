@@ -13,6 +13,14 @@ func _ready() -> void:
 	TitlePage.visible = true
 	pass # Replace with function body.
 
+func reset():
+	game_map = null
+	inGame = false
+	
+	mainCamera.global_position = Vector2(0,0)
+	mainCamera.closeGame()
+	
+	TitlePage.visible = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

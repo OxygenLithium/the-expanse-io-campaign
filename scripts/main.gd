@@ -1,6 +1,5 @@
 extends Node
 
-@export var audio_player : AudioStreamPlayer2D
 @export var map_canvas : CanvasLayer
 @export var hud_canvas : CanvasLayer
 @export var message_canvas : CanvasLayer
@@ -22,7 +21,7 @@ var gameOver = false
 func player_death():
 	if gameOver:
 		return
-	var gameOver = true
+	gameOver = true
 	map_canvas.visible = false
 	hud_canvas.visible = false
 	message_canvas.missionFailed()
@@ -30,15 +29,22 @@ func player_death():
 func victory():
 	if gameOver:
 		return
-	var gameOver = true
+	gameOver = true
 	map_canvas.visible = false
 	hud_canvas.visible = false
 	message_canvas.missionAccomplished()
 
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("key_enter"):
+		if gameOver:
+			queue_free()
+			get_parent().reset()
+	
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	#UI
-	var gameOver = false
+	gameOver = false
 	map_canvas.visible = true
 	hud_canvas.visible = true
 	message_canvas.visible = true
@@ -52,19 +58,19 @@ func _ready() -> void:
 	
 	if level == 1:
 		enemy = frigateFile.instantiate()
-		enemy.position = Vector2(20000,1500)
+		enemy.position = Vector2(2000,1500)
 		enemy.displayName = "UNN Ashgrove"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
-		enemy.position = Vector2(22000,3000)
-		enemy.displayName = "UNN Ibadan"
-		add_child(enemy)
-		
-		enemy = frigateFile.instantiate()
-		enemy.position = Vector2(22000,0)
-		enemy.displayName = "UNN Nathaniel Palmer"
-		add_child(enemy)
+		#enemy = frigateFile.instantiate()
+		#enemy.position = Vector2(22000,3000)
+		#enemy.displayName = "UNN Ibadan"
+		#add_child(enemy)
+		#
+		#enemy = frigateFile.instantiate()
+		#enemy.position = Vector2(22000,0)
+		#enemy.displayName = "UNN Nathaniel Palmer"
+		#add_child(enemy)
 		
 	if level == 2:
 		enemy = frigateFile.instantiate()
@@ -172,7 +178,3 @@ func _ready() -> void:
 func unn_ship_destroyed():
 	if UNNShips.size() < 1:
 		victory()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bykl4menuwcb1"
+path="res://.godot/imported/flip and burn.wav-78bea71241c578da21899477fb3c2d1a.sample"
+
+[deps]
+
+source_file="res://audio/ship_parts/common/flip and burn.wav"
+dest_files=["res://.godot/imported/flip and burn.wav-78bea71241c578da21899477fb3c2d1a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

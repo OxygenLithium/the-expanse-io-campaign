@@ -17,17 +17,7 @@ var railgunRoundSpeed = 15000
 func special_init():
 	health = 100
 	PDCTargetingEffectiveness = 12
-
-func missile_cooldowns():
-	if missileCooldown == 1155:
-		shoot_missile()
-	if missileCooldown == 1170:
-		shoot_missile()
-	if missileCooldown == 1185:
-		shoot_missile()
-	if missileCooldown > 1200:
-		shoot_missile()
-		missileCooldown = rng.randi_range(-150,150)
+	missileShootTimes = [1155, 1170, 1185, 1200]
 
 func shoot_railgun():
 	var railgunRound = railgunRoundFile.instantiate()
@@ -45,11 +35,11 @@ func shoot_railgun():
 		
 	var railgun_round_marker = railgunRoundMarkerFile.instantiate()
 	railgun_round_marker.markerTarget = railgunRound
-	$/root/Node.game_map.map_canvas.radar_map.add_child(railgun_round_marker)
+	get_parent().map_canvas.radar_map.add_child(railgun_round_marker)
 	
 	var railgun_warning = railgunWarning.instantiate()
 	railgun_warning.target = railgunRound
-	$/root/Node.game_map.hud_canvas.add_child(railgun_warning)
+	get_parent().hud_canvas.add_child(railgun_warning)
 
 func calc_railgun_lead():
 	var closingVelocity = getClosingVelocity()

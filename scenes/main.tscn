@@ -12,6 +12,7 @@ font_size = 120
 font_size = 60
 
 [node name="Node" type="Node" node_paths=PackedStringArray("TitlePage", "mainCamera")]
+process_mode = 3
 script = ExtResource("1_coc6y")
 TitlePage = NodePath("TitlePage")
 mainCamera = NodePath("mainCamera")

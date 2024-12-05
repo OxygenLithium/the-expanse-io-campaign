@@ -4,7 +4,7 @@ var markerTarget
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$/root/Node.game_map.map_canvas.radar_map.cameraLockable2.push_back(self)
+	get_parent().cameraLockable2.push_back(self)
 	pass # Replace with function body.
 
 
@@ -15,7 +15,7 @@ func _process(delta: float) -> void:
 		queue_free()
 	else:
 		rotation = markerTarget.rotation
-		position = Vector2(600,600) + (markerTarget.position-$/root/Node.game_map.map_canvas.radar_map.mapCenter)/$/root/Node.game_map.map_canvas.radar_map.mapScale
+		position = Vector2(600,600) + (markerTarget.position-get_parent().mapCenter)/get_parent().mapScale
 		if abs(position.x - 600) > 600 or abs(position.y-600) > 600:
 			visible = false
 		else:

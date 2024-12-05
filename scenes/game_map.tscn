@@ -14,6 +14,7 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_4c6h0"]
 font_size = 36
+font_color = Color(0.2, 1, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_jbqy8"]
 font_size = 40
@@ -28,6 +29,8 @@ font_size = 150
 font_color = Color(0, 0.833333, 1, 1)
 
 [node name="game_map" type="Node" node_paths=PackedStringArray("map_canvas", "hud_canvas", "message_canvas", "player")]
+process_priority = -1
+process_physics_priority = -1
 script = ExtResource("1_3bhft")
 map_canvas = NodePath("map_canvas")
 hud_canvas = NodePath("hud_canvas")
@@ -123,10 +126,11 @@ offset_bottom = 904.0
 text = "No missile target selected"
 label_settings = SubResource("LabelSettings_jbqy8")
 
-[node name="message_canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("missionFailedScreen", "missionAccomplishedScreen")]
+[node name="message_canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("missionFailedScreen", "missionAccomplishedScreen", "enterToContinue")]
 script = ExtResource("9_oukbg")
 missionFailedScreen = NodePath("Mission Failed")
 missionAccomplishedScreen = NodePath("Mission Accomplished")
+enterToContinue = NodePath("Enter to Continue")
 
 [node name="Mission Accomplished" type="Label" parent="message_canvas"]
 offset_left = 260.0
@@ -144,6 +148,15 @@ offset_right = 1575.0
 offset_bottom = 822.0
 text = "Mission Failed"
 label_settings = SubResource("LabelSettings_akvpo")
+metadata/_edit_use_anchors_ = true
+
+[node name="Enter to Continue" type="Label" parent="message_canvas"]
+offset_left = 859.0
+offset_top = 1280.0
+offset_right = 1225.0
+offset_bottom = 1330.0
+text = "Press Enter to Continue"
+label_settings = SubResource("LabelSettings_4c6h0")
 metadata/_edit_use_anchors_ = true
 
 [node name="Jupiter" type="Sprite2D" parent="."]

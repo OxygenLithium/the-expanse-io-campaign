@@ -16,10 +16,8 @@ const railgunMinRange = 5000
 var railgunAiming = false
 
 func special_init():
+	missileShootTimes = []
 	PDCLockDistance = 2500
-	
-func shoot_missile():
-	return
 
 func getTelemetry():
 	targetPosition = target.position
@@ -62,11 +60,11 @@ func shoot_railgun():
 		
 	var railgun_round_marker = railgunRoundMarkerFile.instantiate()
 	railgun_round_marker.markerTarget = railgunRound
-	$/root/Node.game_map.map_canvas.radar_map.add_child(railgun_round_marker)
+	get_parent().map_canvas.radar_map.add_child(railgun_round_marker)
 	
 	var railgun_warning = railgunWarning.instantiate()
 	railgun_warning.target = railgunRound
-	$/root/Node.game_map.hud_canvas.add_child(railgun_warning)
+	get_parent().hud_canvas.add_child(railgun_warning)
 
 func movementAlgorithm():
 	acceleration = 1.5

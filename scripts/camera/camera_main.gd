@@ -28,6 +28,11 @@ func getPrevTarget():
 	prevTarget = null
 	return null
 
+func closeGame():
+	player = null
+	target = null
+	prevTarget = null
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
