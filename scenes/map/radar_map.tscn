@@ -1,12 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://c25hobfh6ie7u"]
+[gd_scene load_steps=5 format=3 uid="uid://c25hobfh6ie7u"]
 
 [ext_resource type="Script" path="res://scripts/map/player_marker.gd" id="1_lnoum"]
+[ext_resource type="Script" path="res://scripts/map/radar_map.gd" id="1_w3vyp"]
 [ext_resource type="Script" path="res://scenes/map/target_marker.gd" id="2_bufmo"]
 
-[node name="ColorRect" type="ColorRect"]
+[sub_resource type="LabelSettings" id="LabelSettings_1n5j7"]
+font_size = 60
+font_color = Color(0.2, 1, 0, 1)
+
+[node name="ColorRect" type="ColorRect" node_paths=PackedStringArray("radiusLabel")]
 offset_right = 1200.0
 offset_bottom = 1200.0
 color = Color(1, 1, 1, 0.254902)
+script = ExtResource("1_w3vyp")
+radiusLabel = NodePath("Radius Label")
 
 [node name="player_marker" type="Polygon2D" parent="."]
 color = Color(0.85, 0, 0.0141665, 1)
@@ -40,3 +47,13 @@ position = Vector2(-0.999998, 12)
 rotation = -1.5708
 color = Color(1, 0, 0, 1)
 polygon = PackedVector2Array(12, -1, 10, -7, 14, -7)
+
+[node name="Radius Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 267.0
+offset_top = 1062.0
+offset_right = 901.0
+offset_bottom = 1153.0
+text = "Map Diameter: 16 km"
+label_settings = SubResource("LabelSettings_1n5j7")
+horizontal_alignment = 1

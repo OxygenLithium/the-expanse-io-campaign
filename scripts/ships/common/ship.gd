@@ -43,10 +43,10 @@ var angVelocity = 0
 var timeBetweenPDC = 3
 var bulletSpeed = 3000
 
-const RCSThrust = 300
-const RCSLightThrust = 30
-const RCSCooldownLength = 30
-const RCSLightCooldownLength = 10
+var RCSThrust = 300
+var RCSLightThrust = 30
+var RCSCooldownLength = 30
+var RCSLightCooldownLength = 10
 var RCSCooldowns = [0,0,0,0]
 
 #Cooldowns
@@ -130,6 +130,9 @@ func shoot_missile():
 	missile.marker = missile_marker
 	get_parent().map_canvas.radar_map.add_child(missile_marker)
 
+func targeted_by_railgun():
+	pass
+
 func on_take_damage():
 	pass
 
@@ -149,10 +152,10 @@ func death():
 	pass
 	
 func RCSHard(direction):
-	velocity += Vector2(RCSThrust,0).rotated(direction)
+	velocity += Vector2(RCSThrust,0).rotated(rotation + direction)
 	
 func RCSSoft(direction):
-	velocity += Vector2(RCSLightThrust,0).rotated(direction)
+	velocity += Vector2(RCSLightThrust,0).rotated(rotation + direction)
 
 func shipFunctions():
 	pass

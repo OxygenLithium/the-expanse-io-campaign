@@ -2,6 +2,8 @@ extends ColorRect
 
 @onready var mainCamera = $/root/Node/mainCamera
 
+@export var radiusLabel : Label
+
 var cameraLockable = []
 var cameraLockable2 = []
 
@@ -10,10 +12,7 @@ const cameraLockDistanceInGame = 150
 
 var mapCenter = Vector2(0,0)
 
-var mapScale = 50
-const mapScales = [1000,250,50,10]
-
-var mapSizeNumber = 2
+var mapScale = 40
 
 const mapRadius = 600
 
@@ -29,16 +28,16 @@ func _process(delta: float) -> void:
 	if !cameraTarget:
 		return
 	
-	if Input.is_action_just_pressed("key_-") and mapSizeNumber > 0:
-		mapSizeNumber -= 1
-		mapScale = mapScales[mapSizeNumber]
-		if mapSizeNumber == 0:
-			mapCenter = Vector2(0,0)
-	if Input.is_action_just_pressed("key_+") and mapSizeNumber < 3:
-		mapSizeNumber += 1
-		mapScale = mapScales[mapSizeNumber]
-	if mapSizeNumber > 0:
-		mapCenter = cameraTarget.position
+	if Input.is_action_just_pressed("key_-"):
+		mapScale *= 2
+		radiusLabel.text = "Map Diameter: " + str(mapScale/2.5) + "km"
+	if Input.is_action_just_pressed("key_+") and mapScale > 10:
+		if Input.is_action_pressed("key_shift"):
+			mapScale = 10
+		else:
+			mapScale = mapScale/2
+		radiusLabel.text = "Map Diameter: " + str(mapScale/2.5) + "km"
+	mapCenter = cameraTarget.position
 		
 	if Input.is_action_just_pressed("key_v"):
 		if cameraTarget != $/root/Node.mainCamera.player:
@@ -48,7 +47,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("key_c"):
 		var minDistance = INF
 		var closestMarker = null
-		if $/root/Node.game_map.map_canvas.visible:
+		if visible:
 			for el in cameraLockable:
 				if (el.global_position - get_global_mouse_position()).length() < min(cameraLockDistanceInMap,minDistance):
 					minDistance = (el.global_position - get_global_mouse_position()).length()

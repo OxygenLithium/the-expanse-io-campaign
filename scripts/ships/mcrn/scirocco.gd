@@ -21,6 +21,8 @@ func special_init():
 	PDCTargetingEffectiveness = 12
 	turnSpeed = rng.randf_range(PI/1440, PI/720)
 	
+	canDodge = false
+	
 	missileShootTimes = [ 1665, 1680, 1695, 1710, 1725, 1740, 1755, 1770, 1785, 1800 ]
 
 func shoot_railgun():
@@ -38,6 +40,9 @@ func shoot_railgun():
 	var railgun_round_marker = railgunRoundMarkerFile.instantiate()
 	railgun_round_marker.markerTarget = railgunRound
 	get_parent().map_canvas.radar_map.add_child(railgun_round_marker)
+	
+	if "targeted_by_railgun()" in target:
+		target.targeted_by_railgun()
 
 func calc_railgun_lead():
 	var closingVelocity = getClosingVelocity()

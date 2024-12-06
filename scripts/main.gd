@@ -12,7 +12,7 @@ var frigateFile = load("res://scenes/ships/unn/unn_frigate.tscn")
 var andronicusFile = load("res://scenes/ships/unn/andronicus_destroyer.tscn")
 var munroeFile = load("res://scenes/ships/unn/munroe_frigate.tscn")
 var murphyFile = load("res://scenes/ships/unn/murphy_destroyer.tscn")
-var cruiserFile = load("res://scenes/ships/unn/trenton_cruiser.tscn")
+var trentonFile = load("res://scenes/ships/unn/trenton_cruiser.tscn")
 
 #MCRN Ships
 var corvetteFile = load("res://scenes/ships/mcrn/corvette.tscn")
@@ -177,18 +177,18 @@ func _ready() -> void:
 		add_child(enemy)
 		
 		enemy = murphyFile.instantiate()
-		enemy.position = Vector2(80000,-5000)
+		enemy.position = Vector2(70000,-5000)
 		enemy.displayName = "UNN Hou Yi"
 		add_child(enemy)
 		
-		enemy = murphyFile.instantiate()
-		enemy.position = Vector2(150000,-6000)
-		enemy.displayName = "UNN Hayha"
+		enemy = trentonFile.instantiate()
+		enemy.position = Vector2(60000,1500)
+		enemy.displayName = "UNN Katyusha"
 		add_child(enemy)
 		
-		enemy = murphyFile.instantiate()
-		enemy.position = Vector2(140000,-5000)
-		enemy.displayName = "UNN Basilic"
+		enemy = trentonFile.instantiate()
+		enemy.position = Vector2(60000,-1500)
+		enemy.displayName = "UNN Chelyabinsk"
 		add_child(enemy)
 		
 	elif level == 5:

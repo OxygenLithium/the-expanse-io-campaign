@@ -41,6 +41,9 @@ func shoot_railgun():
 		var railgun_warning = railgunWarning.instantiate()
 		railgun_warning.target = railgunRound
 		get_parent().hud_canvas.add_child(railgun_warning)
+	
+	if "targeted_by_railgun()" in target:
+		target.targeted_by_railgun()
 
 func calc_railgun_lead():
 	var closingVelocity = getClosingVelocity()

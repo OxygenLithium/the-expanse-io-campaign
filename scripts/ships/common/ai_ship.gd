@@ -11,6 +11,10 @@ var standardAcceleration
 var PDCTargetingEffectiveness = 8
 var missileShootTimes = []
 
+var canDodge = true
+var dodgeTimer = 0
+var dodgeCooldown = 420
+
 func ai_ship_init():
 	pass
 
@@ -168,6 +172,11 @@ func PDCFunctions():
 
 func ai_ship_processes():
 	pass
+	
+func targeted_by_railgun():
+	if canDodge and dodgeTimer <= 0:
+		RCSHard(rng.randi_range(0,3)*PI/2)
+		dodgeTimer = dodgeCooldown
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -204,6 +213,9 @@ func _physics_process(delta: float) -> void:
 		shouldAccelerate =  (abs(diffRotation) < PI/6)
 	if !shouldAccelerate:
 		acceleration = 0
+		
+	if dodgeTimer > 0:
+		dodgeTimer -= 1
 	
 	velocity += Vector2(acceleration,0).rotated(rotation)
 

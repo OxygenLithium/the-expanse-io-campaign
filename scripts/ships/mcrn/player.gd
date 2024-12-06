@@ -23,7 +23,7 @@ func custom_init():
 	smallShipExplosionFile = load("res://scenes/projectiles/common/smallShipExplosion.tscn")
 	bulletMarkerFile = load("res://scenes/map/bullet_marker.tscn")
 	
-	const RCSThrust = 450
+	RCSThrust = 450
 	
 	health = maxhealth
 	healthBar.recalculate(health,maxhealth)

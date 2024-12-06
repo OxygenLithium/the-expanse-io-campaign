@@ -1,9 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://1wbv6itdk78b"]
+[gd_scene load_steps=13 format=3 uid="uid://1wbv6itdk78b"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3bhft"]
 [ext_resource type="Script" path="res://scripts/map/map_canvas.gd" id="4_h5gie"]
 [ext_resource type="PackedScene" uid="uid://c25hobfh6ie7u" path="res://scenes/map/radar_map.tscn" id="5_rym8b"]
-[ext_resource type="Script" path="res://scripts/map/radar_map.gd" id="6_qlvp1"]
 [ext_resource type="Script" path="res://scripts/hud/hud_canvas.gd" id="7_n6ini"]
 [ext_resource type="Script" path="res://scripts/hud/healthbar.gd" id="8_62kxx"]
 [ext_resource type="Script" path="res://scripts/messages/message_canvas.gd" id="9_oukbg"]
@@ -45,7 +44,6 @@ offset_top = 150.0
 offset_right = 1650.0
 offset_bottom = 1350.0
 color = Color(0.235294, 0.235294, 0.235294, 0.862745)
-script = ExtResource("6_qlvp1")
 metadata/_edit_use_anchors_ = true
 
 [node name="hud_canvas" type="CanvasLayer" parent="." node_paths=PackedStringArray("autotrack_label", "target_label", "health_bar", "missile_ammo_bar", "g_limit_bar", "no_missile_target_warning")]
