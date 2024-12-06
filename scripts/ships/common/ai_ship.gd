@@ -98,7 +98,7 @@ func shoot_missile():
 	missile_marker.markerTarget = missile
 	get_parent().map_canvas.radar_map.add_child(missile_marker)
 	
-	if allegiance != "MCRN":
+	if allegiance != "MCRN" and target == get_parent().player:
 		var missile_warning = missileWarning.instantiate()
 		missile_warning.target = missile
 		get_parent().hud_canvas.add_child(missile_warning)

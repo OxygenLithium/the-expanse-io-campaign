@@ -3,10 +3,10 @@ extends "res://scripts/ships/common/ship.gd"
 #Healthbar
 @onready var healthBar = get_parent().hud_canvas.health_bar
 
-@export var PDC_sound_player : AudioStreamPlayer2D
-@export var missile_sound_player : AudioStreamPlayer2D
-@export var take_damage_sound_player : AudioStreamPlayer2D
-@export var drive_sound_player : AudioStreamPlayer2D
+@onready var PDC_sound_player = $/root/Node/mainCamera/PDCSoundPlayer
+@onready var missile_sound_player = $/root/Node/mainCamera/MissileSoundPlayer
+@onready var take_damage_sound_player = $/root/Node/mainCamera/TakeDamageRailgunSoundPlayer
+@onready var drive_sound_player = $/root/Node/mainCamera/DriveSoundPlayer
 
 var maxhealth = 100
 var missileReplenish = 1080
@@ -202,11 +202,20 @@ func gforceCheck():
 		death()
 	get_parent().hud_canvas.g_limit_bar.value = gforce
 
+func setTargetDisplay():
+	if target == null:
+		get_parent().hud_canvas.target_label.text = "No Target Selected" 
+	elif "displayType" in target:
+		get_parent().hud_canvas.target_label.text = "Target:\n" + target.displayType
+		if "displayName" in target:
+			get_parent().hud_canvas.target_label.text += "\n"+target.displayName
+
 func shipFunctions():
 	driveControl()
 	RCSControl()
 	rotationControl()
 	gforceCheck()
+	setTargetDisplay()
 	cameraFunctions()
 	PDCFunctions()
 	missileFunctions()

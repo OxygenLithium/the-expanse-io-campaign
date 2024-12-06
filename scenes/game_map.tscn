@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://1wbv6itdk78b"]
+[gd_scene load_steps=14 format=3 uid="uid://1wbv6itdk78b"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3bhft"]
 [ext_resource type="Script" path="res://scripts/map/map_canvas.gd" id="4_h5gie"]
@@ -9,9 +9,6 @@
 [ext_resource type="Script" path="res://scripts/messages/message_canvas.gd" id="9_oukbg"]
 [ext_resource type="Texture2D" uid="uid://cjf0v01yrwnad" path="res://sprites/ambience/jupiter.png" id="10_gytfw"]
 [ext_resource type="PackedScene" uid="uid://bb26ohp7arwpb" path="res://scenes/ships/mcrn/player.tscn" id="11_w8elw"]
-[ext_resource type="PackedScene" uid="uid://51ducbvyppyj" path="res://scenes/ships/mcrn/corvette.tscn" id="12_nagh8"]
-[ext_resource type="Texture2D" uid="uid://drli6mbq3150" path="res://sprites/ships/mcrn/Scirocco-class Cruiser.png" id="12_vrc2s"]
-[ext_resource type="Texture2D" uid="uid://c5qtexwsx0085" path="res://sprites/ship_parts/unn/Murphy Railgun.png" id="13_mp7nl"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4c6h0"]
 font_size = 36
@@ -168,23 +165,3 @@ texture = ExtResource("10_gytfw")
 
 [node name="player" parent="." instance=ExtResource("11_w8elw")]
 position = Vector2(-1, 0)
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(-27, -345)
-scale = Vector2(0.367559, 0.36756)
-texture = ExtResource("12_vrc2s")
-
-[node name="railgun_pivot" type="Node2D" parent="Sprite2D"]
-position = Vector2(-299.271, -185.004)
-
-[node name="railgun_sprite" type="Sprite2D" parent="Sprite2D/railgun_pivot"]
-position = Vector2(81.6195, 3.05176e-05)
-scale = Vector2(1.20987, 1.39048)
-texture = ExtResource("13_mp7nl")
-
-[node name="corvette" parent="." instance=ExtResource("12_nagh8")]
-position = Vector2(-340, 318)
-
-[node name="corvette2" parent="." instance=ExtResource("12_nagh8")]
-position = Vector2(-434, -199)

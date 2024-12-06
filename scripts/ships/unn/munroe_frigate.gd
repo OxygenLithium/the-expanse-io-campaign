@@ -62,9 +62,10 @@ func shoot_railgun():
 	railgun_round_marker.markerTarget = railgunRound
 	get_parent().map_canvas.radar_map.add_child(railgun_round_marker)
 	
-	var railgun_warning = railgunWarning.instantiate()
-	railgun_warning.target = railgunRound
-	get_parent().hud_canvas.add_child(railgun_warning)
+	if target == get_parent().player:
+		var railgun_warning = railgunWarning.instantiate()
+		railgun_warning.target = railgunRound
+		get_parent().hud_canvas.add_child(railgun_warning)
 
 func movementAlgorithm():
 	acceleration = 1.5

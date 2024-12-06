@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://bfikuq830yrbr"]
+
+[ext_resource type="Script" path="res://scripts/projectiles/common/railgun_round.gd" id="1_ucs4u"]
+[ext_resource type="Texture2D" uid="uid://cpgvr8pstn17m" path="res://sprites/projectiles/common/railgun round.png" id="2_queot"]
+
+[node name="railgun_round" type="CharacterBody2D"]
+position = Vector2(-6, -35)
+collision_layer = 0
+collision_mask = 768
+script = ExtResource("1_ucs4u")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-56, 1)
+scale = Vector2(0.772322, 0.6875)
+texture = ExtResource("2_queot")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(3, 1)
+polygon = PackedVector2Array(-5, 0, 0, -1, 5, 0, 0, 1)

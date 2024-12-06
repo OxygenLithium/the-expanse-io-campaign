@@ -1,8 +1,6 @@
 extends CharacterBody2D
 
 @export var pdcPivots: Array[Node2D]
-@export var drivePlume: Node2D
-
 @export var pdcMarkers: Array[Node2D]
 
 #Fields accessed by others on checks
@@ -33,6 +31,8 @@ var bulletMarkerFile = load("res://scenes/map/bullet_marker.tscn")
 #Stats
 #Health stats
 var health = 100
+
+var railgunResistance = 1
 
 #Movement stats
 var ACCELERATIONS = [1,2,4,8]
@@ -68,13 +68,6 @@ func _ready():
 
 func getPDCTarget(enemyShips, PDCTargetingEffectiveness = 12):
 	var futurePos = position + velocity + Vector2(acceleration,0).rotated(rotation)/120
-	
-	if target == null:
-		get_parent().hud_canvas.target_label.text = "No Target Selected" 
-	elif "displayType" in target:
-		get_parent().hud_canvas.target_label.text = "Target:\n" + target.displayType
-		if "displayName" in target:
-			get_parent().hud_canvas.target_label.text += "\n"+target.displayName
 	
 	if incomingMissiles.size() +enemyShips.size() == 0:
 		return null
@@ -148,7 +141,7 @@ func take_damage_bullet():
 	on_take_damage()
 	
 func take_damage_railgun(damage):
-	health -= damage
+	health -= damage/railgunResistance
 	on_take_damage()
 
 func death():

@@ -1,46 +1,43 @@
-extends "res://scripts/ships/unn/enemy_ship.gd"
+extends "res://scripts/ships/mcrn/friendly_ship.gd"
 
-const displayType = "Murphy-class Destroyer"
+const displayType = "Scirocco-class Cruiser"
 var displayName
 
 #Railgun stuff
 @export var railgun : Node2D
-var railgunRoundFile = load("res://scenes/projectiles/unn/enemyRailgunRound.tscn")
+var railgunRoundFile = load("res://scenes/projectiles/mcrn/MCRNRailgunRound.tscn")
 var railgunRoundMarkerFile = load("res://scenes/map/railgun_round_marker.tscn")
-var railgunWarning = load("res://scenes/hud/railgunWarning.tscn")
 var railgunTimer = rng.randi_range(0,150)
-const railgunMaxRange = 15000
-const railgunMinRange = 5000
+const railgunMaxRange = 20000
+const railgunMinRange = 3000
 
 var railgunRoundSpeed = 15000
 
 func special_init():
-	health = 100
+	health = 300
+	railgunResistance = 2
+	acceleration = 0.75
+	standardAcceleration = 0.75
 	PDCTargetingEffectiveness = 12
-	missileShootTimes = [1155, 1170, 1185, 1200]
+	turnSpeed = rng.randf_range(PI/1440, PI/720)
+	
+	missileShootTimes = [ 1665, 1680, 1695, 1710, 1725, 1740, 1755, 1770, 1785, 1800 ]
 
 func shoot_railgun():
 	var railgunRound = railgunRoundFile.instantiate()
-	railgunRound.allegiance = "UNN"
+	railgunRound.allegiance = "MCRN"
 	railgunRound.rotation = railgun.rotation + rotation
 	railgunRound.position = railgun.global_position + velocity/60 + Vector2(100,0).rotated(railgunRound.rotation)
-	railgunRound.set_collision_layer_value(11, true)
-	railgunRound.set_collision_mask_value(1, true)
-	railgunRound.set_collision_mask_value(2, true)
+	railgunRound.damage = 50
 	
 	get_parent().add_child(railgunRound)
 	railgunRound.velocity = velocity
 	railgunRound.velocity += Vector2(railgunRoundSpeed,0).rotated(railgunRound.rotation)
 	railgunRound.set_visible(true)
-	
+		
 	var railgun_round_marker = railgunRoundMarkerFile.instantiate()
 	railgun_round_marker.markerTarget = railgunRound
 	get_parent().map_canvas.radar_map.add_child(railgun_round_marker)
-	
-	if target == get_parent().player:
-		var railgun_warning = railgunWarning.instantiate()
-		railgun_warning.target = railgunRound
-		get_parent().hud_canvas.add_child(railgun_warning)
 
 func calc_railgun_lead():
 	var closingVelocity = getClosingVelocity()
@@ -51,8 +48,9 @@ func calc_railgun_lead():
 func special_actions():
 	railgun.look_at(target.global_position + calc_railgun_lead())
 	railgunTimer += 1
+	print(railgunTimer)
 	if railgunTimer > 600 and (target.global_position-global_position).length() < railgunMaxRange and (target.global_position-global_position).length() > railgunMinRange:
-		railgunRoundSpeed = (target.global_position-global_position).length()
+		railgunRoundSpeed = (target.global_position-global_position).length()/1.5
 		shoot_railgun()
 		railgunTimer = rng.randi_range(0,60)
 	pass

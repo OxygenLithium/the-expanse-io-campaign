@@ -1,9 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://ceku4w7mjgf8o"]
+[gd_scene load_steps=11 format=3 uid="uid://ceku4w7mjgf8o"]
 
 [ext_resource type="Script" path="res://scripts/main_node.gd" id="1_coc6y"]
 [ext_resource type="Script" path="res://scripts/camera/camera_main.gd" id="2_30754"]
 [ext_resource type="Texture2D" uid="uid://d4e0ld03dtjjd" path="res://sprites/ambience/space.png" id="3_fswy2"]
+[ext_resource type="AudioStream" uid="uid://cxb246wrvh1is" path="res://audio/ship_parts/common/pdc-[AudioTrimmer.com].mp3" id="4_0y8k2"]
 [ext_resource type="Texture2D" uid="uid://7ex3hj62petl" path="res://sprites/ships/mcrn/tachi.png" id="4_ymrtj"]
+[ext_resource type="AudioStream" uid="uid://dcqu1ogkou3lr" path="res://audio/ship_parts/common/missile launch.mp3" id="5_cnb30"]
+[ext_resource type="AudioStream" uid="uid://dfnjtavfa8ycr" path="res://audio/ship_parts/common/railgun hit.mp3" id="6_b6dwk"]
+[ext_resource type="AudioStream" uid="uid://dujpktd43mb7b" path="res://audio/ship_parts/common/drive.wav" id="7_f0x28"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_5e3ys"]
 font_size = 120
@@ -25,6 +29,27 @@ script = ExtResource("2_30754")
 position = Vector2(-14.0001, -8.50008)
 scale = Vector2(0.442, 0.515667)
 texture = ExtResource("3_fswy2")
+
+[node name="PDCSoundPlayer" type="AudioStreamPlayer2D" parent="mainCamera"]
+stream = ExtResource("4_0y8k2")
+attenuation = 0.1
+playback_type = 1
+
+[node name="MissileSoundPlayer" type="AudioStreamPlayer2D" parent="mainCamera"]
+stream = ExtResource("5_cnb30")
+volume_db = -3.0
+pitch_scale = 0.87
+attenuation = 0.1
+
+[node name="TakeDamageRailgunSoundPlayer" type="AudioStreamPlayer2D" parent="mainCamera"]
+stream = ExtResource("6_b6dwk")
+attenuation = 0.1
+playback_type = 1
+
+[node name="DriveSoundPlayer" type="AudioStreamPlayer2D" parent="mainCamera"]
+stream = ExtResource("7_f0x28")
+attenuation = 0.1
+playback_type = 1
 
 [node name="TitlePage" type="Node2D" parent="."]
 

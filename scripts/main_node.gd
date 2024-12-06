@@ -22,22 +22,25 @@ func reset():
 	
 	TitlePage.visible = true
 
+func setUpGame(level):
+	inGame = true
+	TitlePage.visible = false
+	game_map = gameMapFile.instantiate()
+	game_map.level = level
+	self.add_child(game_map)
+	mainCamera.gameStart(game_map.player)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if !inGame:
-		if Input.is_action_pressed("key_1") or Input.is_action_pressed("key_2") or Input.is_action_pressed("key_3") or Input.is_action_pressed("key_4"):
-			inGame = true
-			TitlePage.visible = false
-			game_map = gameMapFile.instantiate()
-			
-			if Input.is_action_pressed("key_1"):
-				game_map.level = 1
-			if Input.is_action_pressed("key_2"):
-				game_map.level = 2
-			if Input.is_action_pressed("key_3"):
-				game_map.level = 3
-			if Input.is_action_pressed("key_4"):
-				game_map.level = 4
-			self.add_child(game_map)
-			mainCamera.gameStart(game_map.player)
+		if Input.is_action_pressed("key_1"):
+			setUpGame(1)
+		if Input.is_action_pressed("key_2"):
+			setUpGame(2)
+		if Input.is_action_pressed("key_3"):
+			setUpGame(3)
+		if Input.is_action_pressed("key_4"):
+			setUpGame(4)
+		if Input.is_action_pressed("key_5"):
+			setUpGame(5)
 			

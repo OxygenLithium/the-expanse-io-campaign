@@ -10,13 +10,12 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ypt78"]
 size = Vector2(719.318, 140.535)
 
-[node name="unn_frigate" type="CharacterBody2D" node_paths=PackedStringArray("pdcPivots", "drivePlume", "pdcMarkers")]
+[node name="unn_frigate" type="CharacterBody2D" node_paths=PackedStringArray("pdcPivots", "pdcMarkers")]
 position = Vector2(7, -3)
 collision_layer = 256
 collision_mask = 257
 script = ExtResource("1_upgyx")
 pdcPivots = [NodePath("pdc_pivot_upper_left"), NodePath("pdc_pivot_upper_right")]
-drivePlume = NodePath("Drive Plume")
 pdcMarkers = [NodePath("pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
