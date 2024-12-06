@@ -40,6 +40,7 @@ var ACCELERATIONS = [1,2,4,8]
 var acceleration = 0
 var angVelocity = 0
 
+var timeBetweenPDC = 3
 var bulletSpeed = 3000
 
 const RCSThrust = 300

@@ -161,7 +161,7 @@ func PDCFunctions():
 	
 	if PDCTarget and shootCooldown == 0:
 		shoot_PDC()
-		shootCooldown = 3
+		shootCooldown = timeBetweenPDC
 	
 	if shootCooldown > 0:
 		shootCooldown -= 1

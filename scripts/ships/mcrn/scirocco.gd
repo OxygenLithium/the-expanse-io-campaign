@@ -48,7 +48,6 @@ func calc_railgun_lead():
 func special_actions():
 	railgun.look_at(target.global_position + calc_railgun_lead())
 	railgunTimer += 1
-	print(railgunTimer)
 	if railgunTimer > 600 and (target.global_position-global_position).length() < railgunMaxRange and (target.global_position-global_position).length() > railgunMinRange:
 		railgunRoundSpeed = (target.global_position-global_position).length()/1.5
 		shoot_railgun()

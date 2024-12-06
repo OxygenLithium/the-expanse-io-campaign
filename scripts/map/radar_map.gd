@@ -76,7 +76,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("key_f"):
 		var minDistance = INF
 		var closestMarker = null
-		if $/root/Node.game_map.map_canvas.visible:
+		if visible:
 			for el in cameraLockable:
 				if el.markerTarget.allegiance != "MCRN" and (el.global_position - get_global_mouse_position()).length() < min(cameraLockDistanceInMap,minDistance):
 					minDistance = (el.global_position - get_global_mouse_position()).length()
@@ -87,4 +87,4 @@ func _process(delta: float) -> void:
 						minDistance = (el.global_position - get_global_mouse_position()).length()
 						closestMarker = el
 			if closestMarker:
-				$/root/Node.game_map.player.target = closestMarker.markerTarget
+				get_parent().get_parent().player.target = closestMarker.markerTarget

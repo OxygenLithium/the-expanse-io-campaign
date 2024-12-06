@@ -106,7 +106,7 @@ func driveControl():
 		acceleration = ACCELERATIONS[3]
 	
 	if acceleration != 0:
-		drive_sound_player.volume_db = log(acceleration**4)
+		drive_sound_player.volume_db = log(acceleration**4)/2
 		if !drive_sound_player.playing:
 			drive_sound_player.play()
 	else:
