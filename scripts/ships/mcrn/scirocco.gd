@@ -16,8 +16,8 @@ var railgunRoundSpeed = 15000
 func special_init():
 	health = 300
 	railgunResistance = 2
-	acceleration = 1
-	standardAcceleration = 1
+	acceleration = 1.5
+	standardAcceleration = 1.5
 	PDCTargetingEffectiveness = 12
 	turnSpeed = rng.randf_range(PI/960, PI/480)
 	

@@ -8,7 +8,7 @@ extends Node
 var level = 1
 
 #UNN Ships
-var frigateFile = load("res://scenes/ships/unn/unn_frigate.tscn")
+var mulanFile = load("res://scenes/ships/unn/unn_frigate.tscn")
 var andronicusFile = load("res://scenes/ships/unn/andronicus_destroyer.tscn")
 var munroeFile = load("res://scenes/ships/unn/munroe_frigate.tscn")
 var murphyFile = load("res://scenes/ships/unn/murphy_destroyer.tscn")
@@ -56,7 +56,7 @@ func _ready() -> void:
 	message_canvas.visible = true
 	
 	#for i in range(3):
-		#var enemy = frigateFile.instantiate()
+		#var enemy = mulanFile.instantiate()
 		#enemy.position = Vector2(10000,-1000 + 1000*i)
 		#add_child(enemy)
 	
@@ -64,54 +64,26 @@ func _ready() -> void:
 	var ally = null
 	
 	if level == 1:
-		enemy = frigateFile.instantiate()
-		enemy.position = Vector2(20000,1500)
-		enemy.displayName = "UNN Ashgrove"
-		add_child(enemy)
-		
-		enemy = frigateFile.instantiate()
-		enemy.position = Vector2(22000,3000)
-		enemy.displayName = "UNN Ibadan"
-		add_child(enemy)
-		
-		enemy = frigateFile.instantiate()
-		enemy.position = Vector2(22000,0)
-		enemy.displayName = "UNN Nathaniel Palmer"
-		add_child(enemy)
+		addMulan(Vector2(20000,1500), "UNN Ashgrove")
+		addMulan(Vector2(22000,3000), "UNN Ibadan")
+		addMulan(Vector2(22000,0), "UNN Riemann")
 		
 	elif level == 2:
-		enemy = frigateFile.instantiate()
-		enemy.position = Vector2(20000,1500)
-		enemy.displayName = "UNN Honolulu"
-		add_child(enemy)
-		
-		enemy = frigateFile.instantiate()
-		enemy.position = Vector2(20000,-1500)
-		enemy.displayName = "UNN Arthur Cayley"
-		add_child(enemy)
-		
-		enemy = andronicusFile.instantiate()
-		enemy.position = Vector2(24000,0)
-		enemy.displayName = "UNN Triangulum"
-		add_child(enemy)
-		
-		enemy = trentonFile.instantiate()
-		enemy.position = Vector2(22000,-2000)
-		enemy.displayName = "UNN Heron"
-		add_child(enemy)
-		
-		enemy = munroeFile.instantiate()
-		enemy.position = Vector2(22000,2000)
-		enemy.displayName = "UNN Shinden"
-		add_child(enemy)
+		addMulan(Vector2(22000,1500), "UNN Honolulu")
+		addMulan(Vector2(22000,-1500), "UNN Arthur Cayley")
+		addMulan(Vector2(20000,0), "UNN Triangulum")
+	
+		addAndronicus(Vector2(23500,-500), "UNN Rawlinson")
+		addTrenton(Vector2(24000,0), "UNN Daegu")
+		addAndronicus(Vector2(23500,500), "UNN Horatio")
 		
 	elif level == 3:
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(20000,1500)
 		enemy.displayName = "UNN Nightwing"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(20000,0)
 		enemy.displayName = "UNN Beirut"
 		add_child(enemy)
@@ -138,7 +110,7 @@ func _ready() -> void:
 		
 		enemy = trentonFile.instantiate()
 		enemy.position = Vector2(35000,1000)
-		enemy.displayName = "UNN Hamilton"
+		enemy.displayName = "UNN Stockholm"
 		add_child(enemy)
 		
 		enemy = trentonFile.instantiate()
@@ -157,7 +129,7 @@ func _ready() -> void:
 		ally.displayName = "MCRN Raiden"
 		add_child(ally)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(13500,1500)
 		enemy.displayName = "UNN Milton"
 		add_child(enemy)
@@ -167,7 +139,7 @@ func _ready() -> void:
 		enemy.displayName = "UNN Jasper"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(13500,-1500)
 		enemy.displayName = "UNN Beirut"
 		add_child(enemy)
@@ -223,12 +195,12 @@ func _ready() -> void:
 		ally.displayName = "MCRN Amazon"
 		add_child(ally)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(13500,1500)
 		enemy.displayName = "UNN Milton"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(14500,2500)
 		enemy.displayName = "UNN Milton"
 		add_child(enemy)
@@ -238,12 +210,12 @@ func _ready() -> void:
 		enemy.displayName = "UNN Jasper"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(13500,-1500)
 		enemy.displayName = "UNN Beirut"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(14500,-2500)
 		enemy.displayName = "UNN Beirut"
 		add_child(enemy)
@@ -268,27 +240,27 @@ func _ready() -> void:
 		enemy.displayName = "UNN Hou Yi"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(50000,-5000)
 		enemy.displayName = "UNN Austin"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(50000,-6000)
 		enemy.displayName = "UNN Chelsea"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(50000,-4000)
 		enemy.displayName = "UNN San Jose"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(50000,-3000)
 		enemy.displayName = "UNN Donald Knuth"
 		add_child(enemy)
 		
-		enemy = frigateFile.instantiate()
+		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(50000,-2000)
 		enemy.displayName = "UNN Mary Shelley"
 		add_child(enemy)
@@ -311,3 +283,62 @@ func _ready() -> void:
 func unn_ship_destroyed():
 	if UNNShips.size() < 1:
 		victory()
+
+#Add UNN ship
+func addMulan(ePos, eName, eMode = "active"):
+	var enemy = mulanFile.instantiate()
+	enemy.position = ePos
+	enemy.name = eName
+	enemy.mode = eMode
+	add_child(enemy)
+
+func addMunroe(ePos, eName, eMode = "active"):
+	var enemy = munroeFile.instantiate()
+	enemy.position = ePos
+	enemy.name = eName
+	enemy.mode = eMode
+	add_child(enemy)
+
+func addAndronicus(ePos, eName, eMode = "active"):
+	var enemy = andronicusFile.instantiate()
+	enemy.position = ePos
+	enemy.name = eName
+	enemy.mode = eMode
+	add_child(enemy)
+	
+func addMurphy(ePos, eName, eMode = "active"):
+	var enemy = murphyFile.instantiate()
+	enemy.position = ePos
+	enemy.name = eName
+	enemy.mode = eMode
+	add_child(enemy)
+
+func addTrenton(ePos, eName, eMode = "active"):
+	var enemy = trentonFile.instantiate()
+	enemy.position = ePos
+	enemy.name = eName
+	enemy.mode = eMode
+	add_child(enemy)
+
+func addAsimov(ePos, eName, eMode = "active"):
+	var enemy = asimovFile.instantiate()
+	enemy.position = ePos
+	enemy.name = eName
+	enemy.mode = eMode
+	add_child(enemy)
+
+
+#Add MCRN ships
+func addCorvette(ePos, eName, eMode = "active"):
+	var ally = corvetteFile.instantiate()
+	ally.position = ePos
+	ally.name = eName
+	ally.mode = eMode
+	add_child(ally)
+
+func addScirocco(ePos, eName, eMode = "active"):
+	var ally = sciroccoFile.instantiate()
+	ally.position = ePos
+	ally.name = eName
+	ally.mode = eMode
+	add_child(ally)

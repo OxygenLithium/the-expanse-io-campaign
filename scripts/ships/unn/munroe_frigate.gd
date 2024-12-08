@@ -34,7 +34,7 @@ func calc_railgun_lead():
 
 func special_actions():
 	railgunTimer += 1
-	if railgunTimer > 600 and (target.global_position-global_position).length() < railgunMaxRange and (target.global_position-global_position).length() > railgunMinRange:
+	if railgunTimer > 900 and (target.global_position-global_position).length() < railgunMaxRange and (target.global_position-global_position).length() > railgunMinRange:
 		railgunAiming = true
 		shouldAccelerate = false
 		var diffRotation = getDiffRotation()

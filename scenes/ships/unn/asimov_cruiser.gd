@@ -17,8 +17,8 @@ var railgunRoundSpeed = 20000
 func special_init():
 	health = 250
 	railgunResistance = 2
-	acceleration = 0.75
-	standardAcceleration = 0.75
+	acceleration = 1.5
+	standardAcceleration = 1.5
 	PDCTargetingEffectiveness = 7
 	turnSpeed = rng.randf_range(PI/960, PI/480)
 	
@@ -31,7 +31,6 @@ func shoot_railgun():
 	railgunRound.allegiance = "UNN"
 	railgunRound.rotation = railgun.rotation + rotation
 	railgunRound.position = railgun.global_position + velocity/60 + Vector2(100,0).rotated(railgunRound.rotation)
-	railgunRound.damage = 40
 	
 	get_parent().add_child(railgunRound)
 	railgunRound.velocity = velocity

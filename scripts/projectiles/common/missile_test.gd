@@ -37,6 +37,7 @@ var approxImpactTime = INF
 const finalManeuverTime = 3
 
 var timer = 0
+var offTargetTimer = 0
 
 var proportionalNavTimer = 0
 
@@ -83,6 +84,7 @@ func nonzeroAcceleration():
 
 func proportionalNavigation(limitSpeed = true):
 	if relativeVelocity.dot(relativeDisplacement) < 0:
+		offTargetTimer = 0
 		#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
 		var LOSRate = (currTargetDirection-prevTargetDirection)
 		var closingVelocity = getClosingVelocity()
@@ -105,32 +107,31 @@ func proportionalNavigation(limitSpeed = true):
 			else:
 				desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
 	else:
+		if timer > 180:
+			offTargetTimer += 1
+		if offTargetTimer > 30:
+			death()
+			return
 		if velocity.length() < acceleration:
 			velocity = Vector2(0,0)
 			desiredRotation = relativeDisplacement.angle()
 		else:
 			desiredRotation = relativeVelocity.angle()
 
+func death():
+	var explosion = explosionFile.instantiate()
+	explosion.position = global_position
+	explosion.velocity = velocity
+	get_parent().add_child(explosion)
+	if is_instance_valid(target) && "incomingMissiles" in target:
+		target.incomingMissiles.erase(self)
+	queue_free()
 
 func hit_by_railgun():
-	var explosion = explosionFile.instantiate()
-	explosion.position = global_position
-	explosion.velocity = velocity
-	get_parent().add_child(explosion)
-	
-	if is_instance_valid(target) && "incomingMissiles" in target:
-		target.incomingMissiles.erase(self)
-	queue_free()
+	death()
 
 func hit_by_bullet():
-	var explosion = explosionFile.instantiate()
-	explosion.position = global_position
-	explosion.velocity = velocity
-	get_parent().add_child(explosion)
-	
-	if is_instance_valid(target) && "incomingMissiles" in target:
-		target.incomingMissiles.erase(self)
-	queue_free()
+	death()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
@@ -141,8 +142,7 @@ func _physics_process(delta: float) -> void:
 		target = null
 	
 	if !target:
-		velocity += Vector2(acceleration,0).rotated(rotation)
-		move_and_slide()
+		death()
 		return
 		
 	getTelemetry()
@@ -154,17 +154,6 @@ func _physics_process(delta: float) -> void:
 			proportionalNavTimer = 0
 		if proportionalNavTimer > 5:
 			proportionalNavigation()
-			#var shouldBrake = getClosingVelocity() > cutAccelerationSpeed
-			#print(shouldBrake)
-			#if shouldBrake:
-				#velocity -= Vector2(acceleration*5,0).rotated(relativeDisplacement.angle())
-			#var desiredAccel = proportionalNavigation(shouldBrake)
-			#
-			#if desiredAccel < 9:
-				#cutAcceleration = true
-				#desiredRotation = relativeVelocity.angle()
-				#velocity += Vector2(0,desiredAccel).rotated(relativeVelocity.angle())
-			
 			proportionalNavTimer = 0
 		
 	if timer == 30:
@@ -172,9 +161,7 @@ func _physics_process(delta: float) -> void:
 	#if timer == 120:
 		#accelerationGrade = 1
 	elif timer == lifespan:
-		if "incomingMissiles" in target:
-			target.incomingMissiles.erase(self)
-		queue_free()
+		death()
 		return
 	
 	rotation = fmod(rotation, 2*PI)
@@ -218,23 +205,16 @@ func _physics_process(delta: float) -> void:
 			continue
 		
 		if (collider.type == "missile"):
-			var explosion = explosionFile.instantiate()
-			explosion.position = global_position
-			explosion.velocity = velocity
-			get_parent().add_child(explosion)
+			death()
 			collider.hit_by_bullet()
+			return
 		
 		if (collider.type == "ship"):
-			var explosion = explosionFile.instantiate()
-			explosion.position = global_position
-			explosion.velocity = collider.velocity
-			get_parent().add_child(explosion)
-			
+			death()
 			collider.take_damage_missile()
+			return
 			
-		if "incomingMissiles" in target:
-			target.incomingMissiles.erase(self)
-		queue_free()
+		death()
 		break
 	
 	prevTargetDirection = currTargetDirection

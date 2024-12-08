@@ -2,6 +2,8 @@ extends "res://scripts/ships/common/ship.gd"
 
 #Stats called by others
 
+var mode = "active"
+
 #Imported paths
 var missileWarning = load("res://scenes/hud/missileWarning.tscn")
 var enemyShips
@@ -182,29 +184,40 @@ func targeted_by_railgun():
 			dodgeTimer = dodgeCooldown
 
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if enemyShips.size() < 1:
-		move_and_slide()
-		return
-	
+	#death detection
 	if health <= 0:
 		death()
 		return
 	
-	if !target:
-		target = enemyShips.pick_random()
+	if mode == "active" and !target:
+		if enemyShips.size() < 1:
+			mode = "passive"
+		else:
+			target = enemyShips.pick_random()
 	
-	getTelemetry()
-	PDCFunctions()
+	shouldAccelerate = true	
+	if mode == "active":
+		getTelemetry()
+		PDCFunctions()
 	
-	missile_cooldowns()
+		missile_cooldowns()
 	
-	ai_ship_processes()
+		ai_ship_processes()
 	
-	acceleration = standardAcceleration
-	shouldAccelerate = true
+		acceleration = standardAcceleration
 	
-	movementAlgorithm()
+		movementAlgorithm()
+	
+	if mode == "passive":
+		if velocity.length() <= acceleration:
+			velocity = Vector2(0,0)
+			shouldAccelerate = 0
+		else:
+			desiredRotation = velocity.angle() + PI
+		
+		for ship in enemyShips:
+			if (ship.position - position).length < 50000:
+				mode = "active"
 
 	var diffRotation = getDiffRotation()
 	if diffRotation >= 0:
