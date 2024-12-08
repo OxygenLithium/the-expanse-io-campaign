@@ -49,9 +49,6 @@ func shoot_railgun():
 	railgunRound.allegiance = "UNN"
 	railgunRound.rotation = (calc_railgun_lead() + target.global_position - position).angle()
 	railgunRound.position = global_position + velocity/60 + Vector2(100,0).rotated(railgunRound.rotation)
-	railgunRound.set_collision_layer_value(11, true)
-	railgunRound.set_collision_mask_value(1, true)
-	railgunRound.set_collision_mask_value(2, true)
 	
 	get_parent().add_child(railgunRound)
 	railgunRound.velocity = velocity

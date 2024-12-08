@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://1wbv6itdk78b"]
+[gd_scene load_steps=12 format=3 uid="uid://1wbv6itdk78b"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_3bhft"]
 [ext_resource type="Script" path="res://scripts/map/map_canvas.gd" id="4_h5gie"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://scripts/hud/hud_canvas.gd" id="7_n6ini"]
 [ext_resource type="Script" path="res://scripts/hud/healthbar.gd" id="8_62kxx"]
 [ext_resource type="Script" path="res://scripts/messages/message_canvas.gd" id="9_oukbg"]
-[ext_resource type="Texture2D" uid="uid://cjf0v01yrwnad" path="res://sprites/ambience/jupiter.png" id="10_gytfw"]
 [ext_resource type="PackedScene" uid="uid://bb26ohp7arwpb" path="res://scenes/ships/mcrn/player.tscn" id="11_w8elw"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4c6h0"]
@@ -154,12 +153,6 @@ offset_bottom = 1330.0
 text = "Press Enter to Continue"
 label_settings = SubResource("LabelSettings_4c6h0")
 metadata/_edit_use_anchors_ = true
-
-[node name="Jupiter" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(1203, 1117)
-scale = Vector2(5.62598, 5.62598)
-texture = ExtResource("10_gytfw")
 
 [node name="player" parent="." instance=ExtResource("11_w8elw")]
 position = Vector2(-1, 0)

@@ -8,18 +8,18 @@ var displayName
 var railgunRoundFile = load("res://scenes/projectiles/mcrn/MCRNRailgunRound.tscn")
 var railgunRoundMarkerFile = load("res://scenes/map/railgun_round_marker.tscn")
 var railgunTimer = rng.randi_range(0,150)
-const railgunMaxRange = 20000
-const railgunMinRange = 3000
+const railgunMaxRange = 30000
+const railgunMinRange = 5000
 
 var railgunRoundSpeed = 15000
 
 func special_init():
 	health = 300
 	railgunResistance = 2
-	acceleration = 0.75
-	standardAcceleration = 0.75
+	acceleration = 1
+	standardAcceleration = 1
 	PDCTargetingEffectiveness = 12
-	turnSpeed = rng.randf_range(PI/1440, PI/720)
+	turnSpeed = rng.randf_range(PI/960, PI/480)
 	
 	canDodge = false
 	

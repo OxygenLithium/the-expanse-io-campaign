@@ -4,5 +4,6 @@ const displayType = "Corvette-class Frigate"
 var displayName = ""
 
 func special_init():
-	missileShootTimes = [500, 520, 540, 560, 580, 600]
+	missileShootTimes = [800, 820, 840, 860, 880, 900]
 	PDCLockDistance = 2500
+	dodgeChance = 60

@@ -13,7 +13,8 @@ var missileShootTimes = []
 
 var canDodge = true
 var dodgeTimer = 0
-var dodgeCooldown = 420
+var dodgeCooldown = 300
+var dodgeChance = 30
 
 func ai_ship_init():
 	pass
@@ -96,7 +97,8 @@ func shoot_missile():
 	get_parent().add_child(missile)
 	missile.rotation = rotation
 	missile.velocity = velocity
-	missile.velocity += Vector2(300,0).rotated(rotation)
+	missile.velocity += Vector2(100,0).rotated(rotation)
+	missile.velocity += Vector2(300,0).rotated(rng.randf_range(-PI/2,PI/2))
 	
 	var missile_marker = missileMarkerFile.instantiate()
 	missile_marker.markerTarget = missile
@@ -175,8 +177,9 @@ func ai_ship_processes():
 	
 func targeted_by_railgun():
 	if canDodge and dodgeTimer <= 0:
-		RCSHard(rng.randi_range(0,3)*PI/2)
-		dodgeTimer = dodgeCooldown
+		if rng.randi_range(1,100) <= dodgeChance:
+			RCSHard(rng.randi_range(0,3)*PI/2)
+			dodgeTimer = dodgeCooldown
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.

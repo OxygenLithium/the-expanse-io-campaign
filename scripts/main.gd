@@ -13,6 +13,7 @@ var andronicusFile = load("res://scenes/ships/unn/andronicus_destroyer.tscn")
 var munroeFile = load("res://scenes/ships/unn/munroe_frigate.tscn")
 var murphyFile = load("res://scenes/ships/unn/murphy_destroyer.tscn")
 var trentonFile = load("res://scenes/ships/unn/trenton_cruiser.tscn")
+var asimovFile = load("res://scenes/ships/unn/asimov_cruiser.tscn")
 
 #MCRN Ships
 var corvetteFile = load("res://scenes/ships/mcrn/corvette.tscn")
@@ -94,7 +95,7 @@ func _ready() -> void:
 		enemy.displayName = "UNN Triangulum"
 		add_child(enemy)
 		
-		enemy = andronicusFile.instantiate()
+		enemy = trentonFile.instantiate()
 		enemy.position = Vector2(22000,-2000)
 		enemy.displayName = "UNN Heron"
 		add_child(enemy)
@@ -130,9 +131,19 @@ func _ready() -> void:
 		enemy.displayName = "UNN Raiden"
 		add_child(enemy)
 		
-		enemy = murphyFile.instantiate()
-		enemy.position = Vector2(45000,-5000)
-		enemy.displayName = "UNN Lafayette"
+		enemy = asimovFile.instantiate()
+		enemy.position = Vector2(32000,1000)
+		enemy.displayName = "UNN Ursula Le Guin"
+		add_child(enemy)
+		
+		enemy = trentonFile.instantiate()
+		enemy.position = Vector2(35000,1000)
+		enemy.displayName = "UNN Hamilton"
+		add_child(enemy)
+		
+		enemy = trentonFile.instantiate()
+		enemy.position = Vector2(35000,-1000)
+		enemy.displayName = "UNN Salem"
 		add_child(enemy)
 		
 	elif level == 4:
