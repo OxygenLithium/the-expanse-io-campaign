@@ -20,7 +20,7 @@ var velocityDirection
 var relativeVelocityDireciton
 
 const lifespan = 1800
-const accelerations = [0,9,27]
+var accelerations = [0,9,27]
 
 var acceleration = 4
 var accelerationGrade
@@ -33,6 +33,8 @@ const cutAccelerationDistance = 3000
 
 var approxImpactTime = INF
 
+var damage = 40
+
 #seconds
 const finalManeuverTime = 3
 
@@ -41,8 +43,13 @@ var offTargetTimer = 0
 
 var proportionalNavTimer = 0
 
+func missile_init():
+	pass
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	missile_init()
+	
 	if target:
 		getTelemetry()
 	prevTargetDirection = currTargetDirection
@@ -118,6 +125,27 @@ func proportionalNavigation(limitSpeed = true):
 		else:
 			desiredRotation = relativeVelocity.angle()
 
+func collision_functions():
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		
+		if not "type" in collider:
+			continue
+		
+		if (collider.type == "missile"):
+			death()
+			collider.hit_by_bullet()
+			return
+		
+		if (collider.type == "ship"):
+			death()
+			collider.take_damage_missile(damage)
+			return
+			
+		death()
+		break
+
 func death():
 	var explosion = explosionFile.instantiate()
 	explosion.position = global_position
@@ -132,6 +160,19 @@ func hit_by_railgun():
 
 func hit_by_bullet():
 	death()
+	
+func phases_functions():
+	if timer >= 30:
+		if approxImpactTime < finalManeuverTime:
+			accelerationGrade = 2
+			proportionalNavigation(false)
+			proportionalNavTimer = 0
+		if proportionalNavTimer > 5:
+			proportionalNavigation()
+			proportionalNavTimer = 0
+		
+	if timer == 30:
+		accelerationGrade = 2
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
@@ -147,20 +188,9 @@ func _physics_process(delta: float) -> void:
 		
 	getTelemetry()
 	
-	if timer >= 30:
-		if approxImpactTime < finalManeuverTime:
-			accelerationGrade = 2
-			proportionalNavigation(false)
-			proportionalNavTimer = 0
-		if proportionalNavTimer > 5:
-			proportionalNavigation()
-			proportionalNavTimer = 0
-		
-	if timer == 30:
-		accelerationGrade = 2
-	#if timer == 120:
-		#accelerationGrade = 1
-	elif timer == lifespan:
+	phases_functions()
+	
+	if timer == lifespan:
 		death()
 		return
 	
@@ -187,7 +217,6 @@ func _physics_process(delta: float) -> void:
 	
 	if abs(diffRotation) > PI/18:
 		cutAcceleration = true
-	
 		
 	acceleration = accelerations[accelerationGrade]
 	if !cutAcceleration:
@@ -197,25 +226,7 @@ func _physics_process(delta: float) -> void:
 	
 	proportionalNavTimer += 1
 	
-	for i in get_slide_collision_count():
-		var collision = get_slide_collision(i)
-		var collider = collision.get_collider()
-		
-		if not "type" in collider:
-			continue
-		
-		if (collider.type == "missile"):
-			death()
-			collider.hit_by_bullet()
-			return
-		
-		if (collider.type == "ship"):
-			death()
-			collider.take_damage_missile()
-			return
-			
-		death()
-		break
+	collision_functions()
 	
 	prevTargetDirection = currTargetDirection
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://f2hfhof2sfos"]
+[gd_scene load_steps=4 format=3 uid="uid://6ypoy02gv20c"]
 
 [ext_resource type="Script" path="res://scripts/ship_parts/mcrn/player_pdc.gd" id="1_7b106"]
 [ext_resource type="Texture2D" uid="uid://rnrf66q5dhmf" path="res://sprites/ship_parts/mcrn/MCRN PDC Base.png" id="1_d0uce"]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://bjirmtxocn4ld"]
+
+[ext_resource type="Script" path="res://scripts/ship_parts/mcrn/player_pdc.gd" id="1_7b106"]
+[ext_resource type="Texture2D" uid="uid://rnrf66q5dhmf" path="res://sprites/ship_parts/mcrn/MCRN PDC Base.png" id="1_d0uce"]
+[ext_resource type="Texture2D" uid="uid://cm4dsmi62fb2m" path="res://sprites/ship_parts/mcrn/MCRN PDC gun.png" id="2_5ibbd"]
+
+[node name="PDC Base" type="Node2D" node_paths=PackedStringArray("pivot", "marker")]
+script = ExtResource("1_7b106")
+pivot = NodePath("PDC Pivot")
+marker = NodePath("PDC Pivot/Marker2D")
+
+[node name="PDC Base" type="Sprite2D" parent="."]
+scale = Vector2(0.361111, 0.361111)
+texture = ExtResource("1_d0uce")
+
+[node name="PDC Pivot" type="Node2D" parent="."]
+position = Vector2(0, -5)
+
+[node name="PDC Gun Sprite" type="Sprite2D" parent="PDC Pivot"]
+position = Vector2(3, -2)
+scale = Vector2(0.310811, 0.310811)
+texture = ExtResource("2_5ibbd")
+
+[node name="Marker2D" type="Marker2D" parent="PDC Pivot"]
+position = Vector2(36, 0)

@@ -14,7 +14,7 @@ const railgunMinRange = 5000
 var railgunRoundSpeed = 15000
 
 func special_init():
-	health = 300
+	health = 150
 	railgunResistance = 2
 	acceleration = 1.5
 	standardAcceleration = 1.5

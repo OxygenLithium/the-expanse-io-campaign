@@ -1,51 +1,33 @@
-[gd_scene load_steps=8 format=3 uid="uid://xh760rt8upvn"]
+[gd_scene load_steps=7 format=3 uid="uid://xh760rt8upvn"]
 
 [ext_resource type="Script" path="res://scripts/ships/unn/unn_frigate.gd" id="1_upgyx"]
 [ext_resource type="Texture2D" uid="uid://ti6sb5w73jkc" path="res://sprites/ships/unn/Mulan-class Gunship.png" id="2_2bmrs"]
-[ext_resource type="Script" path="res://scripts/ship_parts/unn/enemyPDC.gd" id="2_alwmd"]
-[ext_resource type="Texture2D" uid="uid://ci6caan12shp0" path="res://sprites/ship_parts/common/minigun.png" id="4_i3lsr"]
 [ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="4_ywmov"]
 [ext_resource type="Script" path="res://scripts/ship_parts/common/drive_plume.gd" id="5_4l5w6"]
+[ext_resource type="PackedScene" uid="uid://bfiwl5bqp3awf" path="res://scenes/ship_parts/unn/unn_pdc.tscn" id="5_cftew"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ypt78"]
 size = Vector2(719.318, 140.535)
 
-[node name="unn_frigate" type="CharacterBody2D" node_paths=PackedStringArray("pdcPivots", "pdcMarkers")]
+[node name="unn_frigate" type="CharacterBody2D"]
 position = Vector2(7, -3)
 collision_layer = 256
 collision_mask = 257
 script = ExtResource("1_upgyx")
-pdcPivots = [NodePath("pdc_pivot_upper_left"), NodePath("pdc_pivot_upper_right")]
-pdcMarkers = [NodePath("pdc_pivot_upper_left/pdc_upper_left/pdc_marker_upper_left"), NodePath("pdc_pivot_upper_right/pdc_upper_right/pdc_marker_upper_right")]
+
+[node name="PDC Base" parent="." instance=ExtResource("5_cftew")]
+position = Vector2(-7, -29)
+scale = Vector2(1, 1)
+
+[node name="PDC Base2" parent="." instance=ExtResource("5_cftew")]
+position = Vector2(-7, 23)
+rotation = -3.14159
+scale = Vector2(1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-6.49713, 1.24998)
 scale = Vector2(0.209913, 0.209913)
 shape = SubResource("RectangleShape2D_ypt78")
-
-[node name="pdc_pivot_upper_left" type="Node2D" parent="."]
-position = Vector2(-10, -27)
-scale = Vector2(0.145, 0.145)
-script = ExtResource("2_alwmd")
-
-[node name="pdc_upper_left" type="Sprite2D" parent="pdc_pivot_upper_left"]
-position = Vector2(55.1724, 0)
-texture = ExtResource("4_i3lsr")
-
-[node name="pdc_marker_upper_left" type="Marker2D" parent="pdc_pivot_upper_left/pdc_upper_left"]
-position = Vector2(27.5862, 6.89655)
-
-[node name="pdc_pivot_upper_right" type="Node2D" parent="."]
-position = Vector2(-6, 21)
-script = ExtResource("2_alwmd")
-
-[node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_right"]
-position = Vector2(6.99999, -1.90735e-06)
-scale = Vector2(0.145, 0.145)
-texture = ExtResource("4_i3lsr")
-
-[node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_upper_right/pdc_upper_right"]
-position = Vector2(27.5863, 6.89652)
 
 [node name="Drive Plume" type="Sprite2D" parent="."]
 position = Vector2(-127, -1)

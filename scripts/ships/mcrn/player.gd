@@ -179,7 +179,7 @@ func checkFireMissileValid():
 func missileFunctions():
 	if Input.is_action_pressed("key_space") && missileCooldown == 0 && missileReplenish > 180:
 		if target:
-			shoot_missile()
+			shoot_missile(40)
 			shoot_missile_audio()
 			missileCooldown = 15
 			missileReplenish -= 180

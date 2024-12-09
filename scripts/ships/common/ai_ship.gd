@@ -91,9 +91,10 @@ func getTelemetry():
 	relativeVelocity = targetVelocity - velocity
 	currTargetDirection = relativeDisplacement.angle()
 
-func shoot_missile():
+func shoot_missile(mDamage = 40):
 	var missile = missileFile.instantiate()
 	missile.allegiance = allegiance
+	missile.damage = mDamage
 	missile.target = target
 	missile.global_position = global_position
 	get_parent().add_child(missile)
@@ -105,6 +106,8 @@ func shoot_missile():
 	var missile_marker = missileMarkerFile.instantiate()
 	missile_marker.markerTarget = missile
 	get_parent().map_canvas.radar_map.add_child(missile_marker)
+	
+	missile.marker = missile_marker
 	
 	if allegiance != "MCRN" and target == get_parent().player:
 		var missile_warning = missileWarning.instantiate()

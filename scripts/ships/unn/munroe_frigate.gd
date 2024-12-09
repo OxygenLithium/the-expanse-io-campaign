@@ -16,6 +16,7 @@ const railgunMinRange = 5000
 var railgunAiming = false
 
 func special_init():
+	health = 25
 	missileShootTimes = []
 	PDCLockDistance = 2500
 

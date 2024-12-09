@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/ships/mcrn/player.gd" id="1_4hx5q"]
 [ext_resource type="Texture2D" uid="uid://7ex3hj62petl" path="res://sprites/ships/mcrn/tachi.png" id="2_858hr"]
 [ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="4_heho3"]
-[ext_resource type="PackedScene" uid="uid://f2hfhof2sfos" path="res://scripts/ship_parts/mcrn/mcrn_pdc.tscn" id="4_pnas7"]
+[ext_resource type="PackedScene" uid="uid://6ypoy02gv20c" path="res://scenes/ship_parts/mcrn/player_pdc.tscn" id="4_ht44a"]
 [ext_resource type="Script" path="res://scripts/ship_parts/common/drive_plume.gd" id="5_um53v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cweei"]
@@ -13,33 +13,32 @@ size = Vector2(641.127, 136.366)
 collision_mask = 257
 script = ExtResource("1_4hx5q")
 
-[node name="PDC Upper Left" parent="." instance=ExtResource("4_pnas7")]
-position = Vector2(-22, -22)
-
-[node name="PDC Upper Right" parent="." instance=ExtResource("4_pnas7")]
-position = Vector2(-23, 20)
-rotation = -3.14159
-
-[node name="PDC Middle Left" parent="." instance=ExtResource("4_pnas7")]
-position = Vector2(53, -20)
-scale = Vector2(1, 1.00722)
-
-[node name="PDC Middle Right" parent="." instance=ExtResource("4_pnas7")]
-position = Vector2(52, 18)
-rotation = -3.14159
-
-[node name="PDC Lower Left" parent="." instance=ExtResource("4_pnas7")]
-position = Vector2(14, -23)
-
-[node name="PDC Lower Right" parent="." instance=ExtResource("4_pnas7")]
-position = Vector2(13, 23)
-rotation = 3.14159
-
 [node name="Drive Plume" type="Sprite2D" parent="."]
 position = Vector2(-119, -1)
 scale = Vector2(0.158209, 0.10015)
 texture = ExtResource("4_heho3")
 script = ExtResource("5_um53v")
+
+[node name="PDC Base7" parent="." instance=ExtResource("4_ht44a")]
+position = Vector2(53, -20)
+
+[node name="PDC Base8" parent="." instance=ExtResource("4_ht44a")]
+position = Vector2(13, -25)
+
+[node name="PDC Base9" parent="." instance=ExtResource("4_ht44a")]
+position = Vector2(-23, -22)
+
+[node name="PDC Base10" parent="." instance=ExtResource("4_ht44a")]
+position = Vector2(50, 17)
+rotation = -3.14159
+
+[node name="PDC Base11" parent="." instance=ExtResource("4_ht44a")]
+position = Vector2(13, 24)
+rotation = -3.14159
+
+[node name="PDC Base12" parent="." instance=ExtResource("4_ht44a")]
+position = Vector2(-22, 21)
+rotation = -3.14159
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1.29044, -1.31253)

@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://bc26qfhx48nwy"]
+[gd_scene load_steps=7 format=3 uid="uid://bc26qfhx48nwy"]
 
 [ext_resource type="Script" path="res://scenes/ships/unn/asimov_cruiser.gd" id="1_aaxk1"]
-[ext_resource type="Script" path="res://scripts/ship_parts/unn/enemyPDC.gd" id="2_l7r8s"]
-[ext_resource type="Texture2D" uid="uid://ci6caan12shp0" path="res://sprites/ship_parts/common/minigun.png" id="4_i3lsr"]
+[ext_resource type="PackedScene" uid="uid://bfiwl5bqp3awf" path="res://scenes/ship_parts/unn/unn_pdc.tscn" id="4_l7ogq"]
 [ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="4_vmdhi"]
 [ext_resource type="Script" path="res://scripts/ship_parts/common/drive_plume.gd" id="5_t4uug"]
 [ext_resource type="Texture2D" uid="uid://bmy0kjddh6mxa" path="res://sprites/ships/unn/Asimov-class Cruiser.png" id="6_o5rw7"]
@@ -13,54 +12,6 @@ collision_layer = 256
 collision_mask = 257
 script = ExtResource("1_aaxk1")
 railgun = NodePath("railgun_pivot")
-
-[node name="pdc_pivot_upper_uleft" type="Node2D" parent="."]
-position = Vector2(-225, -86)
-scale = Vector2(0.145, 0.145)
-script = ExtResource("2_l7r8s")
-
-[node name="pdc_upper_left" type="Sprite2D" parent="pdc_pivot_upper_uleft"]
-position = Vector2(55.1724, 0)
-texture = ExtResource("4_i3lsr")
-
-[node name="pdc_marker_upper_left" type="Marker2D" parent="pdc_pivot_upper_uleft/pdc_upper_left"]
-position = Vector2(27.5862, 6.89655)
-
-[node name="pdc_pivot_upper_bleft" type="Node2D" parent="."]
-position = Vector2(-224, 83)
-script = ExtResource("2_l7r8s")
-
-[node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_bleft"]
-position = Vector2(6.99999, -1.90735e-06)
-scale = Vector2(0.145, 0.145)
-texture = ExtResource("4_i3lsr")
-
-[node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_upper_bleft/pdc_upper_right"]
-position = Vector2(27.5863, 6.89652)
-
-[node name="pdc_pivot_upper_bright" type="Node2D" parent="."]
-position = Vector2(64, 91)
-script = ExtResource("2_l7r8s")
-
-[node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_bright"]
-position = Vector2(6.99999, -1.90735e-06)
-scale = Vector2(0.145, 0.145)
-texture = ExtResource("4_i3lsr")
-
-[node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_upper_bright/pdc_upper_right"]
-position = Vector2(27.5863, 6.89652)
-
-[node name="pdc_pivot_upper_uright" type="Node2D" parent="."]
-position = Vector2(65, -90)
-script = ExtResource("2_l7r8s")
-
-[node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_uright"]
-position = Vector2(6.99999, -1.90735e-06)
-scale = Vector2(0.145, 0.145)
-texture = ExtResource("4_i3lsr")
-
-[node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_upper_uright/pdc_upper_right"]
-position = Vector2(27.5863, 6.89652)
 
 [node name="Drive Plume" type="Sprite2D" parent="."]
 position = Vector2(-358, -41.2281)
@@ -82,8 +33,25 @@ script = ExtResource("5_t4uug")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 position = Vector2(-5.96046e-08, -4.54747e-13)
-scale = Vector2(1, 1)
 polygon = PackedVector2Array(-262, -66, -179, -62, -177, -51, -159, -50, -159, -65, -84, -71, -81, -61, -67, -56, -66, -41, 12, -57, 18, -70, 112, -71, 118, -63, 188, -61, 195, -52, 183, -32, 228, -31, 272, -8, 260, 8, 207, 10, 225, 34, 210, 53, 131, 52, 109, 78, 16, 77, 7, 62, 7, 56, -42, 56, -65, 40, -65, 51, -72, 60, -80, 62, -80, 73, -120, 74, -159, 65, -159, 52, -176, 53, -177, 63, -263, 70)
+
+[node name="PDC Base" parent="." instance=ExtResource("4_l7ogq")]
+position = Vector2(64, -94)
+scale = Vector2(1, 1)
+
+[node name="PDC Base2" parent="." instance=ExtResource("4_l7ogq")]
+position = Vector2(64, 94)
+rotation = -3.14159
+scale = Vector2(1, 1)
+
+[node name="PDC Base3" parent="." instance=ExtResource("4_l7ogq")]
+position = Vector2(-222, -85)
+scale = Vector2(1, 1)
+
+[node name="PDC Base4" parent="." instance=ExtResource("4_l7ogq")]
+position = Vector2(-222, 87)
+rotation = -3.14159
+scale = Vector2(1, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-1, -7.62939e-06)

@@ -1,8 +1,5 @@
 extends CharacterBody2D
 
-@export var pdcPivots: Array[Node2D]
-@export var pdcMarkers: Array[Node2D]
-
 @export var pdcs: Array[Node2D]
 
 #Fields accessed by others on checks
@@ -115,11 +112,12 @@ func shoot_PDC():
 			bullet_marker.markerTarget = bullet
 			get_parent().map_canvas.radar_map.add_child(bullet_marker)
 
-func shoot_missile():
+func shoot_missile(mDamage = 20):
 	var missile = missileFile.instantiate()
 	missile.allegiance = allegiance
 	
 	missile.target = target
+	missile.damage = mDamage
 	missile.global_position = global_position + Vector2(50,0).rotated(rotation) + velocity/60
 	missile.velocity = velocity
 	missile.rotation = rotation
@@ -138,8 +136,8 @@ func targeted_by_railgun():
 func on_take_damage():
 	pass
 
-func take_damage_missile():
-	health -= 20
+func take_damage_missile(damage):
+	health -= damage
 	on_take_damage()
 	
 func take_damage_bullet():

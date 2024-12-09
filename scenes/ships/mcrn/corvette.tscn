@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://scripts/ship_parts/mcrn/mcrn_corvette.gd" id="1_dbp2b"]
 [ext_resource type="Texture2D" uid="uid://7ex3hj62petl" path="res://sprites/ships/mcrn/tachi.png" id="2_858hr"]
-[ext_resource type="Script" path="res://scripts/ship_parts/mcrn/pdc.gd" id="2_hr2f5"]
-[ext_resource type="Texture2D" uid="uid://ci6caan12shp0" path="res://sprites/ship_parts/common/minigun.png" id="3_8vxsh"]
+[ext_resource type="PackedScene" uid="uid://bjirmtxocn4ld" path="res://scenes/ship_parts/mcrn/ai_pdc.tscn" id="4_55lix"]
 [ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="4_heho3"]
+[ext_resource type="Script" path="res://scripts/ship_parts/common/ai_pdc.gd" id="5_7rpb7"]
 [ext_resource type="Script" path="res://scripts/ship_parts/common/drive_plume.gd" id="5_um53v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cweei"]
@@ -14,59 +14,38 @@ size = Vector2(641.127, 136.366)
 collision_mask = 257
 script = ExtResource("1_dbp2b")
 
-[node name="pdc_pivot_upper_left" type="Node2D" parent="."]
-position = Vector2(13, -24)
-scale = Vector2(0.145, 0.145)
-script = ExtResource("2_hr2f5")
-
-[node name="pdc_upper_left" type="Sprite2D" parent="pdc_pivot_upper_left"]
-position = Vector2(55.1724, 0)
-texture = ExtResource("3_8vxsh")
-
-[node name="pdc_marker_upper_left" type="Marker2D" parent="pdc_pivot_upper_left/pdc_upper_left"]
-position = Vector2(27.5862, 6.89655)
-
-[node name="pdc_pivot_upper_right" type="Node2D" parent="."]
-position = Vector2(13, 21)
-script = ExtResource("2_hr2f5")
-
-[node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_upper_right"]
-position = Vector2(6.99999, -1.90735e-06)
-scale = Vector2(0.145, 0.145)
-texture = ExtResource("3_8vxsh")
-
-[node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_upper_right/pdc_upper_right"]
-position = Vector2(27.5863, 6.89652)
-
-[node name="pdc_pivot_lower_left" type="Node2D" parent="."]
-position = Vector2(-24, -20)
-scale = Vector2(0.145, 0.145)
-script = ExtResource("2_hr2f5")
-
-[node name="pdc_upper_left" type="Sprite2D" parent="pdc_pivot_lower_left"]
-position = Vector2(62.0689, -6.89655)
-texture = ExtResource("3_8vxsh")
-
-[node name="pdc_marker_upper_left" type="Marker2D" parent="pdc_pivot_lower_left/pdc_upper_left"]
-position = Vector2(27.5862, 6.89655)
-
-[node name="pdc_pivot_lower_right" type="Node2D" parent="."]
-position = Vector2(-22, 19)
-script = ExtResource("2_hr2f5")
-
-[node name="pdc_upper_right" type="Sprite2D" parent="pdc_pivot_lower_right"]
-position = Vector2(6.99999, -1.90735e-06)
-scale = Vector2(0.145, 0.145)
-texture = ExtResource("3_8vxsh")
-
-[node name="pdc_marker_upper_right" type="Marker2D" parent="pdc_pivot_lower_right/pdc_upper_right"]
-position = Vector2(27.5863, 6.89652)
-
 [node name="Drive Plume" type="Sprite2D" parent="."]
 position = Vector2(-119, -1)
 scale = Vector2(0.158209, 0.10015)
 texture = ExtResource("4_heho3")
 script = ExtResource("5_um53v")
+
+[node name="PDC Base" parent="." instance=ExtResource("4_55lix")]
+position = Vector2(53, -20)
+script = ExtResource("5_7rpb7")
+
+[node name="PDC Base2" parent="." instance=ExtResource("4_55lix")]
+position = Vector2(13, -25)
+script = ExtResource("5_7rpb7")
+
+[node name="PDC Base3" parent="." instance=ExtResource("4_55lix")]
+position = Vector2(-23, -22)
+script = ExtResource("5_7rpb7")
+
+[node name="PDC Base4" parent="." instance=ExtResource("4_55lix")]
+position = Vector2(50, 17)
+rotation = -3.14159
+script = ExtResource("5_7rpb7")
+
+[node name="PDC Base5" parent="." instance=ExtResource("4_55lix")]
+position = Vector2(13, 24)
+rotation = -3.14159
+script = ExtResource("5_7rpb7")
+
+[node name="PDC Base6" parent="." instance=ExtResource("4_55lix")]
+position = Vector2(-22, 21)
+rotation = -3.14159
+script = ExtResource("5_7rpb7")
 
 [node name="ship_sprite" type="Sprite2D" parent="."]
 position = Vector2(1, 2.38419e-07)
