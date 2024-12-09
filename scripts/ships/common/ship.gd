@@ -3,6 +3,8 @@ extends CharacterBody2D
 @export var pdcPivots: Array[Node2D]
 @export var pdcMarkers: Array[Node2D]
 
+@export var pdcs: Array[Node2D]
+
 #Fields accessed by others on checks
 var type = "ship"
 var allegiance
@@ -97,21 +99,21 @@ func getPDCTarget(enemyShips, PDCTargetingEffectiveness = 12):
 	return closest
 
 func shoot_PDC():
-	for i in range(pdcPivots.size()):
-		var bullet = bulletFile.instantiate()
-		bullet.allegiance = allegiance
-		bullet.position = pdcPivots[i].global_position + velocity/60
-		get_parent().add_child(bullet)
-		bullet.rotation = pdcPivots[i].rotation + rotation
-		bullet.rotation += rng.randf_range(-PI/60, PI/60)
-		bullet.velocity = velocity
-		bullet.velocity += Vector2(bulletSpeed,0).rotated(bullet.rotation)
-		bullet.set_visible(true)
-		
-		var bullet_marker = bulletMarkerFile.instantiate()
-		bullet_marker.markerTarget = bullet
-		get_parent().map_canvas.radar_map.add_child(bullet_marker)
-		
+	for i in range(pdcs.size()):
+		if pdcs[i].active:
+			var bullet = bulletFile.instantiate()
+			bullet.allegiance = allegiance
+			bullet.position = pdcs[i].marker.global_position + velocity/60
+			get_parent().add_child(bullet)
+			bullet.rotation = pdcs[i].pivot.rotation - pdcs[i].rotation + rotation
+			bullet.rotation += rng.randf_range(-PI/60, PI/60)
+			bullet.velocity = velocity
+			bullet.velocity += Vector2(bulletSpeed,0).rotated(bullet.rotation)
+			bullet.set_visible(true)
+			
+			var bullet_marker = bulletMarkerFile.instantiate()
+			bullet_marker.markerTarget = bullet
+			get_parent().map_canvas.radar_map.add_child(bullet_marker)
 
 func shoot_missile():
 	var missile = missileFile.instantiate()
