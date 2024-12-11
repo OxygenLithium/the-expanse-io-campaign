@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://bjirmtxocn4ld"]
 
-[ext_resource type="Script" path="res://scripts/ship_parts/mcrn/player_pdc.gd" id="1_7b106"]
 [ext_resource type="Texture2D" uid="uid://rnrf66q5dhmf" path="res://sprites/ship_parts/mcrn/MCRN PDC Base.png" id="1_d0uce"]
+[ext_resource type="Script" path="res://scripts/ship_parts/mcrn/mcrn_ai_pdc.gd" id="1_haji8"]
 [ext_resource type="Texture2D" uid="uid://cm4dsmi62fb2m" path="res://sprites/ship_parts/mcrn/MCRN PDC gun.png" id="2_5ibbd"]
 
 [node name="PDC Base" type="Node2D" node_paths=PackedStringArray("pivot", "marker")]
-script = ExtResource("1_7b106")
+script = ExtResource("1_haji8")
 pivot = NodePath("PDC Pivot")
 marker = NodePath("PDC Pivot/Marker2D")
 

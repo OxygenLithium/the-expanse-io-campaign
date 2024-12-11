@@ -1,13 +1,18 @@
 extends Node2D
 
+@export var pivot : Node2D
+@export var marker : Marker2D
+
 @onready var shooter = get_parent()
 
 var currPDCTargetAngle = 0
 var prevPDCTargetAngle = 0
+var active = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	get_parent().pdcPivots.append(self)
+	get_parent().pdcs.append(self)
+	pivot.rotation -= rotation
 	pass # Replace with function body.
 
 func predictTime(target, targetPosition = null):
@@ -29,17 +34,19 @@ func approximateLead(predictedTime):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if get_parent().PDCAutotrack:
-		if get_parent().PDCTarget and is_instance_valid(get_parent().PDCTarget):
-			currPDCTargetAngle = (get_parent().PDCTarget.global_position-global_position).angle()
-			if abs(currPDCTargetAngle - prevPDCTargetAngle) < PI/30 or abs(currPDCTargetAngle - prevPDCTargetAngle) > 59*PI/30:
-				look_at(get_parent().PDCTarget.global_position)
-			else:
-				var firstApproxPosition = approximateLead(predictTime(get_parent().PDCTarget))
-				look_at(get_parent().PDCTarget.global_position + firstApproxPosition + get_parent().velocity/60)
-			prevPDCTargetAngle = currPDCTargetAngle
-	else:
-		if $/root/Node.game_map.map_canvas.visible:
-			look_at((get_global_mouse_position()-$/root/Node.mainCamera.target.position)*$/root/Node.game_map.map_canvas.radar_map.mapScale + $/root/Node.game_map.map_canvas.radar_map.mapCenter + shooter.velocity/60)
+	active = true
+	if get_parent().PDCTarget and is_instance_valid(get_parent().PDCTarget):
+		currPDCTargetAngle = (get_parent().PDCTarget.global_position-global_position).angle()
+		if abs(currPDCTargetAngle - prevPDCTargetAngle) < PI/30 or abs(currPDCTargetAngle - prevPDCTargetAngle) > 59*PI/30:
+			pivot.look_at(get_parent().PDCTarget.global_position)
 		else:
-			look_at(get_global_mouse_position() + shooter.velocity/60)
+			var firstApproxPosition = approximateLead(predictTime(get_parent().PDCTarget))
+			pivot.look_at(get_parent().PDCTarget.global_position + firstApproxPosition + get_parent().velocity/60)
+		prevPDCTargetAngle = currPDCTargetAngle
+	
+	if (fmod(pivot.rotation,2*PI) > 0) and (fmod(pivot.rotation,2*PI) < PI):
+		pivot.rotation = 0
+		active = false
+	elif fmod(pivot.rotation,2*PI) < -PI:
+		pivot.rotation = 0
+		active = false

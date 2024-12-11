@@ -1,6 +1,6 @@
-extends "res://scripts/ships/unn/enemy_ship.gd"
+extends "res://scripts/ships/mcrn/friendly_ship.gd"
 
-const displayType = "Trenton-class Cruiser"
+const displayType = "Raptor-class Cruiser"
 var displayName = ""
 
 const idealRange = 30000
@@ -10,8 +10,8 @@ func special_init():
 	railgunResistance = 2
 	acceleration = 1.5
 	standardAcceleration = 1.5
-	PDCTargetingEffectiveness = 7
-	turnSpeed = rng.randf_range(PI/960, PI/480)
+	PDCTargetingEffectiveness = 12
+	turnSpeed = rng.randf_range(PI/720, PI/360)
 	
 	canDodge = false
 	

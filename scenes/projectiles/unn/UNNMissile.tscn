@@ -4,8 +4,8 @@
 [ext_resource type="Script" path="res://scripts/projectiles/unn/unn_missile.gd" id="1_wdf10"]
 [ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="2_2reka"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_boodk"]
-size = Vector2(124.456, 28.5833)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sgww5"]
+size = Vector2(73.8401, 47.6388)
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 collision_layer = 512
@@ -18,8 +18,9 @@ scale = Vector2(0.0406764, 0.0201754)
 texture = ExtResource("2_2reka")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.25, -1.19209e-07)
 scale = Vector2(0.209913, 0.209913)
-shape = SubResource("RectangleShape2D_boodk")
+shape = SubResource("RectangleShape2D_sgww5")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-2.38419e-07, -2.38419e-07)

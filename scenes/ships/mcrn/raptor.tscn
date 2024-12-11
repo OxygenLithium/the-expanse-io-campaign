@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3 uid="uid://bf1mxbxfrbyus"]
+
+[ext_resource type="Script" path="res://scripts/ships/mcrn/mcrn_raptor.gd" id="1_wf8eo"]
+[ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="4_heho3"]
+[ext_resource type="Texture2D" uid="uid://bdg2co3355016" path="res://sprites/ships/mcrn/Raptor-class Cruiser.png" id="5_kajmi"]
+[ext_resource type="Script" path="res://scripts/ship_parts/common/drive_plume.gd" id="5_um53v"]
+[ext_resource type="PackedScene" uid="uid://bjirmtxocn4ld" path="res://scenes/ship_parts/mcrn/ai_pdc.tscn" id="6_ue3bh"]
+
+[node name="Raptor" type="CharacterBody2D"]
+collision_mask = 257
+script = ExtResource("1_wf8eo")
+
+[node name="Drive Plume" type="Sprite2D" parent="."]
+position = Vector2(-284, -39)
+scale = Vector2(0.268154, 0.15287)
+texture = ExtResource("4_heho3")
+script = ExtResource("5_um53v")
+
+[node name="Drive Plume2" type="Sprite2D" parent="."]
+position = Vector2(-284, 40)
+scale = Vector2(0.268154, 0.15287)
+texture = ExtResource("4_heho3")
+script = ExtResource("5_um53v")
+
+[node name="PDC Base" parent="." instance=ExtResource("6_ue3bh")]
+position = Vector2(148, -55)
+
+[node name="PDC Base2" parent="." instance=ExtResource("6_ue3bh")]
+position = Vector2(-132, -73)
+
+[node name="PDC Base7" parent="." instance=ExtResource("6_ue3bh")]
+position = Vector2(67, -76)
+
+[node name="PDC Base4" parent="." instance=ExtResource("6_ue3bh")]
+position = Vector2(38, 42)
+rotation = -3.14159
+
+[node name="PDC Base5" parent="." instance=ExtResource("6_ue3bh")]
+position = Vector2(-137, 75)
+rotation = -3.14159
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-185, -62, -70, -69, -10, -33, 27, -66, 109, -68, 121, -45, 187, -45, 207, -22, 199, 1, 163, 5, 173, 47, 82, 48, 72, 35, -2, 33, -67, 71, -186, 65, -180, 29, -139, 22, -142, -18, -176, -22)
+
+[node name="ship_sprite" type="Sprite2D" parent="."]
+position = Vector2(3.00001, 1)
+scale = Vector2(0.362219, 0.362219)
+texture = ExtResource("5_kajmi")

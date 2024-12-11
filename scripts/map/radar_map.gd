@@ -12,7 +12,7 @@ const cameraLockDistanceInGame = 150
 
 var mapCenter = Vector2(0,0)
 
-var mapScale = 40
+var mapScale = 20
 
 const mapRadius = 600
 
@@ -29,14 +29,19 @@ func _process(delta: float) -> void:
 		return
 	
 	if Input.is_action_just_pressed("key_-"):
-		mapScale *= 2
-		radiusLabel.text = "Map Diameter: " + str(mapScale/2.5) + "km"
+		if Input.is_action_pressed("key_shift"):
+			mapScale *= 16
+		else:
+			mapScale *= 2
+		radiusLabel.text = "Map Diameter: " + str(mapScale*4) + "km"
 	if Input.is_action_just_pressed("key_+") and mapScale > 10:
 		if Input.is_action_pressed("key_shift"):
-			mapScale = 10
+			mapScale = mapScale/16
+			if mapScale < 10:
+				mapScale = 10
 		else:
 			mapScale = mapScale/2
-		radiusLabel.text = "Map Diameter: " + str(mapScale/2.5) + "km"
+		radiusLabel.text = "Map Diameter: " + str(mapScale*4) + "km"
 	mapCenter = cameraTarget.position
 		
 	if Input.is_action_just_pressed("key_v"):

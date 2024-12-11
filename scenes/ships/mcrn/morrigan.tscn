@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://bsika51qlw01v"]
+
+[ext_resource type="Script" path="res://scripts/ships/mcrn/mcrn_morrigan.gd" id="1_gei7l"]
+[ext_resource type="PackedScene" uid="uid://bjirmtxocn4ld" path="res://scenes/ship_parts/mcrn/ai_pdc.tscn" id="4_55lix"]
+[ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="4_heho3"]
+[ext_resource type="Script" path="res://scripts/ship_parts/common/drive_plume.gd" id="5_um53v"]
+[ext_resource type="Texture2D" uid="uid://d2x4klk0ak81h" path="res://sprites/ships/mcrn/Morrigan-class Destroyer.png" id="5_v103m"]
+
+[node name="morrigan" type="CharacterBody2D"]
+collision_mask = 257
+script = ExtResource("1_gei7l")
+
+[node name="Drive Plume" type="Sprite2D" parent="."]
+position = Vector2(-99.5566, -2.13569)
+scale = Vector2(0.145619, 0.0921803)
+texture = ExtResource("4_heho3")
+script = ExtResource("5_um53v")
+
+[node name="PDC Base" parent="." instance=ExtResource("4_55lix")]
+position = Vector2(-6, -18)
+
+[node name="PDC Base4" parent="." instance=ExtResource("4_55lix")]
+position = Vector2(-6, 16)
+rotation = -3.14159
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(5.96046e-08, 2.84217e-14)
+scale = Vector2(1, 1)
+polygon = PackedVector2Array(-43, -15, 54, -9, 44, 9, 13, 10, 11, 12, -50, 12, -51, -6)
+
+[node name="ship_sprite" type="Sprite2D" parent="."]
+position = Vector2(1, 2.38419e-07)
+scale = Vector2(0.286939, 0.286939)
+texture = ExtResource("5_v103m")

@@ -1,11 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://ni51vctnooo1"]
+[gd_scene load_steps=7 format=3 uid="uid://ni51vctnooo1"]
 
 [ext_resource type="Script" path="res://scripts/ships/mcrn/scirocco.gd" id="1_xoyef"]
 [ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="4_heho3"]
 [ext_resource type="Script" path="res://scripts/ship_parts/common/drive_plume.gd" id="5_um53v"]
 [ext_resource type="Texture2D" uid="uid://drli6mbq3150" path="res://sprites/ships/mcrn/Scirocco-class Cruiser.png" id="6_dc58n"]
 [ext_resource type="PackedScene" uid="uid://bjirmtxocn4ld" path="res://scenes/ship_parts/mcrn/ai_pdc.tscn" id="6_ue3bh"]
-[ext_resource type="Script" path="res://scripts/ship_parts/common/ai_pdc.gd" id="7_dd4hx"]
 [ext_resource type="Texture2D" uid="uid://c5qtexwsx0085" path="res://sprites/ship_parts/unn/Murphy Railgun.png" id="7_kvn27"]
 
 [node name="scirocco" type="CharacterBody2D" node_paths=PackedStringArray("railgun")]
@@ -33,43 +32,34 @@ script = ExtResource("5_um53v")
 
 [node name="PDC Base" parent="." instance=ExtResource("6_ue3bh")]
 position = Vector2(216, -109)
-script = ExtResource("7_dd4hx")
 
 [node name="PDC Base2" parent="." instance=ExtResource("6_ue3bh")]
 position = Vector2(20, -109)
-script = ExtResource("7_dd4hx")
 
 [node name="PDC Base3" parent="." instance=ExtResource("6_ue3bh")]
 position = Vector2(-160, -109)
-script = ExtResource("7_dd4hx")
 
 [node name="PDC Base7" parent="." instance=ExtResource("6_ue3bh")]
 position = Vector2(117, -109)
-script = ExtResource("7_dd4hx")
 
 [node name="PDC Base8" parent="." instance=ExtResource("6_ue3bh")]
 position = Vector2(-271, -109)
-script = ExtResource("7_dd4hx")
 
 [node name="PDC Base4" parent="." instance=ExtResource("6_ue3bh")]
 position = Vector2(216, 77)
 rotation = -3.14159
-script = ExtResource("7_dd4hx")
 
 [node name="PDC Base5" parent="." instance=ExtResource("6_ue3bh")]
 position = Vector2(124, 120)
 rotation = -3.14159
-script = ExtResource("7_dd4hx")
 
 [node name="PDC Base6" parent="." instance=ExtResource("6_ue3bh")]
 position = Vector2(-105, 123)
 rotation = -3.14159
-script = ExtResource("7_dd4hx")
 
 [node name="PDC Base9" parent="." instance=ExtResource("6_ue3bh")]
 position = Vector2(-276, 104)
 rotation = -3.14159
-script = ExtResource("7_dd4hx")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-312, -95, 266, -93, 308, -77, 318, -60, 285, -51, 253, 61, 164, 68, 150, 103, 104, 110, 90, 76, -40, 78, -41, 108, -123, 112, -200, 88, -310, 87)

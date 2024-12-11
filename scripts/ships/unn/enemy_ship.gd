@@ -18,7 +18,6 @@ func ai_ship_init():
 	enemyShips = get_parent().MCRNShips
 	friendlyShips = get_parent().UNNShips
 	PDCTargetingEffectiveness = 8
-	timeBetweenPDC = 5
 	target = player
 	
 	health = 50

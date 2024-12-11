@@ -190,10 +190,10 @@ func missileFunctions():
 		missileCooldown -= 1
 	if missileReplenish < 1080:
 		missileReplenish += 1
-	get_parent().hud_canvas.missile_ammo_bar.value = missileReplenish
+	get_parent().hud_canvas.setMissileAmmoBar(missileReplenish)
 
 func gforceCheck():
-	gforce += max(acceleration-1.5,0)
+	gforce += max((acceleration-1.5)*3/2,0)
 	if gforce > 1:
 		gforce -= 1
 	if gforce > 990 && acceleration > 2:

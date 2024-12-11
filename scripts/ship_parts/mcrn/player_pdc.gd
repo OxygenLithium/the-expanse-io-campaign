@@ -9,40 +9,36 @@ var currPDCTargetAngle = 0
 var prevPDCTargetAngle = 0
 var active = true
 
+var target = null
+var closingVelocity = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	get_parent().pdcs.append(self)
 	pivot.rotation -= rotation
 	pass # Replace with function body.
 
-func predictTime(target, targetPosition = null):
-	if !targetPosition:
-		targetPosition = target.global_position
-	var relDistance = targetPosition - global_position
-	var relVelocity = target.velocity - get_parent().velocity
-	var closingVelocity = relVelocity.dot(relDistance)/relDistance.dot(relDistance)*relDistance
-	if relDistance.dot(relVelocity) < 0:
-		return relDistance.length()/(3000+closingVelocity.length())
-	return relDistance.length()/(3000-closingVelocity.length())
+func getClosingVelocity():
+	closingVelocity = -(target.velocity - get_parent().velocity).dot(target.position - global_position)/(target.position - global_position).dot(target.position - global_position)*((target.position - global_position).length())
 
-func approximateLead(predictedTime):
-	var relativeVelocity = get_parent().PDCTarget.velocity - get_parent().velocity
-	if "acceleration" in get_parent().PDCTarget:
-		return relativeVelocity/60*predictedTime + Vector2(get_parent().PDCTarget.acceleration,0).rotated(get_parent().PDCTarget.rotation)/60*(predictedTime)**2/2
-	
-	return relativeVelocity/60*predictedTime
+func calc_lead():
+	getClosingVelocity()
+	if "acceleration" in target:
+		return (target.velocity - get_parent().velocity)*((target.global_position - global_position).length()/(get_parent().bulletSpeed + closingVelocity)) + Vector2(target.acceleration,0).rotated(target.rotation)*(((target.global_position-global_position).length()/(get_parent().bulletSpeed + closingVelocity))**2)*30
+	return (target.velocity - get_parent().velocity)*((target.global_position-global_position).length()/(get_parent().bulletSpeed + closingVelocity))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	target = get_parent().PDCTarget
 	active = true
+	
 	if get_parent().PDCAutotrack:
 		if get_parent().PDCTarget and is_instance_valid(get_parent().PDCTarget):
 			currPDCTargetAngle = (get_parent().PDCTarget.global_position-global_position).angle()
 			if abs(currPDCTargetAngle - prevPDCTargetAngle) < PI/30 or abs(currPDCTargetAngle - prevPDCTargetAngle) > 59*PI/30:
 				pivot.look_at(get_parent().PDCTarget.global_position)
 			else:
-				var firstApproxPosition = approximateLead(predictTime(get_parent().PDCTarget))
-				pivot.look_at(get_parent().PDCTarget.global_position + firstApproxPosition + get_parent().velocity/60)
+				pivot.look_at(global_position + calc_lead() + get_parent().velocity/60)
 			prevPDCTargetAngle = currPDCTargetAngle
 	else:
 		if $/root/Node.game_map.map_canvas.visible:

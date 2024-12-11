@@ -7,6 +7,9 @@ extends CanvasLayer
 @export var g_limit_bar : ProgressBar
 @export var no_missile_target_warning : Label
 
+@export var missile_ammo_bars : Array[ProgressBar]
+@export var missile_ammo_icons : Array[Sprite2D]
+
 var noMissileTargetWarningTimer = 0
 
 # Called when the node enters the scene tree for the first time.
@@ -39,6 +42,15 @@ func noMissileTargetWarningOn():
 	no_missile_target_warning.text = "No missile target selected"
 	no_missile_target_warning.visible = true
 	noMissileTargetWarningTimer = 15
+
+func setMissileAmmoBar(replenish):
+	for i in range(6):
+		if replenish >= 180*(i+1):
+			missile_ammo_bars[i].value = 180
+			missile_ammo_icons[i].self_modulate = "#ffffff"
+		else:
+			missile_ammo_bars[i].value = replenish - 180*i
+			missile_ammo_icons[i].self_modulate = "#7bff00"
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

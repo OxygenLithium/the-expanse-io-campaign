@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://51ducbvyppyj"]
+[gd_scene load_steps=7 format=3 uid="uid://51ducbvyppyj"]
 
-[ext_resource type="Script" path="res://scripts/ship_parts/mcrn/mcrn_corvette.gd" id="1_dbp2b"]
+[ext_resource type="Script" path="res://scripts/ships/mcrn/mcrn_corvette.gd" id="1_474p7"]
 [ext_resource type="Texture2D" uid="uid://7ex3hj62petl" path="res://sprites/ships/mcrn/tachi.png" id="2_858hr"]
 [ext_resource type="PackedScene" uid="uid://bjirmtxocn4ld" path="res://scenes/ship_parts/mcrn/ai_pdc.tscn" id="4_55lix"]
 [ext_resource type="Texture2D" uid="uid://cd2vqhv12e31t" path="res://sprites/ship_parts/common/drive plume.png" id="4_heho3"]
-[ext_resource type="Script" path="res://scripts/ship_parts/common/ai_pdc.gd" id="5_7rpb7"]
 [ext_resource type="Script" path="res://scripts/ship_parts/common/drive_plume.gd" id="5_um53v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cweei"]
@@ -12,7 +11,7 @@ size = Vector2(641.127, 136.366)
 
 [node name="corvette" type="CharacterBody2D"]
 collision_mask = 257
-script = ExtResource("1_dbp2b")
+script = ExtResource("1_474p7")
 
 [node name="Drive Plume" type="Sprite2D" parent="."]
 position = Vector2(-119, -1)
@@ -22,30 +21,24 @@ script = ExtResource("5_um53v")
 
 [node name="PDC Base" parent="." instance=ExtResource("4_55lix")]
 position = Vector2(53, -20)
-script = ExtResource("5_7rpb7")
 
 [node name="PDC Base2" parent="." instance=ExtResource("4_55lix")]
 position = Vector2(13, -25)
-script = ExtResource("5_7rpb7")
 
 [node name="PDC Base3" parent="." instance=ExtResource("4_55lix")]
 position = Vector2(-23, -22)
-script = ExtResource("5_7rpb7")
 
 [node name="PDC Base4" parent="." instance=ExtResource("4_55lix")]
 position = Vector2(50, 17)
 rotation = -3.14159
-script = ExtResource("5_7rpb7")
 
 [node name="PDC Base5" parent="." instance=ExtResource("4_55lix")]
 position = Vector2(13, 24)
 rotation = -3.14159
-script = ExtResource("5_7rpb7")
 
 [node name="PDC Base6" parent="." instance=ExtResource("4_55lix")]
 position = Vector2(-22, 21)
 rotation = -3.14159
-script = ExtResource("5_7rpb7")
 
 [node name="ship_sprite" type="Sprite2D" parent="."]
 position = Vector2(1, 2.38419e-07)

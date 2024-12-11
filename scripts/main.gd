@@ -16,7 +16,9 @@ var trentonFile = load("res://scenes/ships/unn/trenton_cruiser.tscn")
 var asimovFile = load("res://scenes/ships/unn/asimov_cruiser.tscn")
 
 #MCRN Ships
+var morriganFile = load("res://scenes/ships/mcrn/morrigan.tscn")
 var corvetteFile = load("res://scenes/ships/mcrn/corvette.tscn")
+var raptorFile = load("res://scenes/ships/mcrn/raptor.tscn")
 var sciroccoFile = load("res://scenes/ships/mcrn/scirocco.tscn")
 
 var UNNShips = []
@@ -64,210 +66,137 @@ func _ready() -> void:
 	var ally = null
 	
 	if level == 1:
-		addMulan(Vector2(20000,1500), "UNN Ashgrove")
-		addMulan(Vector2(22000,3000), "UNN Ibadan")
-		addMulan(Vector2(22000,0), "UNN Riemann")
+		addMulan(Vector2(100000,6000), "UNN Ashgrove")
+		addMulan(Vector2(11000,12000), "UNN Ibadan")
+		addMulan(Vector2(110000,0), "UNN Riemann")
 		
 	elif level == 2:
-		addMulan(Vector2(22000,1500), "UNN Honolulu")
-		addMulan(Vector2(22000,-1500), "UNN Arthur Cayley")
-		addMulan(Vector2(20000,0), "UNN Triangulum")
+		addMorrigan(Vector2(-1600,800), "MCRN Scipio Africanus")
+		
+		addMulan(Vector2(11000,6000), "UNN Honolulu")
+		addMulan(Vector2(11000,-6000), "UNN Arthur Cayley")
+		addMulan(Vector2(100000,0), "UNN Triangulum")
 	
-		addAndronicus(Vector2(23500,-500), "UNN Rawlinson")
-		addTrenton(Vector2(24000,0), "UNN Daegu")
-		addAndronicus(Vector2(23500,500), "UNN Horatio")
+		addAndronicus(Vector2(114000,-2000), "UNN Rawlinson")
+		addTrenton(Vector2(116000,0), "UNN Daegu")
+		addAndronicus(Vector2(114000,2000), "UNN Horatio")
 		
 	elif level == 3:
-		addCorvette(Vector2(-800,400), "MCRN Wukong")
-		addCorvette(Vector2(20000,1500), "UNN Nightwing")
+		addCorvette(Vector2(-1600,800), "MCRN Wukong")
+		addCorvette(Vector2(-1600,-800), "UNN Nightwing")
 		
-		addMulan(Vector2(20000,0), "UNN Beirut")
-		addAndronicus(Vector2(30000,700), "UNN Terence Moe")
-		
-		enemy = munroeFile.instantiate()
-		enemy.position = Vector2(30000,5000)
-		enemy.displayName = "UNN Senden"
-		add_child(enemy)
-		
-		enemy = munroeFile.instantiate()
-		enemy.position = Vector2(30000,-5000)
-		enemy.displayName = "UNN Raiden"
-		add_child(enemy)
-		
-		enemy = asimovFile.instantiate()
-		enemy.position = Vector2(32000,1000)
-		enemy.displayName = "UNN Ursula Le Guin"
-		add_child(enemy)
-		
-		enemy = trentonFile.instantiate()
-		enemy.position = Vector2(35000,1000)
-		enemy.displayName = "UNN Stockholm"
-		add_child(enemy)
-		
-		enemy = trentonFile.instantiate()
-		enemy.position = Vector2(35000,-1000)
-		enemy.displayName = "UNN Salem"
-		add_child(enemy)
+		addMulan(Vector2(100000,0), "UNN Beirut")
+		addAndronicus(Vector2(140000,700), "UNN Terence Moe")
+		addMunroe(Vector2(140000,20000), "UNN Senden")
+		addMunroe(Vector2(140000,-20000), "UNN Raiden")
+		addMunroe(Vector2(148000,4000), "UNN Ursula Le Guin")
+		addTrenton(Vector2(160000,4000), "UNN Stockholm")
+		addTrenton(Vector2(160000,-4000), "UNN Salem")
 		
 	elif level == 4:
-		ally = corvetteFile.instantiate()
-		ally.position = Vector2(-800,400)
-		ally.displayName = "MCRN Wukong"
-		add_child(ally)
+		addCorvette(Vector2(-1600,800), "MCRN Wukong")
+		addCorvette(Vector2(-1600,-800), "UNN Nightwing")
 		
-		ally = corvetteFile.instantiate()
-		ally.position = Vector2(-800,-400)
-		ally.displayName = "MCRN Raiden"
-		add_child(ally)
+		addMulan(Vector2(108000,6000), "UNN Milton")
+		addMulan(Vector2(10600,0), "UNN Jasper")
+		addMulan(Vector2(108000,-6000), "UNN Beirut")
+		addMunroe(Vector2(140000,-6000), "UNN St. Elmo's Fire")
+		addMunroe(Vector2(140000, 6000), "UNN Maracaibo")
 		
-		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(13500,1500)
-		enemy.displayName = "UNN Milton"
-		add_child(enemy)
+		addAndronicus(Vector2(180000,0), "UNN Maracaibo")
+		addAndronicus(Vector2(180000,0), "UNN Hou Yi")
 		
-		enemy = andronicusFile.instantiate()
-		enemy.position = Vector2(12000,0)
-		enemy.displayName = "UNN Jasper"
-		add_child(enemy)
-		
-		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(13500,-1500)
-		enemy.displayName = "UNN Beirut"
-		add_child(enemy)
-		
-		enemy = munroeFile.instantiate()
-		enemy.position = Vector2(20000,700)
-		enemy.displayName = "UNN St. Elmo's Fire"
-		add_child(enemy)
-		
-		enemy = munroeFile.instantiate()
-		enemy.position = Vector2(20000,-700)
-		enemy.displayName = "UNN Maracaibo"
-		add_child(enemy)
-		
-		enemy = andronicusFile.instantiate()
-		enemy.position = Vector2(24000,0)
-		enemy.displayName = "UNN Beowulf"
-		add_child(enemy)
-		
-		enemy = murphyFile.instantiate()
-		enemy.position = Vector2(70000,-5000)
-		enemy.displayName = "UNN Hou Yi"
-		add_child(enemy)
-		
-		enemy = trentonFile.instantiate()
-		enemy.position = Vector2(60000,1500)
-		enemy.displayName = "UNN Katyusha"
-		add_child(enemy)
-		
-		enemy = trentonFile.instantiate()
-		enemy.position = Vector2(60000,-1500)
-		enemy.displayName = "UNN Chelyabinsk"
-		add_child(enemy)
+		addTrenton(Vector2(200000,6000), "UNN Katyusha")
+		addTrenton(Vector2(200000,-6000), "UNN Chelyabinsk")
 		
 	elif level == 5:
-		ally = corvetteFile.instantiate()
-		ally.position = Vector2(-800,400)
-		ally.displayName = "MCRN Wukong"
-		add_child(ally)
-		
-		ally = corvetteFile.instantiate()
-		ally.position = Vector2(-800,-400)
-		ally.displayName = "MCRN Raiden"
-		add_child(ally)
-		
-		ally = corvetteFile.instantiate()
-		ally.position = Vector2(-1600,800)
-		ally.displayName = "MCRN Hester Prynne"
-		add_child(ally)
-		
-		ally = sciroccoFile.instantiate()
-		ally.position = Vector2(-2400,0)
-		ally.displayName = "MCRN Amazon"
-		add_child(ally)
+		addCorvette(Vector2(-1600,800), "MCRN Wukong")
+		addMorrigan(Vector2(-1600,-800), "MCRN Nagamaki")
+		addMorrigan(Vector2(-3200,1600), "MCRN Hester Prynne")
+		addScirocco(Vector2(-4800,0), "MCRN Amazon")
 		
 		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(13500,1500)
+		enemy.position = Vector2(54000,6000)
 		enemy.displayName = "UNN Milton"
 		add_child(enemy)
 		
 		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(14500,2500)
+		enemy.position = Vector2(54000,10000)
 		enemy.displayName = "UNN Milton"
 		add_child(enemy)
 		
 		enemy = andronicusFile.instantiate()
-		enemy.position = Vector2(12000,0)
+		enemy.position = Vector2(48000,0)
 		enemy.displayName = "UNN Jasper"
 		add_child(enemy)
 		
 		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(13500,-1500)
+		enemy.position = Vector2(54000,-6000)
 		enemy.displayName = "UNN Beirut"
 		add_child(enemy)
 		
 		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(14500,-2500)
+		enemy.position = Vector2(58000,-10000)
 		enemy.displayName = "UNN Beirut"
 		add_child(enemy)
 		
 		enemy = munroeFile.instantiate()
-		enemy.position = Vector2(20000,700)
+		enemy.position = Vector2(80000,2800)
 		enemy.displayName = "UNN St. Elmo's Fire"
 		add_child(enemy)
 		
 		enemy = munroeFile.instantiate()
-		enemy.position = Vector2(20000,-700)
+		enemy.position = Vector2(80000,-2800)
 		enemy.displayName = "UNN Maracaibo"
 		add_child(enemy)
 		
 		enemy = andronicusFile.instantiate()
-		enemy.position = Vector2(24000,0)
+		enemy.position = Vector2(96000,0)
 		enemy.displayName = "UNN Beowulf"
 		add_child(enemy)
 		
 		enemy = murphyFile.instantiate()
-		enemy.position = Vector2(40000,-5000)
+		enemy.position = Vector2(160000,-20000)
 		enemy.displayName = "UNN Hou Yi"
 		add_child(enemy)
 		
 		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(50000,-5000)
+		enemy.position = Vector2(200000,-20000)
 		enemy.displayName = "UNN Austin"
 		add_child(enemy)
 		
 		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(50000,-6000)
+		enemy.position = Vector2(200000,-24000)
 		enemy.displayName = "UNN Chelsea"
 		add_child(enemy)
 		
 		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(50000,-4000)
+		enemy.position = Vector2(200000,-16000)
 		enemy.displayName = "UNN San Jose"
 		add_child(enemy)
 		
 		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(50000,-3000)
+		enemy.position = Vector2(200000,-12000)
 		enemy.displayName = "UNN Donald Knuth"
 		add_child(enemy)
 		
 		enemy = mulanFile.instantiate()
-		enemy.position = Vector2(50000,-2000)
+		enemy.position = Vector2(200000,-8000)
 		enemy.displayName = "UNN Mary Shelley"
 		add_child(enemy)
 		
 		enemy = murphyFile.instantiate()
-		enemy.position = Vector2(52000,-6000)
+		enemy.position = Vector2(208000,-24000)
 		enemy.displayName = "UNN Hayha"
 		add_child(enemy)
 		
 		enemy = murphyFile.instantiate()
-		enemy.position = Vector2(52000,-5000)
+		enemy.position = Vector2(208000,-20000)
 		enemy.displayName = "UNN Basilic"
 		add_child(enemy)
 		
 		enemy = murphyFile.instantiate()
-		enemy.position = Vector2(53000,-4000)
+		enemy.position = Vector2(212000,-16000)
 		enemy.displayName = "UNN Typhoon"
 		add_child(enemy)
 
@@ -320,12 +249,27 @@ func addAsimov(ePos, eName, eMode = "active"):
 
 
 #Add MCRN ships
+func addMorrigan(ePos, eName, eMode = "active"):
+	var ally = morriganFile.instantiate()
+	ally.position = ePos
+	ally.displayName = eName
+	ally.mode = eMode
+	add_child(ally)
+
 func addCorvette(ePos, eName, eMode = "active"):
 	var ally = corvetteFile.instantiate()
 	ally.position = ePos
 	ally.displayName = eName
 	ally.mode = eMode
 	add_child(ally)
+
+func addRaptor(ePos, eName, eMode = "active"):
+	var ally = raptorFile.instantiate()
+	ally.position = ePos
+	ally.displayName = eName
+	ally.mode = eMode
+	add_child(ally)
+
 
 func addScirocco(ePos, eName, eMode = "active"):
 	var ally = sciroccoFile.instantiate()
