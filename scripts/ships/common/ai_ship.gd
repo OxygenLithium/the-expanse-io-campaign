@@ -66,6 +66,10 @@ func death():
 	small_ship_explosion.position = global_position
 	small_ship_explosion.velocity = velocity
 	get_parent().add_child(small_ship_explosion)
+	
+	if $/root/Node/mainCamera.target == self:
+		$/root/Node/mainCamera.target = small_ship_explosion
+	
 	queue_free()
 
 func missile_cooldowns():

@@ -154,6 +154,9 @@ func death():
 	get_parent().add_child(explosion)
 	if is_instance_valid(target) && "incomingMissiles" in target:
 		target.incomingMissiles.erase(self)
+	if $/root/Node/mainCamera.target == self:
+		$/root/Node/mainCamera.target = explosion
+		
 	queue_free()
 
 func hit_by_railgun():
