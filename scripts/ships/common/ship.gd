@@ -112,10 +112,11 @@ func shoot_PDC():
 			bullet_marker.markerTarget = bullet
 			get_parent().map_canvas.radar_map.add_child(bullet_marker)
 
-func shoot_missile(mDamage = 20):
+func shoot_missile(mDamage = 20, targeting = "normal"):
 	var missile = missileFile.instantiate()
 	missile.allegiance = allegiance
 	
+	missile.shooter = self
 	missile.target = target
 	missile.damage = mDamage
 	missile.global_position = global_position + Vector2(50,0).rotated(rotation) + velocity/60

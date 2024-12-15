@@ -9,6 +9,8 @@ var missileWarning = load("res://scenes/hud/missileWarning.tscn")
 var enemyShips
 var friendlyShips
 
+var preferTargetType
+
 var standardAcceleration
 var PDCTargetingEffectiveness = 8
 var missileShootTimes = []
@@ -91,11 +93,16 @@ func getTelemetry():
 	relativeVelocity = targetVelocity - velocity
 	currTargetDirection = relativeDisplacement.angle()
 
-func shoot_missile(mDamage = 40):
+func shoot_missile(mDamage = 40, targeting = "normal"):
 	var missile = missileFile.instantiate()
 	missile.allegiance = allegiance
 	missile.damage = mDamage
-	missile.target = target
+	missile.shooter = self
+	if targeting == "random":
+		print("random")
+		missile.target = enemyShips.pick_random()
+	else:
+		missile.target = target
 	missile.global_position = global_position
 	get_parent().add_child(missile)
 	missile.rotation = rotation
@@ -186,6 +193,22 @@ func targeted_by_railgun():
 			RCSHard(rng.randi_range(0,3)*PI/2)
 			dodgeTimer = dodgeCooldown
 
+func intelligent_pick_target():
+	var weights = []
+	var currMax = 0
+	for i in enemyShips:
+		var weight = max(1, 300000/(i.position - position).length())
+		weights.push_back(currMax + weight)
+		currMax += weight
+	
+	var chosen = rng.randi_range(1, currMax)
+	for i in range(weights.size()):
+		if chosen <= weights[i]:
+			return enemyShips[i]
+	
+	print("intelligent pick target failed")
+	return enemyShips.pick_random()
+
 func _physics_process(delta: float) -> void:
 	#death detection
 	if health <= 0:
@@ -196,7 +219,7 @@ func _physics_process(delta: float) -> void:
 		if enemyShips.size() < 1:
 			mode = "passive"
 		else:
-			target = enemyShips.pick_random()
+			target = intelligent_pick_target()
 	
 	shouldAccelerate = true	
 	if mode == "active":

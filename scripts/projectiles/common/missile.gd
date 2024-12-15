@@ -5,8 +5,9 @@ var displayType = "Missile"
 var allegiance
 
 var marker
-
+var shooter
 var target
+
 var explosionFile = load("res://scenes/projectiles/common/explosion.tscn")
 
 var targetPosition

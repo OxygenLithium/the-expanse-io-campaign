@@ -6,7 +6,7 @@ var displayName = ""
 const idealRange = 30000
 
 func special_init():
-	health = 150
+	health = 250
 	railgunResistance = 2
 	acceleration = 1.5
 	standardAcceleration = 1.5

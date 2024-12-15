@@ -20,6 +20,7 @@ var morriganFile = load("res://scenes/ships/mcrn/morrigan.tscn")
 var corvetteFile = load("res://scenes/ships/mcrn/corvette.tscn")
 var raptorFile = load("res://scenes/ships/mcrn/raptor.tscn")
 var sciroccoFile = load("res://scenes/ships/mcrn/scirocco.tscn")
+var donnagerFile = load("res://scenes/ships/mcrn/donnager.tscn")
 
 var UNNShips = []
 var MCRNShips = []
@@ -113,7 +114,7 @@ func _ready() -> void:
 		addCorvette(Vector2(-1600,800), "MCRN Wukong")
 		addMorrigan(Vector2(-1600,-800), "MCRN Nagamaki")
 		addMorrigan(Vector2(-3200,1600), "MCRN Hester Prynne")
-		addScirocco(Vector2(-4800,0), "MCRN Amazon")
+		#addDonnager(Vector2(-500,-300), "MCRN Ragnarok")
 		
 		enemy = mulanFile.instantiate()
 		enemy.position = Vector2(54000,6000)
@@ -273,6 +274,13 @@ func addRaptor(ePos, eName, eMode = "active"):
 
 func addScirocco(ePos, eName, eMode = "active"):
 	var ally = sciroccoFile.instantiate()
+	ally.position = ePos
+	ally.displayName = eName
+	ally.mode = eMode
+	add_child(ally)
+
+func addDonnager(ePos, eName, eMode = "active"):
+	var ally = donnagerFile.instantiate()
 	ally.position = ePos
 	ally.displayName = eName
 	ally.mode = eMode
