@@ -1,11 +1,12 @@
 extends Polygon2D
 
-@onready var markerTarget = get_parent().get_parent().get_parent().player
+@onready var markerTarget
 
 var markers = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	markerTarget = get_parent().get_parent().get_parent().player
 	get_parent().cameraLockable.push_back(self)
 	return
 

@@ -6,6 +6,7 @@ extends CanvasLayer
 @export var missile_ammo_bar : ProgressBar
 @export var g_limit_bar : ProgressBar
 @export var no_missile_target_warning : Label
+@export var mission_status : Label
 
 @export var missile_ammo_bars : Array[ProgressBar]
 @export var missile_ammo_icons : Array[Sprite2D]

@@ -1,9 +1,26 @@
-[gd_scene load_steps=2 format=3 uid="uid://bukljjvtahxq0"]
+[gd_scene load_steps=3 format=3 uid="uid://bukljjvtahxq0"]
 
 [ext_resource type="Script" path="res://scripts/map/enemy_marker.gd" id="1_llu5p"]
 
-[node name="enemy_marker" type="Polygon2D"]
-scale = Vector2(2, 2)
-color = Color(0.972549, 0.419608, 0, 1)
-polygon = PackedVector2Array(-3, -1, 3, 0, -3, 1)
+[sub_resource type="LabelSettings" id="LabelSettings_gxmfl"]
+font_size = 20
+font_color = Color(0.972549, 0.419608, 0, 1)
+
+[node name="Friend Marker" type="Node2D" node_paths=PackedStringArray("markerIcon", "markerLabel")]
 script = ExtResource("1_llu5p")
+markerIcon = NodePath("Marker Icon")
+markerLabel = NodePath("Label")
+
+[node name="Marker Icon" type="Polygon2D" parent="."]
+position = Vector2(6, 0)
+scale = Vector2(4.5, 4.5)
+color = Color(0.972549, 0.419608, 0, 1)
+polygon = PackedVector2Array(-3, -1, 2.22222, 0, -3, 1)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = 8.0
+offset_right = 20.0
+offset_bottom = 31.0
+label_settings = SubResource("LabelSettings_gxmfl")
+metadata/_edit_use_anchors_ = true

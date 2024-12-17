@@ -17,12 +17,10 @@ script = ExtResource("1_upgyx")
 
 [node name="PDC Base" parent="." instance=ExtResource("5_cftew")]
 position = Vector2(-7, -29)
-scale = Vector2(1, 1)
 
 [node name="PDC Base2" parent="." instance=ExtResource("5_cftew")]
 position = Vector2(-7, 23)
 rotation = -3.14159
-scale = Vector2(1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-6.49713, 1.24998)

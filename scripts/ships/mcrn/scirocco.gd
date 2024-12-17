@@ -16,6 +16,7 @@ var railgunRoundSpeed = 15000
 const idealRange = 24000
 
 func special_init():
+	shipExplosionFile = load("res://scenes/projectiles/common/largeShipExplosion.tscn")
 	health = 300
 	railgunResistance = 2
 	acceleration = 1.5
@@ -30,14 +31,14 @@ func special_init():
 func movementAlgorithm():
 	acceleration = 1.5
 	if relativeDisplacement.length() < 16000:
-		proportionalNavigation(true)
+		proportionalNavigation(target, true)
 	elif relativeDisplacement.length() < 28000 and relativeVelocity.length() < 50:
 		shouldAccelerate = false
 		desiredRotation = relativeDisplacement.angle()
 		velocity += Vector2(0.3,0).rotated(relativeVelocity.angle())
 	else:
 		var shouldDecelerate = (relativeVelocity.dot(relativeDisplacement) < 0 && relativeVelocity.length()**2 > float(standardAcceleration)*120*(relativeDisplacement.length()-idealRange-relativeVelocity.length()*PI/turnSpeed/60))
-		proportionalNavigation(shouldDecelerate)
+		proportionalNavigation(target, shouldDecelerate)
 
 func shoot_railgun():
 	var railgunRound = railgunRoundFile.instantiate()

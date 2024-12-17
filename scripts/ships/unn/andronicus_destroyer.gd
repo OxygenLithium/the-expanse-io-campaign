@@ -5,5 +5,6 @@ var displayName = ""
 
 func special_init():
 	health = 50
+	acceleration = 2
 	PDCTargetingEffectiveness = 8
 	missileShootTimes = [1155, 1170, 1185, 1200]

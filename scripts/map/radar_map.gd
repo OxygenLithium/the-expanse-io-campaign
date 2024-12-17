@@ -11,10 +11,10 @@ const cameraLockDistanceInMap = 50
 const cameraLockDistanceInGame = 150
 
 var mapCenter = Vector2(0,0)
-
 var mapScale = 20
-
 const mapRadius = 600
+
+var showNames = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -27,6 +27,9 @@ func _process(delta: float) -> void:
 	var cameraPrevTarget = mainCamera.getPrevTarget()
 	if !cameraTarget:
 		return
+		
+	if Input.is_action_just_pressed("key_n"):
+		showNames = !showNames
 	
 	if Input.is_action_just_pressed("key_-"):
 		if Input.is_action_pressed("key_shift"):

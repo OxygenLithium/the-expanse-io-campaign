@@ -3,6 +3,8 @@ extends CanvasLayer
 @export var missionFailedScreen : Label
 @export var missionAccomplishedScreen : Label
 @export var enterToContinue : Label
+@export var missionLabel : Label
+@export var missionDescription : Label
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

@@ -1,7 +1,7 @@
 extends "res://scripts/ships/common/ship.gd"
 
 #Healthbar
-@onready var healthBar = get_parent().hud_canvas.health_bar
+@onready var healthBar
 
 @onready var PDC_sound_player = $/root/Node/mainCamera/PDCSoundPlayer
 @onready var missile_sound_player = $/root/Node/mainCamera/MissileSoundPlayer
@@ -20,8 +20,10 @@ func custom_init():
 	bulletFile = load("res://scenes/projectiles/mcrn/bullet.tscn")
 	missileFile = load("res://scenes/projectiles/mcrn/MCRNMissile.tscn")
 	missileMarkerFile = load("res://scenes/map/mcrn_missile_marker.tscn")
-	smallShipExplosionFile = load("res://scenes/projectiles/common/smallShipExplosion.tscn")
+	shipExplosionFile = load("res://scenes/projectiles/common/smallShipExplosion.tscn")
 	bulletMarkerFile = load("res://scenes/map/bullet_marker.tscn")
+	
+	healthBar = get_parent().hud_canvas.health_bar
 	
 	RCSThrust = 450
 	
@@ -38,7 +40,7 @@ func death():
 	get_parent().player_death()
 	get_parent().MCRNShips.erase(self)
 	
-	var small_ship_explosion = smallShipExplosionFile.instantiate()
+	var small_ship_explosion = shipExplosionFile.instantiate()
 	small_ship_explosion.position = global_position
 	small_ship_explosion.velocity = velocity
 	get_parent().add_child(small_ship_explosion)

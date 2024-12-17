@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://byujhtk10a1wg"]
+
+[ext_resource type="Script" path="res://scripts/projectiles/common/torpedo_explosion.gd" id="1_5n6ul"]
+[ext_resource type="Texture2D" uid="uid://crxwnhq173okh" path="res://sprites/projectiles/common/explosion cloud.png" id="2_v2dto"]
+[ext_resource type="Texture2D" uid="uid://dyipcsrjxk8kj" path="res://sprites/projectiles/common/explosion light.png" id="3_llv4s"]
+[ext_resource type="Texture2D" uid="uid://fhsxh8d0uijq" path="res://sprites/projectiles/common/explosion flash.png" id="4_qyd2r"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("explosion_light", "explosion_cloud", "explosion_flash")]
+scale = Vector2(4, 4)
+script = ExtResource("1_5n6ul")
+explosion_light = NodePath("explosion light")
+explosion_cloud = NodePath("explosion cloud")
+explosion_flash = NodePath("explosion flash")
+
+[node name="explosion cloud" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_v2dto")
+
+[node name="explosion light" type="Sprite2D" parent="."]
+position = Vector2(5.96046e-08, 0)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_llv4s")
+
+[node name="explosion flash" type="Sprite2D" parent="."]
+texture = ExtResource("4_qyd2r")

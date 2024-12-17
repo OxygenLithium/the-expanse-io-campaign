@@ -26,7 +26,16 @@ func setUpGame(level):
 	inGame = true
 	TitlePage.visible = false
 	game_map = gameMapFile.instantiate()
-	game_map.level = level
+	if level == 1:
+		game_map.set_script(preload("res://scripts/levels/level1.gd"))
+	elif level == 2:
+		game_map.set_script(preload("res://scripts/levels/level2.gd"))
+	elif level == 3:
+		game_map.set_script(preload("res://scripts/levels/level3.gd"))
+	elif level == 4:
+		game_map.set_script(preload("res://scripts/levels/level4.gd"))
+	elif level == 5:
+		game_map.set_script(preload("res://scripts/levels/level5.gd"))
 	self.add_child(game_map)
 	mainCamera.gameStart(game_map.player)
 

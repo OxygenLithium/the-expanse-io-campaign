@@ -58,11 +58,6 @@ func _ready() -> void:
 	hud_canvas.visible = true
 	message_canvas.visible = true
 	
-	#for i in range(3):
-		#var enemy = mulanFile.instantiate()
-		#enemy.position = Vector2(10000,-1000 + 1000*i)
-		#add_child(enemy)
-	
 	var enemy = null
 	var ally = null
 	
@@ -72,7 +67,7 @@ func _ready() -> void:
 		addMulan(Vector2(110000,0), "UNN Riemann")
 		
 	elif level == 2:
-		addMorrigan(Vector2(-1600,800), "MCRN Scipio Africanus")
+		addCorvette(Vector2(-1600,800), "MCRN Scipio Africanus")
 		
 		addMulan(Vector2(11000,6000), "UNN Honolulu")
 		addMulan(Vector2(11000,-6000), "UNN Arthur Cayley")
@@ -97,6 +92,7 @@ func _ready() -> void:
 	elif level == 4:
 		addCorvette(Vector2(-1600,800), "MCRN Wukong")
 		addCorvette(Vector2(-1600,-800), "UNN Nightwing")
+		addScirocco(Vector2(-3200,0), "UNN Monsoon")
 		
 		addMulan(Vector2(108000,6000), "UNN Milton")
 		addMulan(Vector2(10600,0), "UNN Jasper")
@@ -210,42 +206,42 @@ func addMulan(ePos, eName, eMode = "active"):
 	var enemy = mulanFile.instantiate()
 	enemy.position = ePos
 	enemy.displayName = eName
-	enemy.mode = eMode
+	enemy.stance = eMode
 	add_child(enemy)
 
 func addMunroe(ePos, eName, eMode = "active"):
 	var enemy = munroeFile.instantiate()
 	enemy.position = ePos
 	enemy.displayName = eName
-	enemy.mode = eMode
+	enemy.stance = eMode
 	add_child(enemy)
 
 func addAndronicus(ePos, eName, eMode = "active"):
 	var enemy = andronicusFile.instantiate()
 	enemy.position = ePos
 	enemy.displayName = eName
-	enemy.mode = eMode
+	enemy.stance = eMode
 	add_child(enemy)
 	
 func addMurphy(ePos, eName, eMode = "active"):
 	var enemy = murphyFile.instantiate()
 	enemy.position = ePos
 	enemy.displayName = eName
-	enemy.mode = eMode
+	enemy.stance = eMode
 	add_child(enemy)
 
 func addTrenton(ePos, eName, eMode = "active"):
 	var enemy = trentonFile.instantiate()
 	enemy.position = ePos
 	enemy.displayName = eName
-	enemy.mode = eMode
+	enemy.stance = eMode
 	add_child(enemy)
 
 func addAsimov(ePos, eName, eMode = "active"):
 	var enemy = asimovFile.instantiate()
 	enemy.position = ePos
 	enemy.displayName = eName
-	enemy.mode = eMode
+	enemy.stance = eMode
 	add_child(enemy)
 
 
@@ -254,21 +250,21 @@ func addMorrigan(ePos, eName, eMode = "active"):
 	var ally = morriganFile.instantiate()
 	ally.position = ePos
 	ally.displayName = eName
-	ally.mode = eMode
+	ally.stance = eMode
 	add_child(ally)
 
 func addCorvette(ePos, eName, eMode = "active"):
 	var ally = corvetteFile.instantiate()
 	ally.position = ePos
 	ally.displayName = eName
-	ally.mode = eMode
+	ally.stance = eMode
 	add_child(ally)
 
 func addRaptor(ePos, eName, eMode = "active"):
 	var ally = raptorFile.instantiate()
 	ally.position = ePos
 	ally.displayName = eName
-	ally.mode = eMode
+	ally.stance = eMode
 	add_child(ally)
 
 
@@ -276,12 +272,12 @@ func addScirocco(ePos, eName, eMode = "active"):
 	var ally = sciroccoFile.instantiate()
 	ally.position = ePos
 	ally.displayName = eName
-	ally.mode = eMode
+	ally.stance = eMode
 	add_child(ally)
 
 func addDonnager(ePos, eName, eMode = "active"):
 	var ally = donnagerFile.instantiate()
 	ally.position = ePos
 	ally.displayName = eName
-	ally.mode = eMode
+	ally.stance = eMode
 	add_child(ally)

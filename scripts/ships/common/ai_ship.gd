@@ -2,14 +2,22 @@ extends "res://scripts/ships/common/ship.gd"
 
 #Stats called by others
 
-var mode = "active"
-
 #Imported paths
 var missileWarning = load("res://scenes/hud/missileWarning.tscn")
+
+#Variables for AI
 var enemyShips
 var friendlyShips
 
-var preferTargetType
+var defaultStance = "active"
+var stance = null
+
+#AI for Escorting
+var escortTarget = null
+var initialOffset
+
+#The alert group is the group of ships that will engage alongside this one
+var alertGroup = []
 
 var standardAcceleration
 var PDCTargetingEffectiveness = 8
@@ -24,9 +32,16 @@ func ai_ship_init():
 	pass
 
 func custom_init():
+	if !stance:
+		stance = defaultStance
+	
 	#Defining variables
-	smallShipExplosionFile = load("res://scenes/projectiles/common/smallShipExplosion.tscn")
+	shipExplosionFile = load("res://scenes/projectiles/common/smallShipExplosion.tscn")
 	missileCooldown = rng.randi_range(0,150)
+	
+	#Preparing ships in escort stance
+	if stance == "escort":
+		initialOffset = position - escortTarget.position
 	
 	#Initiation operations
 	ai_ship_init()
@@ -60,9 +75,12 @@ func ai_ships_processes():
 
 func death():
 	friendlyShips.erase(self)
-	get_parent().unn_ship_destroyed()
+	if allegiance == "UNN":
+		get_parent().unn_ship_destroyed(self)
+	elif allegiance == "MCRN":
+		get_parent().mcrn_ship_destroyed(self)
 	
-	var small_ship_explosion = smallShipExplosionFile.instantiate()
+	var small_ship_explosion = shipExplosionFile.instantiate()
 	small_ship_explosion.position = global_position
 	small_ship_explosion.velocity = velocity
 	get_parent().add_child(small_ship_explosion)
@@ -90,9 +108,9 @@ func missile_cooldowns():
 		missileCooldown += 1
 	
 
-func getTelemetry():
-	targetPosition = target.position + Vector2(desiredDistance,0).rotated((target.position-position).angle() + PI/3*favouredSide)
-	targetVelocity = target.velocity
+func getTelemetry(telemetryTarget, bias = Vector2(desiredDistance,0).rotated((telemetryTarget.position-position).angle() + PI/3*favouredSide)):
+	targetPosition = telemetryTarget.position + bias
+	targetVelocity = telemetryTarget.velocity
 	relativeDisplacement = targetPosition - position
 	relativeVelocity = targetVelocity - velocity
 	currTargetDirection = relativeDisplacement.angle()
@@ -130,7 +148,7 @@ func getClosingVelocity():
 	var closingVelocityVector = relativeVelocity.dot(relativeDisplacement)/relativeDisplacement.dot(relativeDisplacement)*relativeDisplacement
 	return sqrt(closingVelocityVector.dot(closingVelocityVector))
 
-func proportionalNavigation(decelerate = false):
+func proportionalNavigation(propNavTarget = target, decelerate = false):
 	if relativeVelocity.dot(relativeDisplacement) < 0 or decelerate:
 		#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
 		var LOSRate = (currTargetDirection-prevTargetDirection)*60
@@ -158,9 +176,19 @@ func proportionalNavigation(decelerate = false):
 		else:
 			desiredRotation = relativeVelocity.angle()
 
+func escortMovementAlgorithm():
+	getTelemetry(escortTarget, initialOffset)
+	if relativeDisplacement.length() < 200 and relativeVelocity.length() < 50:
+		shouldAccelerate = false
+		desiredRotation = relativeDisplacement.angle()
+		velocity += Vector2(0.3,0).rotated(relativeVelocity.angle())
+	else:
+		var shouldDecelerate = (relativeVelocity.dot(relativeDisplacement) < 0 && relativeVelocity.length()**2 > float(standardAcceleration)*120*(relativeDisplacement.length()-100-relativeVelocity.length()*PI/turnSpeed/60))
+		proportionalNavigation(target, shouldDecelerate)
+
 func movementAlgorithm():
 	var shouldDecelerate = (relativeVelocity.dot(relativeDisplacement) < 0 && relativeVelocity.length()**2 > float(standardAcceleration)*120*(relativeDisplacement.length()-relativeVelocity.length()*PI/turnSpeed/60))
-	proportionalNavigation(shouldDecelerate)
+	proportionalNavigation(target, shouldDecelerate)
 
 func getDiffRotation():
 	rotation = fmod(rotation, 2*PI)
@@ -219,15 +247,18 @@ func _physics_process(delta: float) -> void:
 		death()
 		return
 	
-	if mode == "active" and !target:
+	if stance == "escort" and (!escortTarget or !is_instance_valid(escortTarget)):
+		stance = "active"
+	
+	if (stance == "active" or stance == "escort") and !target:
 		if enemyShips.size() < 1:
-			mode = "passive"
+			stance = "passive"
 		else:
 			target = intelligent_pick_target()
 	
 	shouldAccelerate = true	
-	if mode == "active":
-		getTelemetry()
+	if stance == "active" or stance == "escort":
+		getTelemetry(target)
 		PDCFunctions()
 	
 		missile_cooldowns()
@@ -236,9 +267,12 @@ func _physics_process(delta: float) -> void:
 	
 		acceleration = standardAcceleration
 	
-		movementAlgorithm()
+		if stance == "active":
+			movementAlgorithm()
+		elif stance == "escort":
+			escortMovementAlgorithm()
 	
-	if mode == "passive":
+	if stance == "passive":
 		if velocity.length() <= acceleration:
 			velocity = Vector2(0,0)
 			shouldAccelerate = 0
@@ -247,7 +281,7 @@ func _physics_process(delta: float) -> void:
 		
 		for ship in enemyShips:
 			if (ship.position - position).length < 50000:
-				mode = "active"
+				stance = "active"
 
 	var diffRotation = getDiffRotation()
 	if diffRotation >= 0:

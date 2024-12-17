@@ -12,6 +12,7 @@ var explosionFile = load("res://scenes/projectiles/common/explosion.tscn")
 
 var targetPosition
 var targetVelocity
+var relativeVelocityShooter
 var relativeDisplacement
 var relativeVelocity
 var currTargetDirection
@@ -31,6 +32,7 @@ var desiredRotation = 0
 var cutAcceleration
 const cutAccelerationSpeed = 6000
 const cutAccelerationDistance = 3000
+var relativeToTarget = false
 
 var approxImpactTime = INF
 
@@ -65,6 +67,8 @@ func getTelemetry():
 	targetVelocity = target.velocity
 	relativeDisplacement = targetPosition - position
 	relativeVelocity = targetVelocity - velocity
+	
+	relativeVelocityShooter = shooter.velocity - velocity
 	currTargetDirection = relativeDisplacement.angle()
 	velocityDirection = velocity.angle()
 
@@ -91,7 +95,16 @@ func nonzeroAcceleration():
 	return acceleration
 
 func proportionalNavigation(limitSpeed = true):
-	if relativeVelocity.dot(relativeDisplacement) < 0:
+	var velocityType
+	if (targetPosition - position).length() < (shooter.position - position).length():
+		relativeToTarget = true
+	if timer > 30:
+		relativeToTarget = true
+	if relativeToTarget:
+		velocityType = relativeVelocity
+	else:
+		velocityType = relativeVelocityShooter
+	if velocityType.dot(relativeDisplacement) < 0:
 		offTargetTimer = 0
 		#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
 		var LOSRate = (currTargetDirection-prevTargetDirection)
@@ -100,20 +113,20 @@ func proportionalNavigation(limitSpeed = true):
 		var desiredAccel
 		desiredAccel = 4*LOSRate*closingVelocity
 		if (desiredAccel > acceleration):
-			desiredRotation = relativeVelocity.angle() + PI + PI/2
+			desiredRotation = velocityType.angle() + PI + PI/2
 		elif (desiredAccel < -acceleration):
-			desiredRotation = relativeVelocity.angle() + PI - PI/2
+			desiredRotation = velocityType.angle() + PI - PI/2
 		else:
 			if limitSpeed:
 				if closingVelocity > cutAccelerationSpeed*1.5:
-					desiredRotation = relativeVelocity.angle() - asin(desiredAccel/acceleration)
+					desiredRotation = velocityType.angle() - asin(desiredAccel/acceleration)
 				else:
-					desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
+					desiredRotation = velocityType.angle() + PI + asin(desiredAccel/acceleration)
 					if closingVelocity > cutAccelerationSpeed:
 						cutAcceleration = true
-						velocity += Vector2(0,desiredAccel).rotated(relativeVelocity.angle())
+						velocity += Vector2(0,desiredAccel).rotated(velocityType.angle())
 			else:
-				desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/acceleration)
+				desiredRotation = velocityType.angle() + PI + asin(desiredAccel/acceleration)
 	else:
 		if timer > 180:
 			offTargetTimer += 1
@@ -124,7 +137,7 @@ func proportionalNavigation(limitSpeed = true):
 			velocity = Vector2(0,0)
 			desiredRotation = relativeDisplacement.angle()
 		else:
-			desiredRotation = relativeVelocity.angle()
+			desiredRotation = velocityType.angle()
 
 func collision_functions():
 	for i in get_slide_collision_count():
@@ -186,7 +199,7 @@ func _physics_process(delta: float) -> void:
 	if !is_instance_valid(target):
 		target = null
 	
-	if !target:
+	if !target or !is_instance_valid(shooter):
 		death()
 		return
 		

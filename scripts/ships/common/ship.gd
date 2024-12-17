@@ -23,7 +23,7 @@ var bulletFile
 var missileFile
 var missileMarkerFile
 
-var smallShipExplosionFile = load("res://scenes/projectiles/common/smallShipExplosion.tscn")
+var shipExplosionFile = load("res://scenes/projectiles/common/smallShipExplosion.tscn")
 
 var bulletMarkerFile = load("res://scenes/map/bullet_marker.tscn")
 

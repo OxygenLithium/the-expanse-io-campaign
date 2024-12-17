@@ -19,13 +19,7 @@ func special_init():
 	health = 25
 	missileShootTimes = []
 	PDCLockDistance = 2500
-
-func getTelemetry():
-	targetPosition = target.position
-	targetVelocity = target.velocity
-	relativeDisplacement = targetPosition - position
-	relativeVelocity = targetVelocity - velocity
-	currTargetDirection = relativeDisplacement.angle()
+	desiredDistance = 0
 	
 func calc_railgun_lead():
 	var closingVelocity = getClosingVelocity()
@@ -74,12 +68,12 @@ func movementAlgorithm():
 		desiredRotation = (relativeDisplacement + calc_railgun_lead()).angle()
 		return
 	if relativeDisplacement.length() < 8000:
-		proportionalNavigation(true)
+		proportionalNavigation(target, true)
 	elif relativeDisplacement.length() < 14000 and relativeVelocity.length() < 100:
 		shouldAccelerate = false
 		desiredRotation = relativeDisplacement.angle()
 		velocity += Vector2(0.5,0).rotated(relativeVelocity.angle())
 	else:
 		var shouldDecelerate = (relativeVelocity.dot(relativeDisplacement) < 0 && relativeVelocity.length()**2 > float(standardAcceleration)*120*(relativeDisplacement.length()-(railgunMaxRange+railgunMinRange)/2-relativeVelocity.length()*PI/turnSpeed/60))
-		proportionalNavigation(shouldDecelerate)
+		proportionalNavigation(target, shouldDecelerate)
 	
