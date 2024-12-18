@@ -26,8 +26,8 @@ position = Vector2(-1, 0)
 script = ExtResource("2_30754")
 
 [node name="Sprite2D" type="Sprite2D" parent="mainCamera"]
-position = Vector2(-14.0001, -8.50008)
-scale = Vector2(0.442, 0.515667)
+position = Vector2(50.3566, 11.7497)
+scale = Vector2(0.504143, 0.588167)
 texture = ExtResource("3_fswy2")
 
 [node name="PDCSoundPlayer" type="AudioStreamPlayer2D" parent="mainCamera"]

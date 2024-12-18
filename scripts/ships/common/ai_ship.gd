@@ -1,7 +1,5 @@
 extends "res://scripts/ships/common/ship.gd"
 
-#Stats called by others
-
 #Imported paths
 var missileWarning = load("res://scenes/hud/missileWarning.tscn")
 
@@ -9,20 +7,29 @@ var missileWarning = load("res://scenes/hud/missileWarning.tscn")
 var enemyShips
 var friendlyShips
 
+#Stances
 var defaultStance = "active"
 var stance = null
 
-#AI for Escorting
+#Escort Stance
 var escortTarget = null
 var initialOffset
 
+#Sentry stance
 #The alert group is the group of ships that will engage alongside this one
 var alertGroup = []
 
+#Acceleration
+var baseAcceleration = 1.5
 var standardAcceleration
+
+#PDC
 var PDCTargetingEffectiveness = 8
+
+#Missile
 var missileShootTimes = []
 
+#Dodging
 var canDodge = true
 var dodgeTimer = 0
 var dodgeCooldown = 300
@@ -32,6 +39,9 @@ func ai_ship_init():
 	pass
 
 func custom_init():
+	standardAcceleration = baseAcceleration
+	acceleration = baseAcceleration
+	
 	if !stance:
 		stance = defaultStance
 	
@@ -42,6 +52,8 @@ func custom_init():
 	#Preparing ships in escort stance
 	if stance == "escort":
 		initialOffset = position - escortTarget.position
+		standardAcceleration = baseAcceleration*1.5
+		acceleration = baseAcceleration*1.5
 	
 	#Initiation operations
 	ai_ship_init()
@@ -62,6 +74,8 @@ var favouredSide = (rng.randi_range(0,1)-0.5)*2
 var turnSpeed = rng.randf_range(PI/480, PI/240)
 
 # Telemetry
+var telemetryTimer = 0
+
 var targetPosition
 var targetVelocity
 var relativeDisplacement
@@ -121,7 +135,6 @@ func shoot_missile(mDamage = 40, targeting = "normal"):
 	missile.damage = mDamage
 	missile.shooter = self
 	if targeting == "random":
-		print("random")
 		missile.target = enemyShips.pick_random()
 	else:
 		missile.target = target
@@ -200,6 +213,16 @@ func getDiffRotation():
 		diffRotation -= 2*PI
 	return diffRotation
 
+func getOtherPDCTargets(closest, minDistance):
+	var biasedMinDistance = minDistance*1.5
+	if stance == "escort":
+		for i in escortTarget.incomingMissiles:
+			if (i.position - global_position).length() < biasedMinDistance:
+				closest = i
+				biasedMinDistance = (i.position - global_position).length()
+	
+	return closest
+
 func PDCFunctions():
 	if PDCTarget and !is_instance_valid(PDCTarget):
 		PDCTarget = getPDCTarget(enemyShips, PDCTargetingEffectiveness)
@@ -238,15 +261,9 @@ func intelligent_pick_target():
 		if chosen <= weights[i]:
 			return enemyShips[i]
 	
-	print("intelligent pick target failed")
 	return enemyShips.pick_random()
 
-func _physics_process(delta: float) -> void:
-	#death detection
-	if health <= 0:
-		death()
-		return
-	
+func check_stance():
 	if stance == "escort" and (!escortTarget or !is_instance_valid(escortTarget)):
 		stance = "active"
 	
@@ -255,22 +272,6 @@ func _physics_process(delta: float) -> void:
 			stance = "passive"
 		else:
 			target = intelligent_pick_target()
-	
-	shouldAccelerate = true	
-	if stance == "active" or stance == "escort":
-		getTelemetry(target)
-		PDCFunctions()
-	
-		missile_cooldowns()
-	
-		ai_ship_processes()
-	
-		acceleration = standardAcceleration
-	
-		if stance == "active":
-			movementAlgorithm()
-		elif stance == "escort":
-			escortMovementAlgorithm()
 	
 	if stance == "passive":
 		if velocity.length() <= acceleration:
@@ -283,6 +284,23 @@ func _physics_process(delta: float) -> void:
 			if (ship.position - position).length < 50000:
 				stance = "active"
 
+func navigation_algorithm():
+	shouldAccelerate = true	
+	if stance == "active" or stance == "escort":
+		getTelemetry(target)
+		if telemetryTimer > 5:
+		
+			acceleration = standardAcceleration
+		
+			if stance == "active":
+				movementAlgorithm()
+			elif stance == "escort":
+				escortMovementAlgorithm()
+			
+			telemetryTimer = 0
+		else:
+			telemetryTimer += 1
+
 	var diffRotation = getDiffRotation()
 	if diffRotation >= 0:
 		rotation += min(diffRotation, turnSpeed)
@@ -293,7 +311,20 @@ func _physics_process(delta: float) -> void:
 		shouldAccelerate =  (abs(diffRotation) < PI/6)
 	if !shouldAccelerate:
 		acceleration = 0
-		
+
+func _physics_process(delta: float) -> void:
+	#death detection
+	if health <= 0:
+		death()
+		return
+
+	check_stance()
+	navigation_algorithm()
+	
+	PDCFunctions()
+	missile_cooldowns()
+	ai_ship_processes()
+
 	if dodgeTimer > 0:
 		dodgeTimer -= 1
 	

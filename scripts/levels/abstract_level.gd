@@ -46,7 +46,6 @@ func level_init():
 
 # Called when the node enters the scene tree for the first time.
 func _init() -> void:
-	print("hi")
 	map_canvas = get_children()[0]
 	hud_canvas = get_children()[1]
 	message_canvas = get_children()[2]

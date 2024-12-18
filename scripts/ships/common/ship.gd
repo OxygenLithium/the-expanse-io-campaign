@@ -5,13 +5,12 @@ extends CharacterBody2D
 #Fields accessed by others on checks
 var type = "ship"
 var allegiance
+var marker = null
 
 #Random number generator
 var rng = RandomNumberGenerator.new()
 
-var marker = null
-
-#Autotrack AI
+#PDC Autotrack AI
 var PDCAutotrack = true
 var PDCTarget = null
 var getPDCTargetTimer = 0
@@ -39,21 +38,22 @@ var ACCELERATIONS = [1,2,4,8]
 var acceleration = 0
 var angVelocity = 0
 
-var timeBetweenPDC = 3
-var bulletSpeed = 3000
-
 var RCSThrust = 300
 var RCSLightThrust = 30
 var RCSCooldownLength = 30
 var RCSLightCooldownLength = 10
 var RCSCooldowns = [0,0,0,0]
 
+# Missile Control
+var target = null
+
+#PDC Control
+var timeBetweenPDC = 3
+var bulletSpeed = 3000
+
 #Cooldowns
 var shootCooldown = 0
-var missileCooldown = 0
-
-#Weapons
-var target = null
+var missileCooldown = 300
 
 func custom_init():
 	pass
@@ -65,6 +65,9 @@ func _ready():
 	
 	custom_init()
 	ready_functions()
+
+func getOtherPDCTargets(closest, minDistance):
+	return closest
 
 func getPDCTarget(enemyShips, PDCTargetingEffectiveness = 12):
 	var futurePos = position + velocity + Vector2(acceleration,0).rotated(rotation)/120
@@ -80,7 +83,7 @@ func getPDCTarget(enemyShips, PDCTargetingEffectiveness = 12):
 			if incomingMissiles[i].approxImpactTime < minDistance:
 				closest = incomingMissiles[i]
 				minDistance = incomingMissiles[i].approxImpactTime
-	
+
 	if closest:
 		return closest
 	
@@ -93,6 +96,9 @@ func getPDCTarget(enemyShips, PDCTargetingEffectiveness = 12):
 		if (incomingMissiles[i].position - futurePos).length() < minDistance:
 			closest = incomingMissiles[i]
 			minDistance = (incomingMissiles[i].position - futurePos).length()
+	
+	closest = getOtherPDCTargets(closest, minDistance)
+	
 	return closest
 
 func shoot_PDC():
@@ -134,26 +140,30 @@ func shoot_missile(mDamage = 20, targeting = "normal"):
 func targeted_by_railgun():
 	pass
 
-func on_take_damage():
+func on_take_damage(damage):
 	pass
 
 func take_damage_missile(damage):
 	health -= damage
-	on_take_damage()
+	on_take_damage(damage)
 	
 func take_damage_bullet():
 	health -= 1
-	on_take_damage()
+	on_take_damage(1)
 	
 func take_damage_railgun(damage):
 	health -= damage/railgunResistance
-	on_take_damage()
+	on_take_damage(damage)
 
 func death():
 	pass
-	
+
+func RCSHardScreenShake():
+	pass
+
 func RCSHard(direction):
 	velocity += Vector2(RCSThrust,0).rotated(rotation + direction)
+	RCSHardScreenShake()
 	
 func RCSSoft(direction):
 	velocity += Vector2(RCSLightThrust,0).rotated(rotation + direction)

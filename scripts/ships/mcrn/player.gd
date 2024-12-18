@@ -32,9 +32,10 @@ func custom_init():
 	
 	get_parent().MCRNShips.push_back(self)
 
-func on_take_damage():
+func on_take_damage(damage):
 	healthBar.recalculate(health,maxhealth)
 	take_damage_sound_player.play()
+	$/root/Node/mainCamera.incrementTrauma(pow(damage, 1/3)*3)
 
 func death():
 	get_parent().player_death()
