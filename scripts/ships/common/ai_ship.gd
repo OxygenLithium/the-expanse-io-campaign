@@ -104,6 +104,22 @@ func death():
 	
 	queue_free()
 
+func become_active():
+	stance = "active"
+
+func become_passive():
+	stance = "passive"
+
+func become_escort():
+	stance = "escort"
+	initialOffset = position - escortTarget.position
+	standardAcceleration = baseAcceleration*1.5
+	acceleration = baseAcceleration*1.5
+
+func quit_escort():
+	standardAcceleration = baseAcceleration
+	acceleration = baseAcceleration
+
 func missile_cooldowns():
 	if missileShootTimes.size() < 1:
 		return
@@ -123,6 +139,8 @@ func missile_cooldowns():
 	
 
 func getTelemetry(telemetryTarget, bias = Vector2(desiredDistance,0).rotated((telemetryTarget.position-position).angle() + PI/3*favouredSide)):
+	var distance = (telemetryTarget.position-position).length()
+	
 	targetPosition = telemetryTarget.position + bias
 	targetVelocity = telemetryTarget.velocity
 	relativeDisplacement = targetPosition - position
@@ -162,32 +180,21 @@ func getClosingVelocity():
 	return sqrt(closingVelocityVector.dot(closingVelocityVector))
 
 func proportionalNavigation(propNavTarget = target, decelerate = false):
-	if relativeVelocity.dot(relativeDisplacement) < 0 or decelerate:
-		#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
-		var LOSRate = (currTargetDirection-prevTargetDirection)*60
-		var closingVelocity = getClosingVelocity()
-		var desiredAccel
-		desiredAccel = 4*LOSRate*closingVelocity
-		if (desiredAccel > standardAcceleration):
-			desiredRotation = relativeVelocity.angle() - PI/2
-		elif (desiredAccel < -standardAcceleration):
-			desiredRotation = relativeVelocity.angle() + PI/2
-		else:
-			if decelerate:
-				if relativeVelocity.dot(relativeDisplacement) < 0:
-					desiredRotation = relativeVelocity.angle() - asin(desiredAccel/standardAcceleration)
-				else:
-					desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/standardAcceleration)
-					
-			else:
-				desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/standardAcceleration)
-			
-	else:
-		if velocity.length() < standardAcceleration:
-			velocity = Vector2(0,0)
-			desiredRotation = relativeDisplacement.angle()
-		else:
-			desiredRotation = relativeVelocity.angle()
+	var desiredVector  = relativeDisplacement + relativeVelocity * sqrt(relativeDisplacement.length())/5
+	if "acceleration" in propNavTarget:
+		desiredVector += Vector2(propNavTarget.acceleration,0).rotated(propNavTarget.rotation) * relativeDisplacement.length()/25
+	desiredRotation = desiredVector.angle()
+	acceleration = 1 + 8/PI*atan(sqrt(desiredVector.length())/100)
+	
+	if desiredVector.length() < 1000:
+		shouldAccelerate = false
+		velocity += Vector2(1,0).rotated(desiredVector.angle())
+	
+	print("---")
+	print(desiredVector)
+	print(relativeDisplacement)
+	print(relativeVelocity * sqrt(relativeDisplacement.length())/10)
+	print(Vector2(propNavTarget.acceleration,0).rotated(propNavTarget.rotation) * relativeDisplacement.length()/800)
 
 func escortMovementAlgorithm():
 	getTelemetry(escortTarget, initialOffset)

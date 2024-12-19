@@ -39,7 +39,7 @@ var approxImpactTime = INF
 var damage = 40
 
 #seconds
-const finalManeuverTime = 3
+const finalManeuverTime = 10
 
 var timer = 0
 var offTargetTimer = 0
@@ -53,7 +53,7 @@ func missile_init():
 func _ready() -> void:
 	missile_init()
 	
-	if target:
+	if target and is_instance_valid(target):
 		getTelemetry()
 	prevTargetDirection = currTargetDirection
 	accelerationGrade = 1
