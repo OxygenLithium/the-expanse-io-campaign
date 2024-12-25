@@ -129,6 +129,23 @@ func shoot_PDC_audio():
 func shoot_missile_audio():
 	missile_sound_player.play()
 
+func shoot_middle_PDC():
+	for i in range(pdcs.size()):
+		if pdcs[i].active and pdcs[i].alwaysResponsive:
+			var bullet = bulletFile.instantiate()
+			bullet.allegiance = allegiance
+			bullet.position = pdcs[i].marker.global_position + velocity/60
+			get_parent().add_child(bullet)
+			bullet.rotation = pdcs[i].pivot.rotation - pdcs[i].rotation + rotation
+			bullet.rotation += rng.randf_range(-PI/60, PI/60)
+			bullet.velocity = velocity
+			bullet.velocity += Vector2(bulletSpeed,0).rotated(bullet.rotation)
+			bullet.set_visible(true)
+			
+			var bullet_marker = bulletMarkerFile.instantiate()
+			bullet_marker.markerTarget = bullet
+			get_parent().map_canvas.radar_map.add_child(bullet_marker)
+
 func PDCFunctions():
 	if Input.is_action_just_pressed("key_t"):
 		PDCAutotrack = !PDCAutotrack
@@ -136,12 +153,16 @@ func PDCFunctions():
 			get_parent().hud_canvas.autotrack_label.text = "PDC Autotrack: ON"
 		else:
 			get_parent().hud_canvas.autotrack_label.text = "PDC Autotrack: OFF"
-	if PDCAutotrack && PDCTarget:
+	if Input.is_action_pressed("click"):
 		shoot_PDC_audio()
 		if shootCooldown == 0:
-			shoot_PDC()
-			shootCooldown = 3
-	elif !PDCAutotrack && Input.is_action_pressed("click"):
+			if !PDCAutotrack:
+				shoot_PDC()
+				shootCooldown = 3
+			elif !PDCTarget:
+				shoot_middle_PDC()
+				shootCooldown = 3
+	if PDCAutotrack && PDCTarget:
 		shoot_PDC_audio()
 		if shootCooldown == 0:
 			shoot_PDC()
@@ -196,13 +217,16 @@ func missileFunctions():
 	get_parent().hud_canvas.setMissileAmmoBar(missileReplenish)
 
 func gforceCheck():
-	gforce += max((acceleration-1.5)*3/2,0)
+	if acceleration >= 8:
+		gforce += 2
+	elif acceleration >= 4:
+		gforce += 1.5
+	elif acceleration >= 2:
+		gforce += 0.5
 	if gforce > 1:
 		gforce -= 1
 	if gforce > 990 && acceleration > 2:
 		acceleration = 2
-	if gforce > 1000:
-		death()
 	get_parent().hud_canvas.g_limit_bar.value = gforce
 
 func setTargetDisplay():

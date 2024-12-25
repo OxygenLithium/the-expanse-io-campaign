@@ -8,3 +8,4 @@ func special_init():
 	acceleration = 2
 	missileShootTimes = [580, 600]
 	PDCLockDistance = 2500
+	timeBetweenPDC = 2

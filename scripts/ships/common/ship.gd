@@ -123,6 +123,7 @@ func shoot_missile(mDamage = 20, targeting = "normal"):
 	missile.allegiance = allegiance
 	
 	missile.shooter = self
+	missile.shooterInitialVelocity = velocity
 	missile.target = target
 	missile.damage = mDamage
 	missile.global_position = global_position + Vector2(50,0).rotated(rotation) + velocity/60

@@ -19,21 +19,23 @@ scale = Vector2(0.158209, 0.10015)
 texture = ExtResource("4_heho3")
 script = ExtResource("5_um53v")
 
+[node name="Middle PDC Left" parent="." instance=ExtResource("4_ht44a")]
+position = Vector2(13, -25)
+alwaysResponsive = true
+
+[node name="Middle PDC Right" parent="." instance=ExtResource("4_ht44a")]
+position = Vector2(13, 24)
+rotation = -3.14159
+alwaysResponsive = true
+
 [node name="PDC Base7" parent="." instance=ExtResource("4_ht44a")]
 position = Vector2(53, -20)
-
-[node name="PDC Base8" parent="." instance=ExtResource("4_ht44a")]
-position = Vector2(13, -25)
 
 [node name="PDC Base9" parent="." instance=ExtResource("4_ht44a")]
 position = Vector2(-23, -22)
 
 [node name="PDC Base10" parent="." instance=ExtResource("4_ht44a")]
 position = Vector2(50, 17)
-rotation = -3.14159
-
-[node name="PDC Base11" parent="." instance=ExtResource("4_ht44a")]
-position = Vector2(13, 24)
 rotation = -3.14159
 
 [node name="PDC Base12" parent="." instance=ExtResource("4_ht44a")]

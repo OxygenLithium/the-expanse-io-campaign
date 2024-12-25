@@ -13,6 +13,7 @@ var explosionFile = load("res://scenes/projectiles/common/explosion.tscn")
 var targetPosition
 var targetVelocity
 var relativeVelocityShooter
+var shooterInitialVelocity
 var relativeDisplacement
 var relativeVelocity
 var currTargetDirection
@@ -40,6 +41,7 @@ var damage = 40
 
 #seconds
 const finalManeuverTime = 10
+var finalManeuver = false
 
 var timer = 0
 var offTargetTimer = 0
@@ -60,15 +62,18 @@ func _ready() -> void:
 	
 	if target and "incomingMissiles" in target:
 		target.incomingMissiles.push_back(self)
-	pass # Replace with function body.
 
 func getTelemetry():
 	targetPosition = target.position
 	targetVelocity = target.velocity
-	relativeDisplacement = targetPosition - position
 	relativeVelocity = targetVelocity - velocity
+	#if !finalManeuver:
+		#targetPosition += target.velocity*((targetPosition - position).length()/cutAccelerationSpeed)
+		##if "acceleration" in target:
+			##targetPosition += Vector2(target.acceleration,0).rotated(target.rotation)*30*((targetPosition - position).length()/cutAccelerationSpeed)
+	relativeDisplacement = targetPosition - position
 	
-	relativeVelocityShooter = shooter.velocity - velocity
+	relativeVelocityShooter = shooterInitialVelocity - velocity
 	currTargetDirection = relativeDisplacement.angle()
 	velocityDirection = velocity.angle()
 
@@ -100,8 +105,10 @@ func proportionalNavigation(limitSpeed = true):
 		relativeToTarget = true
 	if timer > 30:
 		relativeToTarget = true
+	#Velocity always relative to the shooter's initial velocity
 	if relativeToTarget:
-		velocityType = relativeVelocity
+		#velocityType = relativeVelocity
+		velocityType = relativeVelocityShooter
 	else:
 		velocityType = relativeVelocityShooter
 	if velocityType.dot(relativeDisplacement) < 0:
@@ -181,6 +188,8 @@ func hit_by_bullet():
 func phases_functions():
 	if timer >= 30:
 		if approxImpactTime < finalManeuverTime:
+			finalManeuver = true
+		if finalManeuver:
 			accelerationGrade = 2
 			proportionalNavigation(false)
 			proportionalNavTimer = 0
@@ -207,7 +216,7 @@ func _physics_process(delta: float) -> void:
 	
 	phases_functions()
 	
-	if timer == lifespan:
+	if timer >= lifespan:
 		death()
 		return
 	

@@ -2,6 +2,7 @@ extends Node2D
 
 @export var pivot : Node2D
 @export var marker : Marker2D
+@export var alwaysResponsive : bool
 
 @onready var shooter = get_parent()
 
@@ -32,7 +33,7 @@ func _process(delta: float) -> void:
 	target = get_parent().PDCTarget
 	active = true
 	
-	if get_parent().PDCAutotrack:
+	if get_parent().PDCAutotrack and !(alwaysResponsive and Input.is_action_pressed("click")):
 		if get_parent().PDCTarget and is_instance_valid(get_parent().PDCTarget):
 			currPDCTargetAngle = (get_parent().PDCTarget.global_position-global_position).angle()
 			if abs(currPDCTargetAngle - prevPDCTargetAngle) < PI/30 or abs(currPDCTargetAngle - prevPDCTargetAngle) > 59*PI/30:
@@ -41,8 +42,8 @@ func _process(delta: float) -> void:
 				pivot.look_at(global_position + calc_lead() + get_parent().velocity/60)
 			prevPDCTargetAngle = currPDCTargetAngle
 	else:
-		if $/root/Node.game_map.map_canvas.visible:
-			pivot.look_at((get_global_mouse_position()-$/root/Node.mainCamera.target.position)*$/root/Node.game_map.map_canvas.radar_map.mapScale + $/root/Node.game_map.map_canvas.radar_map.mapCenter + shooter.velocity/60)
+		if get_parent().get_parent().map_canvas.visible:
+			pivot.look_at((get_global_mouse_position()-$/root/Node.mainCamera.target.position)*get_parent().get_parent().map_canvas.radar_map.mapScale + get_parent().get_parent().map_canvas.radar_map.mapCenter + shooter.velocity/60)
 		else:
 			pivot.look_at(get_global_mouse_position() + shooter.velocity/60)
 	

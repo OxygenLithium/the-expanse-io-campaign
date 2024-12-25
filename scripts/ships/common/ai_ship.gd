@@ -152,6 +152,7 @@ func shoot_missile(mDamage = 40, targeting = "normal"):
 	missile.allegiance = allegiance
 	missile.damage = mDamage
 	missile.shooter = self
+	missile.shooterInitialVelocity = velocity
 	if targeting == "random":
 		missile.target = enemyShips.pick_random()
 	else:
@@ -180,21 +181,15 @@ func getClosingVelocity():
 	return sqrt(closingVelocityVector.dot(closingVelocityVector))
 
 func proportionalNavigation(propNavTarget = target, decelerate = false):
-	var desiredVector  = relativeDisplacement + relativeVelocity * sqrt(relativeDisplacement.length())/5
+	var desiredVector  = relativeDisplacement + relativeVelocity * pow(relativeDisplacement.length(),0.5)/10
 	if "acceleration" in propNavTarget:
-		desiredVector += Vector2(propNavTarget.acceleration,0).rotated(propNavTarget.rotation) * relativeDisplacement.length()/25
+		desiredVector += Vector2(propNavTarget.acceleration,0).rotated(propNavTarget.rotation) * pow(relativeDisplacement.length(),0.5)/100
 	desiredRotation = desiredVector.angle()
 	acceleration = 1 + 8/PI*atan(sqrt(desiredVector.length())/100)
 	
 	if desiredVector.length() < 1000:
 		shouldAccelerate = false
 		velocity += Vector2(1,0).rotated(desiredVector.angle())
-	
-	print("---")
-	print(desiredVector)
-	print(relativeDisplacement)
-	print(relativeVelocity * sqrt(relativeDisplacement.length())/10)
-	print(Vector2(propNavTarget.acceleration,0).rotated(propNavTarget.rotation) * relativeDisplacement.length()/800)
 
 func escortMovementAlgorithm():
 	getTelemetry(escortTarget, initialOffset)
