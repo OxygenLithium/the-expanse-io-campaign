@@ -1,5 +1,7 @@
 extends Camera2D
 
+@export var background : Sprite2D
+
 var player = null
 var target = null
 var prevTarget = null
@@ -39,6 +41,7 @@ func closeGame():
 	player = null
 	target = null
 	prevTarget = null
+	zoom = Vector2(1,1)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -57,6 +60,20 @@ func shake():
 	shakeOffset.x = 150 * amount * noise.get_noise_2d(noise.seed, noise_y)
 	shakeOffset.y = 150 * amount * noise.get_noise_2d(noise_y, noise.seed)
 
+func screen_shake_functions():
+	position = target.position + shakeOffset
+	if get_parent().inGame:
+		get_parent().game_map.map_canvas.offset = -shakeOffset/5
+		get_parent().game_map.hud_canvas.offset = -shakeOffset/5
+		get_parent().game_map.message_canvas.offset = -shakeOffset/5
+	
+	if trauma > 0:
+		shake()
+		trauma -= min(0.2,trauma)
+	else:
+		shakeOffset = Vector2(0,0)
+		rotation = 0
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if !get_parent().inGame:
@@ -72,16 +89,17 @@ func _process(delta: float) -> void:
 			target = null
 		return
 	
-	position = target.position + shakeOffset
-	if get_parent().inGame:
-		get_parent().game_map.map_canvas.offset = -shakeOffset/5
-		get_parent().game_map.hud_canvas.offset = -shakeOffset/5
-		get_parent().game_map.message_canvas.offset = -shakeOffset/5
+	screen_shake_functions()
 	
-	if trauma > 0:
-		shake()
-		trauma -= min(0.2,trauma)
-	else:
-		shakeOffset = Vector2(0,0)
-		rotation = 0
- 
+	if Input.is_action_just_pressed("key_-"):
+		if get_parent().inGame and !get_parent().game_map.map_canvas.visible:
+			if zoom[0] > 0.125:
+				zoom *= 0.5
+				background.position *= 2
+				background.scale *= 2
+	if Input.is_action_just_pressed("key_+"):
+		if get_parent().inGame and !get_parent().game_map.map_canvas.visible:
+			if zoom[0] < 2:
+				zoom *= 2
+				background.position *= 0.5
+				background.scale *= 0.5

@@ -69,20 +69,20 @@ func _ready():
 func getOtherPDCTargets(closest, minDistance):
 	return closest
 
-func getPDCTarget(enemyShips, PDCTargetingEffectiveness = 12):
+func getPDCTarget(missiles, enemyShips, PDCTargetingEffectiveness = 12):
 	var futurePos = position + velocity + Vector2(acceleration,0).rotated(rotation)/120
 	
-	if incomingMissiles.size() +enemyShips.size() == 0:
+	if incomingMissiles.size() + enemyShips.size() == 0:
 		return null
 	var closest = null
 	var minDistance = PDCTargetingEffectiveness
-	for i in range(incomingMissiles.size()):
-		var relativeDisplacement = incomingMissiles[i].global_position - global_position
-		var relativeVelocity = incomingMissiles[i].velocity - velocity
+	for i in range(missiles.size()):
+		var relativeDisplacement = missiles[i].global_position - global_position
+		var relativeVelocity = missiles[i].velocity - velocity
 		if relativeDisplacement.dot(relativeVelocity)/relativeDisplacement.length()/relativeVelocity.length() < 0.5:
-			if incomingMissiles[i].approxImpactTime < minDistance:
-				closest = incomingMissiles[i]
-				minDistance = incomingMissiles[i].approxImpactTime
+			if missiles[i].approxImpactTime < minDistance:
+				closest = missiles[i]
+				minDistance = missiles[i].approxImpactTime
 
 	if closest:
 		return closest

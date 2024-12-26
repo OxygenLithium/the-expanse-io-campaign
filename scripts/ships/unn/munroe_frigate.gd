@@ -68,12 +68,12 @@ func movementAlgorithm():
 		desiredRotation = (relativeDisplacement + calc_railgun_lead()).angle()
 		return
 	if relativeDisplacement.length() < 8000:
-		proportionalNavigation(target, true)
+		weightedNavigation(target, true)
 	elif relativeDisplacement.length() < 14000 and relativeVelocity.length() < 100:
 		shouldAccelerate = false
 		desiredRotation = relativeDisplacement.angle()
 		velocity += Vector2(0.5,0).rotated(relativeVelocity.angle())
 	else:
 		var shouldDecelerate = (relativeVelocity.dot(relativeDisplacement) < 0 && relativeVelocity.length()**2 > float(standardAcceleration)*120*(relativeDisplacement.length()-(railgunMaxRange+railgunMinRange)/2-relativeVelocity.length()*PI/turnSpeed/60))
-		proportionalNavigation(target, shouldDecelerate)
+		weightedNavigation(target, shouldDecelerate)
 	

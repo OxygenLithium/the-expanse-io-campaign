@@ -21,11 +21,12 @@ script = ExtResource("1_coc6y")
 TitlePage = NodePath("TitlePage")
 mainCamera = NodePath("mainCamera")
 
-[node name="mainCamera" type="Camera2D" parent="."]
+[node name="mainCamera" type="Camera2D" parent="." node_paths=PackedStringArray("background")]
 position = Vector2(-1, 0)
 script = ExtResource("2_30754")
+background = NodePath("background")
 
-[node name="Sprite2D" type="Sprite2D" parent="mainCamera"]
+[node name="background" type="Sprite2D" parent="mainCamera"]
 position = Vector2(50.3566, 11.7497)
 scale = Vector2(0.504143, 0.588167)
 texture = ExtResource("3_fswy2")

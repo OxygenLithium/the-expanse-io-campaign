@@ -171,10 +171,10 @@ func PDCFunctions():
 		PDC_sound_player.stop()
 	
 	if PDCTarget and !is_instance_valid(PDCTarget):
-		PDCTarget = getPDCTarget(get_parent().UNNShips, 12)
+		PDCTarget = getPDCTarget(incomingMissiles, get_parent().UNNShips, 12)
 	
 	if getPDCTargetTimer > 30:
-		PDCTarget = getPDCTarget(get_parent().UNNShips, 12)
+		PDCTarget = getPDCTarget(incomingMissiles, get_parent().UNNShips, 12)
 		getPDCTargetTimer = 0
 	getPDCTargetTimer += 1
 		

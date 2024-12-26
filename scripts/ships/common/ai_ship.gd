@@ -14,6 +14,7 @@ var stance = null
 #Escort Stance
 var escortTarget = null
 var initialOffset
+var escortInterceptTarget = null
 
 #Sentry stance
 #The alert group is the group of ships that will engage alongside this one
@@ -180,19 +181,50 @@ func getClosingVelocity():
 	var closingVelocityVector = relativeVelocity.dot(relativeDisplacement)/relativeDisplacement.dot(relativeDisplacement)*relativeDisplacement
 	return sqrt(closingVelocityVector.dot(closingVelocityVector))
 
-func proportionalNavigation(propNavTarget = target, decelerate = false):
+func weightedNavigation(navTarget = target, decelerate = false):
 	var desiredVector  = relativeDisplacement + relativeVelocity * pow(relativeDisplacement.length(),0.5)/10
-	if "acceleration" in propNavTarget:
-		desiredVector += Vector2(propNavTarget.acceleration,0).rotated(propNavTarget.rotation) * pow(relativeDisplacement.length(),0.5)/100
+	if "acceleration" in navTarget:
+		desiredVector += Vector2(navTarget.acceleration,0).rotated(navTarget.rotation) * pow(relativeDisplacement.length(),0.5)/100
 	desiredRotation = desiredVector.angle()
 	acceleration = 1 + 8/PI*atan(sqrt(desiredVector.length())/100)
 	
 	if desiredVector.length() < 1000:
 		shouldAccelerate = false
 		velocity += Vector2(1,0).rotated(desiredVector.angle())
+		
+func proportionalNavigation(propNavTarget = target, decelerate = false):
+	if relativeVelocity.dot(relativeDisplacement) < 0 or decelerate:
+		#multiplied by 60 to convert to degrees/sec, since Godot physics ticks are 60/sec
+		var LOSRate = (currTargetDirection-prevTargetDirection)*60
+		var closingVelocity = getClosingVelocity()
+		var desiredAccel
+		desiredAccel = 4*LOSRate*closingVelocity
+		if (desiredAccel > standardAcceleration):
+			desiredRotation = relativeVelocity.angle() - PI/2
+		elif (desiredAccel < -standardAcceleration):
+			desiredRotation = relativeVelocity.angle() + PI/2
+		else:
+			if decelerate:
+				if relativeVelocity.dot(relativeDisplacement) < 0:
+					desiredRotation = relativeVelocity.angle() - asin(desiredAccel/standardAcceleration)
+				else:
+					desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/standardAcceleration)
+					
+			else:
+				desiredRotation = relativeVelocity.angle() + PI + asin(desiredAccel/standardAcceleration)
+			
+	else:
+		if velocity.length() < standardAcceleration:
+			velocity = Vector2(0,0)
+			desiredRotation = relativeDisplacement.angle()
+		else:
+			desiredRotation = relativeVelocity.angle()
 
 func escortMovementAlgorithm():
-	getTelemetry(escortTarget, initialOffset)
+	var bias = initialOffset
+	escortInterceptTarget = getPDCTarget(escortTarget.incomingMissiles, enemyShips, INF)
+	getTelemetry(escortTarget, bias)
+	acceleration = escortTarget.acceleration + 1 + 12/PI*atan(sqrt(relativeDisplacement.length())/100)
 	if relativeDisplacement.length() < 200 and relativeVelocity.length() < 50:
 		shouldAccelerate = false
 		desiredRotation = relativeDisplacement.angle()
@@ -203,7 +235,7 @@ func escortMovementAlgorithm():
 
 func movementAlgorithm():
 	var shouldDecelerate = (relativeVelocity.dot(relativeDisplacement) < 0 && relativeVelocity.length()**2 > float(standardAcceleration)*120*(relativeDisplacement.length()-relativeVelocity.length()*PI/turnSpeed/60))
-	proportionalNavigation(target, shouldDecelerate)
+	weightedNavigation(target, shouldDecelerate)
 
 func getDiffRotation():
 	rotation = fmod(rotation, 2*PI)
@@ -227,10 +259,10 @@ func getOtherPDCTargets(closest, minDistance):
 
 func PDCFunctions():
 	if PDCTarget and !is_instance_valid(PDCTarget):
-		PDCTarget = getPDCTarget(enemyShips, PDCTargetingEffectiveness)
+		PDCTarget = getPDCTarget(incomingMissiles, enemyShips, PDCTargetingEffectiveness)
 	
 	if getPDCTargetTimer > 30:
-		PDCTarget = getPDCTarget(enemyShips, PDCTargetingEffectiveness)
+		PDCTarget = getPDCTarget(incomingMissiles, enemyShips, PDCTargetingEffectiveness)
 		getPDCTargetTimer = 0
 	getPDCTargetTimer += 1
 	
