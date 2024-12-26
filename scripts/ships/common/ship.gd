@@ -103,7 +103,7 @@ func getPDCTarget(missiles, enemyShips, PDCTargetingEffectiveness = 12):
 
 func shoot_PDC():
 	for i in range(pdcs.size()):
-		if pdcs[i].active:
+		if pdcs[i].checkActive():
 			var bullet = bulletFile.instantiate()
 			bullet.allegiance = allegiance
 			bullet.position = pdcs[i].marker.global_position + velocity/60

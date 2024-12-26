@@ -131,7 +131,7 @@ func shoot_missile_audio():
 
 func shoot_middle_PDC():
 	for i in range(pdcs.size()):
-		if pdcs[i].active and pdcs[i].alwaysResponsive:
+		if pdcs[i].checkActive() and pdcs[i].alwaysResponsive:
 			var bullet = bulletFile.instantiate()
 			bullet.allegiance = allegiance
 			bullet.position = pdcs[i].marker.global_position + velocity/60
@@ -147,6 +147,7 @@ func shoot_middle_PDC():
 			get_parent().map_canvas.radar_map.add_child(bullet_marker)
 
 func PDCFunctions():
+	var stopSound : bool = true
 	if Input.is_action_just_pressed("key_t"):
 		PDCAutotrack = !PDCAutotrack
 		if PDCAutotrack:
@@ -155,6 +156,7 @@ func PDCFunctions():
 			get_parent().hud_canvas.autotrack_label.text = "PDC Autotrack: OFF"
 	if Input.is_action_pressed("click"):
 		shoot_PDC_audio()
+		stopSound = false
 		if shootCooldown == 0:
 			if !PDCAutotrack:
 				shoot_PDC()
@@ -164,10 +166,11 @@ func PDCFunctions():
 				shootCooldown = 3
 	if PDCAutotrack && PDCTarget:
 		shoot_PDC_audio()
+		stopSound = false
 		if shootCooldown == 0:
 			shoot_PDC()
 			shootCooldown = 3
-	else:
+	if stopSound:
 		PDC_sound_player.stop()
 	
 	if PDCTarget and !is_instance_valid(PDCTarget):
