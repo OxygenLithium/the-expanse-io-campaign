@@ -11,7 +11,7 @@ func place_ships():
 	addCorvette(Vector2(-1600,800), "MCRN Wukong")
 	addMorrigan(Vector2(-1600,-800), "MCRN Nagamaki")
 	addMorrigan(Vector2(-3200,1600), "MCRN Hester Prynne")
-	#addDonnager(Vector2(-500,-300), "MCRN Ragnarok")
+	addDonnager(Vector2(-4800, 0), "MCRN Ragnarok")
 	
 	enemy = mulanFile.instantiate()
 	enemy.position = Vector2(54000,6000)
